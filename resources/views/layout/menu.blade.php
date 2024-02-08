@@ -80,7 +80,7 @@
     </a>
     <hr class="bg-secondary mt-auto mb-auto">
 </li>
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="/admin/panel" class="nav-link">
       <i class="nav-icon fa-solid fa-right-from-bracket"></i>
       <p>
@@ -88,7 +88,7 @@
       </p>
     </a>
     <hr class="bg-secondary mt-auto mb-auto">
-</li>
+</li> --}}
 
 @elseif (auth()->check() && auth()->user()->level == 2)
 <li class="nav-item">

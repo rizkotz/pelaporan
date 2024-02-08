@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SPI POLINEMA</title>
+  <title>@yield('title')</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -74,7 +74,7 @@
           <i class="fa-solid fa-user img-circle elevation-2" style="color: #e6e6e6;" alt="User Image"></i>
         </div>
         <div class="info">
-          <a class="text-bold" href="#" class="d-block">
+          <a class="text-bold text-primary" href="#" class="d-block">
             {{ auth()->user()->name }}
           </a>
         </div>

@@ -1,5 +1,5 @@
 @extends('layout.main')
-@section('title','dokumen')
+@section('title','Dokumen')
 
 @section('isi')
 

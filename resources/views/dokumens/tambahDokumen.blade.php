@@ -1,5 +1,5 @@
 @extends('layout.main')
-@section('title','tambahDokumen')
+@section('title','Tambah Dokumen')
 
 @section('isi')
 

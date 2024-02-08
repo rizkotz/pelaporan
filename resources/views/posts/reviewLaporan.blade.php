@@ -1,5 +1,5 @@
 @extends('layout.main')
-
+@section('title','Review Laporan')
 @section('isi')
 
 <div class="col-md-10 p-5 pt-2">

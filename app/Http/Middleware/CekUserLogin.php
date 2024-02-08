@@ -15,32 +15,38 @@ class CekUserLogin
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $rules)
+    public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check()){
-            return redirect('login');
+        //hanya admin (level 1) dan ketua (level 2) yang boleh melewati middleware ini
+        if (Auth::user()->level != 1 && Auth::user()->level != 2){
+            abort(404);
         }
 
-        $user = Auth::user();
-        if ($user->level == $rules){
-            return $next($request);
-        }
 
-        return redirect('login')->with('error', "Anda tidak ada akses");
+        // if (!Auth::check()){
+        //     return redirect('login');
+        // }
 
-        // Mendapatkan level pengguna
-        $userLevel = Auth::user()->level;
+        // $user = Auth::user();
+        // if ($user->level == $rules){
+        //     return $next($request);
+        // }
 
-        // Mendapatkan konfigurasi menu dari database berdasarkan level
-        $menuConfig = $this->getMenuConfig($userLevel);
+        // return redirect('login')->with('error', "Anda tidak ada akses");
 
-        // Memeriksa izin akses berdasarkan konfigurasi menu
-        if ($this->hasPermission($request->path(), $menuConfig)) {
-            return $next($request);
-        }
+        // // Mendapatkan level pengguna
+        // $userLevel = Auth::user()->level;
+
+        // // Mendapatkan konfigurasi menu dari database berdasarkan level
+        // $menuConfig = $this->getMenuConfig($userLevel);
+
+        // // Memeriksa izin akses berdasarkan konfigurasi menu
+        // if ($this->hasPermission($request->path(), $menuConfig)) {
+        //     return $next($request);
+        // }
 
         // Redirect ke halaman yang sesuai jika tidak diizinkan
-        return redirect('dashboard')->with('error', 'Anda tidak memiliki akses');
+        return $next($request);
     }
     protected function getMenuConfig($userLevel)
     {

@@ -1,5 +1,5 @@
 @extends('layout.main')
-@section('title','userAudite')
+@section('title','Auditee')
 
 @section('isi')
 

@@ -1,7 +1,5 @@
 @extends('layout.main')
-@section('judul')
-    Halaman dahboard
-@endsection
+@section('title','Dashboard')
 
 @section('isi')
 <div class="col-md-10 p-5 pt-2">

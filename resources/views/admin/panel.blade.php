@@ -32,7 +32,7 @@
         <button type="submit" class="btn btn-primary">Simpan Konfigurasi</button>
     </form>
     @else
-        <p>Pengguna tidak ditemukan.</p>
+        <p>Pengguna tidak ditemukann.</p>
     @endif
 
 

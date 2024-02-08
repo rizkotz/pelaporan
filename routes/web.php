@@ -28,61 +28,71 @@ Route::controller(LoginController::class)->group(function(){
     Route::get('logout','logout');
 });
 
-Route::group(['middleware' => ['auth']], function(){
-    Route::group(['middleware' => ['cekUserLogin:1']], function(){
-        Route::resource('dashboard', ProjectController::class);
+// Route::group(['middleware' => ['auth']], function(){
+//     Route::group(['middleware' => ['cekUserLogin:1']], function(){
+//         Route::resource('dashboard', ProjectController::class);
 
-        //Route CRUD Post Controller
-        Route::resource('/posts', PostController::class);
-        Route::get('/tampilData/{id}', [PostController::class,'tampilData'])->name('tampilData');
-        Route::post('/updateData/{id}', [PostController::class,'updateData'])->name('updateData');
-        Route::get('/detailTugas/{id}',      [PostController::class,'detailTugas'])->name('detailTugas');
+//         //Route CRUD Post Controller
+//         Route::resource('/posts', PostController::class);
+//         Route::get('/tampilData/{id}', [PostController::class,'tampilData'])->name('tampilData');
+//         Route::post('/updateData/{id}', [PostController::class,'updateData'])->name('updateData');
+//         Route::get('/detailTugas/{id}',      [PostController::class,'detailTugas'])->name('detailTugas');
 
-        //Route CRUD Anggota
-        Route::resource('/anggotas', AnggotaController::class);
-        Route::get('/tampilDataAnggota/{id}', [AnggotaController::class,'tampilDataAnggota'])->name('tampilDataAnggota');
-        Route::post('/updateDataAnggota/{id}', [AnggotaController::class,'updateDataAnggota'])->name('updateDataAnggota');
+//         //Route CRUD Anggota
+//         Route::resource('/anggotas', AnggotaController::class);
+//         Route::get('/tampilDataAnggota/{id}', [AnggotaController::class,'tampilDataAnggota'])->name('tampilDataAnggota');
+//         Route::post('/updateDataAnggota/{id}', [AnggotaController::class,'updateDataAnggota'])->name('updateDataAnggota');
 
-        //Route CRUD Auditee
-        Route::resource('/audites', AuditeController::class);
-        Route::get('tampilDataAudite/{id}', [AuditeController::class,'tampilDataAudite'])->name('tampilDataAudite');
-        Route::get('updateDataAudite/{id}', [AuditeController::class,'updateDataAudite'])->name('updateDataAudite');
+//         //Route CRUD Auditee
+//         Route::resource('/audites', AuditeController::class);
+//         Route::get('tampilDataAudite/{id}', [AuditeController::class,'tampilDataAudite'])->name('tampilDataAudite');
+//         Route::get('updateDataAudite/{id}', [AuditeController::class,'updateDataAudite'])->name('updateDataAudite');
 
-        //Route CRUD Dokumen
-        Route::resource('/dokumens', DokumenController::class);
-        Route::get('/tampilDataDokumen/{id}', [DokumenController::class,'tampilDataDokumen'])->name('tampilDataDokumen');
-        Route::post('/updateDataDokumen/{id}', [DokumenController::class,'updateDataDokumen'])->name('updateDataDokumen');
-        Route::get('dokumen/download/{id}', [DokumenController::class,'download'])->name('download.dokumen');
+//         //Route CRUD Dokumen
+//         Route::resource('/dokumens', DokumenController::class);
+//         Route::get('/tampilDataDokumen/{id}', [DokumenController::class,'tampilDataDokumen'])->name('tampilDataDokumen');
+//         Route::post('/updateDataDokumen/{id}', [DokumenController::class,'updateDataDokumen'])->name('updateDataDokumen');
+//         Route::get('dokumen/download/{id}', [DokumenController::class,'download'])->name('download.dokumen');
 
-        //Rute untuk Admin Panel
-    Route::get('/admin/panel', [AdminPanelController::class, 'index'])->name('admin.panel');
-    Route::post('/admin/panel/{userId}/save-menu-config', [AdminPanelController::class, 'saveMenuConfig'])->name('admin.saveMenuConfig');
-    });
+//         //Rute untuk Admin Panel
+//     Route::get('/admin/panel', [AdminPanelController::class, 'index'])->name('admin.panel');
+//     Route::post('/admin/panel/{userId}/save-menu-config', [AdminPanelController::class, 'saveMenuConfig'])->name('admin.saveMenuConfig');
+//     });
 
-});
+// });
 
 
  //Route CRUD Post Controller
- Route::resource('/posts', PostController::class);
- Route::get('/tampilData/{id}', [PostController::class,'tampilData'])->name('tampilData');
- Route::post('/updateData/{id}', [PostController::class,'updateData'])->name('updateData');
- Route::get('/detailTugas/{id}',      [PostController::class,'detailTugas'])->name('detailTugas');
+ Route::resource('/posts', PostController::class)->middleware(['auth','cekUserLogin']);
+ Route::get('/tampilData/{id}', [PostController::class,'tampilData'])->name('tampilData')
+        ->middleware(['auth','cekUserLogin']);
+ Route::post('/updateData/{id}', [PostController::class,'updateData'])->name('updateData')
+        ->middleware(['auth','cekUserLogin']);
+ Route::get('/detailTugas/{id}',      [PostController::class,'detailTugas'])->name('detailTugas')
+        ->middleware(['auth','cekUserLogin']);
 
  //Route CRUD Anggota
- Route::resource('/anggotas', AnggotaController::class);
- Route::get('/tampilDataAnggota/{id}', [AnggotaController::class,'tampilDataAnggota'])->name('tampilDataAnggota');
- Route::post('/updateDataAnggota/{id}', [AnggotaController::class,'updateDataAnggota'])->name('updateDataAnggota');
+ Route::resource('/anggotas', AnggotaController::class)->middleware(['auth','cekUserLogin']);
+ Route::get('/tampilDataAnggota/{id}', [AnggotaController::class,'tampilDataAnggota'])->name('tampilDataAnggota')
+        ->middleware(['auth','cekUserLogin']);
+ Route::post('/updateDataAnggota/{id}', [AnggotaController::class,'updateDataAnggota'])->name('updateDataAnggota')
+        ->middleware(['auth','cekUserLogin']);
 
  //Route CRUD Auditee
- Route::resource('/audites', AuditeController::class);
- Route::get('tampilDataAudite/{id}', [AuditeController::class,'tampilDataAudite'])->name('tampilDataAudite');
- Route::get('updateDataAudite/{id}', [AuditeController::class,'updateDataAudite'])->name('updateDataAudite');
+ Route::resource('/audites', AuditeController::class)->middleware(['auth','cekUserLogin']);
+ Route::get('tampilDataAudite/{id}', [AuditeController::class,'tampilDataAudite'])->name('tampilDataAudite')
+        ->middleware(['auth','cekUserLogin']);
+ Route::get('updateDataAudite/{id}', [AuditeController::class,'updateDataAudite'])->name('updateDataAudite')
+        ->middleware(['auth','cekUserLogin']);
 
  //Route CRUD Dokumen
- Route::resource('/dokumens', DokumenController::class);
- Route::get('/tampilDataDokumen/{id}', [DokumenController::class,'tampilDataDokumen'])->name('tampilDataDokumen');
- Route::post('/updateDataDokumen/{id}', [DokumenController::class,'updateDataDokumen'])->name('updateDataDokumen');
- Route::get('dokumen/download/{id}', [DokumenController::class,'download'])->name('download.dokumen');
+ Route::resource('/dokumens', DokumenController::class)->middleware('auth');
+ Route::get('/tampilDataDokumen/{id}', [DokumenController::class,'tampilDataDokumen'])->name('tampilDataDokumen')
+        ->middleware('auth');
+ Route::post('/updateDataDokumen/{id}', [DokumenController::class,'updateDataDokumen'])->name('updateDataDokumen')
+        ->middleware('auth');
+ Route::get('dokumen/download/{id}', [DokumenController::class,'download'])->name('download.dokumen')
+        ->middleware('auth');
 
 
 //Route View
@@ -90,10 +100,10 @@ Route::get('/dashboard',               [ProjectController::class,'dashboard'])->
 Route::get('/',                        [ProjectController::class,'dashboard'])->middleware('auth');
 
 //Route Search
-Route::get('/reviewLaporan/search',     [ProjectController::class,'search']);
-Route::get('/userAnggota/search',     [AnggotaController::class,'search']);
-Route::get('/userAudite/search',        [AuditeController::class,'search']);
-Route::get('/dokumen/search',           [DokumenController::class,'search']);
+Route::get('/reviewLaporan/search',     [ProjectController::class,'search'])->middleware('auth');
+Route::get('/userAnggota/search',     [AnggotaController::class,'search'])->middleware('auth');
+Route::get('/userAudite/search',        [AuditeController::class,'search'])->middleware('auth');
+Route::get('/dokumen/search',           [DokumenController::class,'search'])->middleware('auth');
 
 
 
