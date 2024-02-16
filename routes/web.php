@@ -5,6 +5,7 @@ use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\AuditeController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +62,8 @@ Route::controller(LoginController::class)->group(function(){
 
 // });
 
+//Route Admin Menu Setting
+Route::resource('/admin/panel', MenuController::class);
 
  //Route CRUD Post Controller
  Route::resource('/posts', PostController::class)->middleware(['auth','cekUserLogin']);

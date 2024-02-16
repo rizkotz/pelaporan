@@ -16,7 +16,10 @@ return new class extends Migration
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('visibility');
+            $table->string('link');
+            $table->string('icon');
+            $table->enum('ketua', [0,1])->default('0');
+            $table->enum('anggota', [0,1])->default('0');
             $table->timestamps();
         });
     }

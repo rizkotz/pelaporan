@@ -25,9 +25,9 @@ class User extends Authenticatable
         'level',
         'menu_config',
     ];
-    public function menus(){
-        return $this->belongsToMany(Menu::class, 'user_menu','user_id','menu_id');
-    }
+    // public function menus(){
+    //     return $this->belongsToMany(Menu::class, 'user_menu','user_id','menu_id');
+    // }
 
     /**
      * The attributes that should be hidden for serialization.
