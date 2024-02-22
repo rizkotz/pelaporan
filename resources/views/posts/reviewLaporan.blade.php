@@ -29,6 +29,14 @@
                                 </div>
                             </form>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-2 ml-3">
+                                <a href="/reviewLaporan/print" target="_blank" class="btn btn-md btn-primary mb-3">Print</a>
+                            </div>
+                            <div class="col-md-6 mb-2 ml-3">
+                                <a href="/reviewLaporan/printpdf" target="_blank" class="btn btn-md btn-danger mb-3">Print PDF</a>
+                            </div>
+
                     </div>
 
 

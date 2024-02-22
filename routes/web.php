@@ -63,30 +63,32 @@ Route::controller(LoginController::class)->group(function(){
 // });
 
 //Route Admin Menu Setting
-Route::resource('/admin/panel', MenuController::class);
+Route::resource('/admin/panel', MenuController::class)->middleware(['auth','cekUserLogin']);
 
  //Route CRUD Post Controller
- Route::resource('/posts', PostController::class)->middleware(['auth','cekUserLogin']);
+ Route::resource('/posts', PostController::class)->middleware('auth');
  Route::get('/tampilData/{id}', [PostController::class,'tampilData'])->name('tampilData')
-        ->middleware(['auth','cekUserLogin']);
+        ->middleware('auth');
  Route::post('/updateData/{id}', [PostController::class,'updateData'])->name('updateData')
-        ->middleware(['auth','cekUserLogin']);
+        ->middleware('auth');
  Route::get('/detailTugas/{id}',      [PostController::class,'detailTugas'])->name('detailTugas')
-        ->middleware(['auth','cekUserLogin']);
+        ->middleware('auth');
+ Route::get('/reviewLaporan/print',   [PostController::class,'print'])->middleware('auth');
+ Route::get('/reviewLaporan/printpdf',   [PostController::class,'printpdf'])->middleware('auth');
 
  //Route CRUD Anggota
- Route::resource('/anggotas', AnggotaController::class)->middleware(['auth','cekUserLogin']);
+ Route::resource('/anggotas', AnggotaController::class)->middleware('auth');
  Route::get('/tampilDataAnggota/{id}', [AnggotaController::class,'tampilDataAnggota'])->name('tampilDataAnggota')
-        ->middleware(['auth','cekUserLogin']);
+        ->middleware('auth');
  Route::post('/updateDataAnggota/{id}', [AnggotaController::class,'updateDataAnggota'])->name('updateDataAnggota')
-        ->middleware(['auth','cekUserLogin']);
+        ->middleware('auth');
 
  //Route CRUD Auditee
- Route::resource('/audites', AuditeController::class)->middleware(['auth','cekUserLogin']);
+ Route::resource('/audites', AuditeController::class)->middleware('auth');
  Route::get('tampilDataAudite/{id}', [AuditeController::class,'tampilDataAudite'])->name('tampilDataAudite')
-        ->middleware(['auth','cekUserLogin']);
+        ->middleware('auth');
  Route::get('updateDataAudite/{id}', [AuditeController::class,'updateDataAudite'])->name('updateDataAudite')
-        ->middleware(['auth','cekUserLogin']);
+        ->middleware('auth');
 
  //Route CRUD Dokumen
  Route::resource('/dokumens', DokumenController::class)->middleware('auth');

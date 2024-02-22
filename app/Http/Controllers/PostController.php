@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Anggota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -16,6 +17,7 @@ class PostController extends Controller
      *
      * @return void
      */
+
     public function index(TugasLaporChart $tugasLaporChart)
     {
         //get posts
@@ -26,6 +28,35 @@ class PostController extends Controller
         ['tugasLaporChart'=> $tugasLaporChart->build()])->with([
             'user' => Auth::user(),
         ]);
+    }
+    public function print()
+    {
+        //get posts
+        $posts = Post::all();
+        return view('posts.print',compact('posts'))->with([
+            'user' => Auth::user(),
+        ]);
+    }
+    public function printpdf()
+    {
+        //get posts
+        $posts = Post::all();
+        $html = view('posts.printpdf',compact('posts'))->with([
+            'user' => Auth::user(),
+        ]);
+
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream();
     }
 
     public function create(){
