@@ -7,6 +7,9 @@
     <h4 class="tittle-1">
         <span class="span0">Detail Penugasan</span>
     </h4>
+    <div class=" mb-2 ">
+        <a href="/detailTugas/print/{id}" target="_blank" class="btn fa-solid fa-print bg-primary p-2 text-white" data-toggle="tooltip" title="PRINT"></a>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card border-0 shadow rounded">
@@ -32,14 +35,12 @@
                                         <tr class="text-center">
                                             <th scope="col">No</th>
                                             <th scope="col">Nama Anggota</th>
-                                            <th scope="col">Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td class="text-center">1</td>
                                             <td>{{ $posts->anggota }}</td>
-                                            <td class="text-center"><a href="#" class="btn btn-sm btn-success">Aktif</a></td>
                                         </tr>
                                     </tbody>
                                 </table>

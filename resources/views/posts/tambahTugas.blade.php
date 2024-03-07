@@ -44,8 +44,8 @@
                             <label class="font-weight-bold">ANGGOTA</label>
                             <select name ="anggota" class="form-control">
                                 <option value="">- Pilih Anggota -</option>
-                                @foreach ($anggotas as $anggota)
-                                    <option value="{{ $anggota->nama }}" {{ old('anggota') == $anggota->nama ? 'selected':null }}>{{ $anggota->nama }}</option>
+                                @foreach ($users as $anggota)
+                                    <option value="{{ $anggota->name }}" {{ old('anggota') == $anggota->name ? 'selected':null }}>{{ $anggota->name }}</option>
                                 @endforeach
                             </select>
                             <!-- error message untuk anggota -->
@@ -103,10 +103,10 @@
 
                         <div class="form-group">
                             <label class="font-weight-bold">PENANGGUNG JAWAB</label>
-                            <select name ="tanggungjawab" class="form-control">
+                            <select name ="tanggungjawab" class="form-control" text="black">
                                 <option value="">- Pilih Penanggung Jawab -</option>
-                                @foreach ($anggotas as $tanggungjawab)
-                                    <option value="{{ $tanggungjawab->nama }}" {{ old('anggota') == $tanggungjawab->nama ? 'selected':null }}>{{ $tanggungjawab->nama }}</option>
+                                @foreach ($users as $tanggungjawab)
+                                    <option value="{{ $tanggungjawab->name }}" {{ old('anggota') == $tanggungjawab->name ? 'selected':null }}>{{ $tanggungjawab->name }}</option>
                                 @endforeach
                             </select>
                             <!-- error message untuk penanggung jawab -->

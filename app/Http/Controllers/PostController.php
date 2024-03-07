@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Charts\TugasLaporChart;
 use App\Models\Post;
-use App\Models\Anggota;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Dompdf\Dompdf;
@@ -37,6 +37,14 @@ class PostController extends Controller
             'user' => Auth::user(),
         ]);
     }
+    public function print_id()
+    {
+        //get posts
+        $posts = Post::all();
+        return view('posts.print_id',compact('posts'))->with([
+            'user' => Auth::user(),
+        ]);
+    }
     public function printpdf()
     {
         //get posts
@@ -60,8 +68,8 @@ class PostController extends Controller
     }
 
     public function create(){
-        $anggotas = Anggota::all();
-        return view('posts.tambahTugas', compact('anggotas'))->with([
+        $users = User::all();
+        return view('posts.tambahTugas', compact('users'))->with([
             'user' => Auth::user(),
         ]);
     }

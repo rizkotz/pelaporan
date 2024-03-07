@@ -1,0 +1,138 @@
+@extends('layout.main')
+@section('title','Tambah Anggota')
+
+@section('isi')
+
+<div class="col-md-10 p-5 pt-2">
+    <h3><i class="fa fa-angle-double-right"></i>Tambah User</h3><hr>
+    <h4 class="tittle-1">
+        <span class="span0">Tambahkan Detail User</span>
+    </h4>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-0 shadow rounded">
+                <div class="card-body">
+                    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
+
+                        @csrf
+
+                        <div class="form-group">
+                            <label class="font-weight-bold">NAMA</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama...">
+
+                            <!-- error message untuk nama -->
+                            @error('name')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold">USERNAME</label>
+                            <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" placeholder="Masukkan Username...">
+
+                            <!-- error message untuk nama -->
+                            @error('username')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">EMAIL</label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Masukkan Email...">
+
+                            <!-- error message untuk merek -->
+                            @error('email')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">NIP</label>
+                            <input type="text" class="form-control @error('nip') is-invalid @enderror" name="nip" value="{{ old('nip') }}" placeholder="Masukkan NIP...">
+
+                            <!-- error message untuk merek -->
+                            @error('nip')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">NIDN</label>
+                            <input type="text" class="form-control @error('nidn') is-invalid @enderror" name="nidn" value="{{ old('nidn') }}" placeholder="Masukkan NIDN...">
+
+                            <!-- error message untuk merek -->
+                            @error('nidn')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">PASSWORD</label>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password') }}" placeholder="Masukkan Password...">
+
+                            <!-- error message untuk merek -->
+                            @error('password')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">KONFIRMASI PASSWORD</label>
+                            <input type="password" class="form-control" id="confirmation" name="confirmation" placeholder="Password Confirmation">
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">JABATAN</label>
+                            <select name ="level" class="form-control">
+                                <option value="">- Pilih Jabatan -</option>
+                                @for ($i = 2; $i <= 5; $i++)
+                                    @php
+                                        $level = '';
+                                        switch ($i) {
+                                            case 2:
+                                                $level = 'Admin';
+                                                break;
+                                            case 3:
+                                                $level = 'Ketua';
+                                                break;
+                                            case 4:
+                                                $level = 'Anggota';
+                                                break;
+                                            case 5:
+                                                $level = 'Auditee';
+                                                break;
+                                        }
+                                    @endphp
+                                    {{-- <option value="{{ $i }}" {{ old(level) == $i ? 'selected' : null }}>{{ $level }}</option> --}}
+                                    <option value="{{ $i }}" {{ old('level') == $i ? 'selected' : '' }}>{{ $level }}</option>
+                                @endfor
+                            </select>
+                            <!-- error message untuk merek -->
+                            @error('level')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
+                        <button type="reset" class="btn btn-md btn-warning">RESET</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+
+@endsection

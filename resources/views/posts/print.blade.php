@@ -39,10 +39,13 @@
           <tr>
             <th>Waktu</th>
             <th>Tempat</th>
+            <th>Anggota</th>
             <th>Jenis</th>
             <th>Judul</th>
             <th>Deskripsi</th>
             <th>Bidang</th>
+            <th>Penanggung Jawab</th>
+            <th>Dokumen</th>
           </tr>
           </thead>
           <tbody>
@@ -50,10 +53,13 @@
                 <tr>
                     <td>{{ $post->waktu }}</td>
                     <td>{{ $post->tempat }}</td>
+                    <td>{{ $post->anggota }}</td>
                     <td>{{ $post->jenis }}</td>
                     <td>{{ $post->judul }}</td>
                     <td>{{ $post->deskripsi }}</td>
                     <td>{{ $post->bidang }}</td>
+                    <td>{{ $post->tanggungjawab }}</td>
+                    <td>{{ $post->dokumen }}</td>
                 </tr>
             @endforeach
           </tbody>

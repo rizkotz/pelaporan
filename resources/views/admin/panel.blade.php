@@ -81,6 +81,7 @@
                                         <option value="/dashboard">Laporan Hasil Pemeriksaan</option>
                                         <option value="/anggotas">Anggota</option>
                                         <option value="/audites">Auditee</option>
+                                        <option value="/users">User</option>
                                         <option value="/admin/panel">Menu</option>
                                     </select>
                                 </div>
@@ -275,6 +276,9 @@
                                                                         Anggota</option>
                                                                     <option value="/audites"
                                                                         {{ $menu->link == '/audites' ? 'selected' : '' }}>
+                                                                        Auditee</option>
+                                                                    <option value="/users"
+                                                                        {{ $menu->link == '/users' ? 'selected' : '' }}>
                                                                         Auditee</option>
                                                                     <option value="/admin/panel"
                                                                         {{ $menu->link == '/admin/panel' ? 'selected' : '' }}>

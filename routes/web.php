@@ -8,6 +8,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -74,6 +75,7 @@ Route::resource('/admin/panel', MenuController::class)->middleware(['auth','cekU
  Route::get('/detailTugas/{id}',      [PostController::class,'detailTugas'])->name('detailTugas')
         ->middleware('auth');
  Route::get('/reviewLaporan/print',   [PostController::class,'print'])->middleware('auth');
+ Route::get('/detailTugas/print/{id}',   [PostController::class,'print_id'])->middleware('auth');
  Route::get('/reviewLaporan/printpdf',   [PostController::class,'printpdf'])->middleware('auth');
 
  //Route CRUD Anggota
@@ -88,6 +90,13 @@ Route::resource('/admin/panel', MenuController::class)->middleware(['auth','cekU
  Route::get('tampilDataAudite/{id}', [AuditeController::class,'tampilDataAudite'])->name('tampilDataAudite')
         ->middleware('auth');
  Route::get('updateDataAudite/{id}', [AuditeController::class,'updateDataAudite'])->name('updateDataAudite')
+        ->middleware('auth');
+
+ //Route CRUD User
+ Route::resource('/users', UserController::class)->middleware('auth');
+ Route::get('/tampilDataUser/{id}', [UserController::class,'tampilDataAnggota'])->name('tampilDataUser')
+        ->middleware('auth');
+ Route::post('/updateDataUser/{id}', [UserController::class,'updateDataAnggota'])->name('updateDataUser')
         ->middleware('auth');
 
  //Route CRUD Dokumen
@@ -107,6 +116,7 @@ Route::get('/',                        [ProjectController::class,'dashboard'])->
 //Route Search
 Route::get('/reviewLaporan/search',     [ProjectController::class,'search'])->middleware('auth');
 Route::get('/userAnggota/search',     [AnggotaController::class,'search'])->middleware('auth');
+Route::get('/userView/search',     [UserController::class,'search'])->middleware('auth');
 Route::get('/userAudite/search',        [AuditeController::class,'search'])->middleware('auth');
 Route::get('/dokumen/search',           [DokumenController::class,'search'])->middleware('auth');
 
