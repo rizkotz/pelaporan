@@ -17,10 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('waktu');
             $table->string('tempat');
+            $table->string('anggota');
             $table->string('jenis');
             $table->string('judul');
             $table->string('deskripsi');
             $table->string('bidang');
+            $table->string('tanggungjawab');
+            $table->string('dokumen');
             $table->timestamps();
         });
     }

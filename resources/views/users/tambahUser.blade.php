@@ -89,7 +89,7 @@
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold">JABATAN</label>
-                            <select name ="level" class="form-control">
+                            <select id="level" name ="level" class="form-control">
                                 <option value="">- Pilih Jabatan -</option>
                                 @for ($i = 2; $i <= 5; $i++)
                                     @php
@@ -120,6 +120,19 @@
                                 </div>
                             @enderror
                         </div>
+                        <div id="auditeeForm" style="display: none;">
+                            <div class="form-group">
+                                <label class="font-weight-bold">AUDITEE BAGIAN</label>
+                                <select name="bagian_auditee" class="form-control">
+                                    <option value="">- Pilih Bagian -</option>
+                                    <option value="1">Bagian 1</option>
+                                    <option value="2">Bagian 2</option>
+                                    <option value="3">Bagian 3</option>
+                                    <option value="4">Bagian 4</option>
+                                    <option value="5">Bagian 5</option>
+                                </select>
+                            </div>
+                        </div>
 
                         <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
                         <button type="reset" class="btn btn-md btn-warning">RESET</button>
@@ -134,5 +147,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#level').change(function(){
+            if($(this).val() == '5'){ // If Auditee is selected
+                $('#auditeeForm').show();
+            } else {
+                $('#auditeeForm').hide();
+            }
+        });
+    });
+</script>
 
 @endsection

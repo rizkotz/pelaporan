@@ -17,12 +17,21 @@ class UserData extends Seeder
     {
         $user=[
             [
+                'name' => 'Super Administrator',
+                'username' => 'superadmin',
+                'password' => bcrypt('123456'),
+                'nip' => '19872164861',
+                'nidn' => '363717314',
+                'level' => 1,
+                'email' => 'superadmin@gmail.com'
+            ],
+            [
                 'name' => 'Administrator',
                 'username' => 'admin',
                 'password' => bcrypt('123456'),
                 'nip' => '19872164861',
                 'nidn' => '363717314',
-                'level' => 1,
+                'level' => 2,
                 'email' => 'admin@gmail.com'
             ],
             [
@@ -31,17 +40,8 @@ class UserData extends Seeder
                 'password' => bcrypt('123456'),
                 'nip' => '19872164861',
                 'nidn' => '363717314',
-                'level' => 2,
-                'email' => 'ketua@gmail.com'
-            ],
-            [
-                'name' => 'Anggota',
-                'username' => 'anggota',
-                'password' => bcrypt('123456'),
-                'nip' => '19872164861',
-                'nidn' => '363717314',
                 'level' => 3,
-                'email' => 'anggota@gmail.com'
+                'email' => 'ketua@gmail.com'
             ],
         ];
 

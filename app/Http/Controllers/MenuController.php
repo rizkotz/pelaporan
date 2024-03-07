@@ -27,7 +27,7 @@ class MenuController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
@@ -44,14 +44,23 @@ class MenuController extends Controller
         $menu->name = $request->get('name');
         $menu->link = $request->get('link');
         $menu->icon = $request->get('icon');
-        if ($request->get('ketua')) {
+        if ($request->get('admin')) {
 
             $menu->ketua = "1";
+        }
+        if ($request->get('ketua')) {
+
+            $menu->anggota = "1";
         }
         if ($request->get('anggota')) {
 
             $menu->anggota = "1";
         }
+        if ($request->get('auditee')) {
+
+            $menu->anggota = "1";
+        }
+
         // dd($menu);
         $menu->save();
         return redirect('/admin/panel/')->with('success', 'Panel berhasil diedit');
@@ -104,9 +113,17 @@ class MenuController extends Controller
             $menu->icon = $request->get('icon');
             $menu->save();
         }
+        if ($request->get('admin')) {
+            if($request->get('admin') == "false"){
+                $menu->admin = "0";
+            }else{
+                $menu->admin = $request->get('admin');
+            }
+            $menu->save();
+        }
         if ($request->get('ketua')) {
             if($request->get('ketua') == "false"){
-                $menu->ketua = "0"; 
+                $menu->ketua = "0";
             }else{
                 $menu->ketua = $request->get('ketua');
             }
@@ -114,9 +131,17 @@ class MenuController extends Controller
         }
         if ($request->get('anggota')) {
             if($request->get('anggota') == "false"){
-                $menu->anggota = "0"; 
+                $menu->anggota = "0";
             }else{
                 $menu->anggota = $request->get('anggota');
+            }
+            $menu->save();
+        }
+        if ($request->get('auditee')) {
+            if($request->get('auditee') == "false"){
+                $menu->auditee = "0";
+            }else{
+                $menu->auditee = $request->get('auditee');
             }
             $menu->save();
         }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('judul');
             $table->string('jenis');
+            $table->string('dokumen');
             $table->timestamps();
         });
     }

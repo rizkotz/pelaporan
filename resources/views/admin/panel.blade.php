@@ -1,43 +1,3 @@
-{{-- @extends('layout.main')
-
-@section('isi')
-    <h1>Admin Panel - Konfigurasi Menu</h1>
-
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if ($user)
-    <p>Pengguna ditemukan. ID: {{ $user->id }}</p>
-    <form method="POST" action="{{ route('admin.saveMenuConfig', ['userId' => $user->id]) }}">
-        @csrf
-
-        <div class="form-group">
-            <label for="menu_config">Konfigurasi Menu JSON:</label>
-            <textarea class="form-control" id="menu_config" name="menu_config" rows="5">{{ json_encode($user->menu_config) }}</textarea>
-        </div>
-
-        <div class="form-group">
-            <label>Pilih Menu yang Akan Ditampilkan:</label><br>
-            @foreach ($menus as $menu)
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="menu_visibility[]" value="{{ $menu->id }}" {{ in_array($menu->id, $user->menu_config) ? 'checked' : '' }}>
-                    <label class="form-check-label">{{ $menu->name }}</label>
-                </div>
-            @endforeach
-        </div>
-
-        <button type="submit" class="btn btn-primary">Simpan Konfigurasi</button>
-    </form>
-    @else
-        <p>Pengguna tidak ditemukann.</p>
-    @endif
-
-
-@endsection --}}
-
 @extends('layout.main')
 @section('title', 'Panel')
 
@@ -47,7 +7,7 @@
         <h3><i class="fa-solid fa-list-check mr-2"></i>Admin Panel - Konfigurasi Menu</h3>
         <hr>
         <h4 class="tittle-1">
-            <span class="span0">Konvigurasi</span>
+            <span class="span0">Konfigurasi</span>
             <span class="span1">Menu</span>
         </h4>
         <div class="row">
@@ -103,15 +63,27 @@
                                 <div class="mb-3">
                                     <div class="custom-control custom-checkbox custom-control-inline">
                                         <input type="checkbox" class="custom-control-input" id="customCheck1"
-                                            name="ketua">
+                                            name="admin">
                                         <label class="custom-control-label" style="font-weight: 100;"
-                                            for="customCheck1">Ketua</label>
+                                            for="customCheck1">Admin</label>
                                     </div>
                                     <div class="custom-control custom-checkbox custom-control-inline">
                                         <input type="checkbox" class="custom-control-input" id="customCheck2"
+                                            name="ketua">
+                                        <label class="custom-control-label" style="font-weight: 100;"
+                                            for="customCheck2">Ketua</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck3"
                                             name="anggota">
                                         <label class="custom-control-label" style="font-weight: 100;"
-                                            for="customCheck2">Anggota</label>
+                                            for="customCheck3">Anggota</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck4"
+                                            name="auditee">
+                                        <label class="custom-control-label" style="font-weight: 100;"
+                                            for="customCheck4">Auditee</label>
                                     </div>
                                 </div>
 
@@ -156,8 +128,10 @@
                                 <tr>
                                     <th scope="col">Menu</th>
                                     <th scope="col">Link</th>
+                                    <th scope="col">Admin</th>
                                     <th scope="col">Ketua</th>
                                     <th scope="col">Anggota</th>
+                                    <th scope="col">Auditee</th>
                                     <th scope="col">Action</th>
 
                                 </tr>
@@ -172,6 +146,26 @@
                                         <td class="text">
                                             <a href="{{ $menu->link }}" class="btn btn-sm btn-primary"> <i
                                                     class="fa-solid fa-link"></i> link</a>
+                                        </td>
+                                        <td class="text">
+                                            <div class="form-check">
+                                                <label>
+                                                    <form action="/admin/panel/{{ $menu->id }}" method="post">
+                                                        @method('put')
+                                                        @csrf
+                                                        <input type="hidden" id="inputmenu" class="form-control"
+                                                            name="admin"
+                                                            value="{{ $menu->admin == '1' ? 'false' : '1' }}">
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-{{ $menu->admin == '1' ? 'success' : 'secondary' }}"
+                                                            style="margin:0;"
+                                                            onclick="return confirm('Apakah anda yakin?')">
+                                                            <i
+                                                                class="fa-solid fa-{{ $menu->admin == '1' ? 'check' : 'square' }}"></i>
+                                                        </button>
+                                                    </form>
+                                                </label>
+                                            </div>
                                         </td>
                                         <td class="text">
                                             <div class="form-check">
@@ -208,6 +202,26 @@
                                                             onclick="return confirm('Apakah anda yakin?')">
                                                             <i
                                                                 class="fa-solid fa-{{ $menu->anggota == '1' ? 'check' : 'square' }}"></i>
+                                                        </button>
+                                                    </form>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td class="text">
+                                            <div class="form-check">
+                                                <label>
+                                                    <form action="/admin/panel/{{ $menu->id }}" method="post">
+                                                        @method('put')
+                                                        @csrf
+                                                        <input type="hidden" id="inputmenu" class="form-control"
+                                                            name="auditee"
+                                                            value="{{ $menu->auditee == '1' ? 'false' : '1' }}">
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-{{ $menu->auditee == '1' ? 'success' : 'secondary' }}"
+                                                            style="margin:0;"
+                                                            onclick="return confirm('Apakah anda yakin?')">
+                                                            <i
+                                                                class="fa-solid fa-{{ $menu->auditee == '1' ? 'check' : 'square' }}"></i>
                                                         </button>
                                                     </form>
                                                 </label>
