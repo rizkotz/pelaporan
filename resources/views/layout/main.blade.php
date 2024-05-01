@@ -20,7 +20,7 @@
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-dark navbar-light">
+  <nav class="main-header navbar navbar-expand navbar-primary navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -122,7 +122,7 @@
   </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer bg-dark">
+  <footer class="main-footer bg-primary">
     <div class="float-right d-none d-sm-block">
       <b>Version</b> 1.0
     </div>
@@ -130,7 +130,7 @@
   </footer>
 
   <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
+  <aside class="control-sidebar control-sidebar-primary">
     <!-- Control sidebar content goes here -->
   </aside>
   <!-- /.control-sidebar -->

@@ -9,6 +9,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -120,7 +121,22 @@ Route::get('/userView/search',     [UserController::class,'search'])->middleware
 Route::get('/userAudite/search',        [AuditeController::class,'search'])->middleware('auth');
 Route::get('/dokumen/search',           [DokumenController::class,'search'])->middleware('auth');
 
+//Route Verifikasi Email
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
 
+//Route Email Verification Handler
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/dashboard');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+//Route setelah verif
+Route::get('/dashboard', function () {
+    // Only verified users may access this route...
+});//->middleware(['auth', 'verified']);
 
 
 

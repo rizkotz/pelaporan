@@ -15,6 +15,15 @@
     <link rel="stylesheet" href="{{ asset('/') }}plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('/') }}dist/css/adminlte.min.css">
+
+    <style>
+        body {
+            background-image: url('https://masuk-ptn.com/images/product/524bac3991958498e0e40a465cdb259ceae3972b.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+    </style>
 </head>
 
 <body class="hold-transition login-page">

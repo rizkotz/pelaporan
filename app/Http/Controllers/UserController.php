@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -46,7 +47,7 @@ class UserController extends Controller
         ]);
 
         //create user
-        User::create([
+        $user = User::create([
             'name'     => $request->name,
             'username' => $request->username,
             'email' => $request->email,
@@ -56,8 +57,11 @@ class UserController extends Controller
             'level'     => $request->level,
         ]);
 
+        event(new Registered($user));
+        Auth::login($user);
+
         //redirect to index
-        return redirect()->route('users.index')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect('/email/verify');
     }
 
     //tampil data
