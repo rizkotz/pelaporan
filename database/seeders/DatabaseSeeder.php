@@ -17,5 +17,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call(UserData::class);
         $this->call(MenuData::class);
+        $this->call(LevelSeeder::class);
+        $this->call(LevelMenuSeeder::class);
     }
 }

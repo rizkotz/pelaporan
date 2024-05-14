@@ -89,9 +89,12 @@
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold">JABATAN</label>
-                            <select id="level" name ="level" class="form-control">
+                            <select id="level" name ="id_level" class="form-control">
                                 <option value="">- Pilih Jabatan -</option>
-                                @for ($i = 2; $i <= 5; $i++)
+                                @foreach ($levels as $level)
+                                    <option value="{{ $level->id }}" {{ old('id_level') == $level ? 'selected' : '' }}>{{ $level->name }}</option>
+                                @endforeach
+                                {{-- @for ($i = 2; $i <= 5; $i++)
                                     @php
                                         $level = '';
                                         switch ($i) {
@@ -109,9 +112,9 @@
                                                 break;
                                         }
                                     @endphp
-                                    {{-- <option value="{{ $i }}" {{ old(level) == $i ? 'selected' : null }}>{{ $level }}</option> --}}
+                                    <option value="{{ $i }}" {{ old(level) == $i ? 'selected' : null }}>{{ $level }}</option>
                                     <option value="{{ $i }}" {{ old('level') == $i ? 'selected' : '' }}>{{ $level }}</option>
-                                @endfor
+                                @endfor --}}
                             </select>
                             <!-- error message untuk merek -->
                             @error('level')

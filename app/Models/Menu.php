@@ -8,5 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Menu extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'link','icon', 'ketua', 'anggota', 'admin', 'auditee'];
+    protected $fillable = ['name', 'link','icon'];
+
+    public function Level_menu()
+    {
+        return $this->hasMany(Level_menu::class, 'id_menu');
+    }
 }

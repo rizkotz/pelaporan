@@ -16,11 +16,12 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('username',50)->unique();
+            $table->string('email');
+            $table->string('username',50);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('level',5);
+            $table->unsignedBigInteger('id_level');
+            $table->foreign('id_level')->references('id')->on('levels')->onDelete('cascade');
             $table->string('nip');
             $table->string('nidn');
             $table->json('menu_config')->nullable();

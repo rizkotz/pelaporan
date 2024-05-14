@@ -136,7 +136,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 //Route setelah verif
 Route::get('/dashboard', function () {
     // Only verified users may access this route...
-});//->middleware(['auth', 'verified']);
+})->middleware(['auth', 'verified']);
 
 
 

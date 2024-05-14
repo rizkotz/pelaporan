@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Menu;
+use App\Models\Level;
+use App\Models\Level_menu;
 
 class MenuController extends Controller
 {
@@ -15,8 +17,12 @@ class MenuController extends Controller
     public function index()
     {
         $menus = Menu::all();
+        $levels = Level::all()->except(1);
+        $List_menus = Level_menu::all();
         return view('admin.panel', [
             'menus' => $menus,
+            'levels' => $levels,
+            'List_menus' => $List_menus,
         ]);
     }
 
@@ -38,32 +44,53 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-
         $menu = new Menu;
 
         $menu->name = $request->get('name');
         $menu->link = $request->get('link');
         $menu->icon = $request->get('icon');
-        if ($request->get('admin')) {
+        // if ($request->get('admin')) {
 
-            $menu->ketua = "1";
-        }
-        if ($request->get('ketua')) {
+        //     $menu->ketua = "1";
+        // }
+        // if ($request->get('ketua')) {
 
-            $menu->anggota = "1";
-        }
-        if ($request->get('anggota')) {
+        //     $menu->anggota = "1";
+        // }
+        // if ($request->get('anggota')) {
 
-            $menu->anggota = "1";
-        }
-        if ($request->get('auditee')) {
+        //     $menu->anggota = "1";
+        // }
+        // if ($request->get('auditee')) {
 
-            $menu->anggota = "1";
-        }
-
+        //     $menu->anggota = "1";
+        // }
         // dd($menu);
         $menu->save();
-        return redirect('/admin/panel/')->with('success', 'Panel berhasil diedit');
+
+
+        $lastMenu = Menu::latest()->first();
+        $level = Level::count();
+        // dd($level);
+
+        for ($x = 1; $x <= $level; $x++) {
+            if($x == 1){
+                $levelmenu = new Level_menu();
+                $levelmenu->id_level = 1;
+                $levelmenu->id_menu = $lastMenu->id;
+                $levelmenu->save();
+            }elseif($x > 1){
+
+                if($request->get('level'.$x) !== null){
+                    $levelmenu = new Level_menu();
+                    $levelmenu->id_level = $request->get('level'.$x);
+                    $levelmenu->id_menu = $lastMenu->id;
+                    $levelmenu->save();
+                }
+            }
+
+        };
+        return redirect('/admin/panel/')->with('success', 'Panel berhasil ditambah');
     }
 
     /**
@@ -113,38 +140,54 @@ class MenuController extends Controller
             $menu->icon = $request->get('icon');
             $menu->save();
         }
-        if ($request->get('admin')) {
-            if($request->get('admin') == "false"){
-                $menu->admin = "0";
-            }else{
-                $menu->admin = $request->get('admin');
+        if ($request->get('level')) {
+            $List_menus = Level_menu::all();
+            $id_level = $request->get('level');
+            if ($List_menus->where('id_level', $id_level)->where('id_menu', $id)->first() == null) {
+
+                $Level_menu = new Level_menu();
+                $Level_menu->id_level = $id_level;
+                $Level_menu->id_menu = $id;
+                $Level_menu->save();
+            } else {
+
+                $level_menu_del = $List_menus->where('id_level', $id_level)->where('id_menu', $id)->first();
+                $level_menu_del->delete();
             }
-            $menu->save();
+
         }
-        if ($request->get('ketua')) {
-            if($request->get('ketua') == "false"){
-                $menu->ketua = "0";
-            }else{
-                $menu->ketua = $request->get('ketua');
-            }
-            $menu->save();
-        }
-        if ($request->get('anggota')) {
-            if($request->get('anggota') == "false"){
-                $menu->anggota = "0";
-            }else{
-                $menu->anggota = $request->get('anggota');
-            }
-            $menu->save();
-        }
-        if ($request->get('auditee')) {
-            if($request->get('auditee') == "false"){
-                $menu->auditee = "0";
-            }else{
-                $menu->auditee = $request->get('auditee');
-            }
-            $menu->save();
-        }
+        // if ($request->get('admin')) {
+        //     if($request->get('admin') == "false"){
+        //         $menu->admin = "0";
+        //     }else{
+        //         $menu->admin = $request->get('admin');
+        //     }
+        //     $menu->save();
+        // }
+        // if ($request->get('ketua')) {
+        //     if($request->get('ketua') == "false"){
+        //         $menu->ketua = "0";
+        //     }else{
+        //         $menu->ketua = $request->get('ketua');
+        //     }
+        //     $menu->save();
+        // }
+        // if ($request->get('anggota')) {
+        //     if($request->get('anggota') == "false"){
+        //         $menu->anggota = "0";
+        //     }else{
+        //         $menu->anggota = $request->get('anggota');
+        //     }
+        //     $menu->save();
+        // }
+        // if ($request->get('auditee')) {
+        //     if($request->get('auditee') == "false"){
+        //         $menu->auditee = "0";
+        //     }else{
+        //         $menu->auditee = $request->get('auditee');
+        //     }
+        //     $menu->save();
+        // }
 
         return redirect('/admin/panel/')->with('success', 'Panel berhasil diedit');
 
@@ -159,6 +202,8 @@ class MenuController extends Controller
     public function destroy($id)
     {
         $menu = Menu::findOrFail($id);
+
+        $menu->Level_menu()->delete();
         $menu->delete();
 
         return redirect('/admin/panel')->with('success', 'Panel berhasil dihapus');

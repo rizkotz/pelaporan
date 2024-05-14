@@ -61,7 +61,15 @@
                                     <label for="menu" style="font-weight: 100;">Visibility</label>
                                 </div>
                                 <div class="mb-3">
-                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                    @foreach ($levels as $level)
+                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                            <input type="checkbox" class="custom-control-input" id="customCheck{{ $level->id }}"
+                                                name="level{{ $level->id }}" value="{{ $level->id }}">
+                                            <label class="custom-control-label" style="font-weight: 100;"
+                                                for="customCheck{{ $level->id }}">{{ $level->name }}</label>
+                                        </div>
+                                    @endforeach
+                                    {{-- <div class="custom-control custom-checkbox custom-control-inline">
                                         <input type="checkbox" class="custom-control-input" id="customCheck1"
                                             name="admin">
                                         <label class="custom-control-label" style="font-weight: 100;"
@@ -84,7 +92,7 @@
                                             name="auditee">
                                         <label class="custom-control-label" style="font-weight: 100;"
                                             for="customCheck4">Auditee</label>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                             </div>
@@ -128,10 +136,9 @@
                                 <tr>
                                     <th scope="col">Menu</th>
                                     <th scope="col">Link</th>
-                                    <th scope="col">Admin</th>
-                                    <th scope="col">Ketua</th>
-                                    <th scope="col">Anggota</th>
-                                    <th scope="col">Auditee</th>
+                                    @foreach ($levels as $level)
+                                    <th scope="col">{{ $level->name }}</th>
+                                    @endforeach
                                     <th scope="col">Action</th>
 
                                 </tr>
@@ -147,7 +154,32 @@
                                             <a href="{{ $menu->link }}" class="btn btn-sm btn-primary"> <i
                                                     class="fa-solid fa-link"></i> link</a>
                                         </td>
+                                        @foreach ($levels as $level)
                                         <td class="text">
+                                            <div class="form-check">
+                                                <label>
+                                                    <form action="/admin/panel/{{ $menu->id }}" method="post">
+                                                        @method('put')
+                                                        @csrf
+                                                        <input type="hidden" id="inputmenu" class="form-control"
+                                                            name="level"
+                                                            value="{{ $level->id }}">
+                                                            @php
+                                                                $checkMenu = $List_menus->where('id_level', $level->id)->where('id_menu', $menu->id)->first()
+                                                            @endphp
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-{{ isset($checkMenu) ? 'success' : 'secondary' }}"
+                                                            style="margin:0;"
+                                                            onclick="return confirm('Apakah anda yakin?')">
+                                                            <i
+                                                                class="fa-solid fa-{{ isset($checkMenu) ? 'check' : 'square' }}"></i>
+                                                        </button>
+                                                    </form>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        @endforeach
+                                        {{-- <td class="text">
                                             <div class="form-check">
                                                 <label>
                                                     <form action="/admin/panel/{{ $menu->id }}" method="post">
@@ -226,7 +258,7 @@
                                                     </form>
                                                 </label>
                                             </div>
-                                        </td>
+                                        </td> --}}
 
                                         <td>
                                             <button type="button" class="btn btn-sm btn-warning" data-toggle="modal"

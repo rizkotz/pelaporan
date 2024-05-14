@@ -13,15 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('menus', function (Blueprint $table) {
+        Schema::create('levels', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('link');
-            $table->string('icon');
-            // $table->enum('admin', [0,1])->default('0');
-            // $table->enum('ketua', [0,1])->default('0');
-            // $table->enum('anggota', [0,1])->default('0');
-            // $table->enum('auditee', [0,1])->default('0');
             $table->timestamps();
         });
     }
@@ -33,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('menus');
+        Schema::dropIfExists('levels');
     }
 };

@@ -22,7 +22,7 @@ class UserData extends Seeder
                 'password' => bcrypt('123456'),
                 'nip' => '19872164861',
                 'nidn' => '363717314',
-                'level' => 1,
+                'id_level' => 1,
                 'email' => 'superadmin@gmail.com'
             ],
             [
@@ -31,7 +31,7 @@ class UserData extends Seeder
                 'password' => bcrypt('123456'),
                 'nip' => '19872164861',
                 'nidn' => '363717314',
-                'level' => 2,
+                'id_level' => 2,
                 'email' => 'admin@gmail.com'
             ],
             [
@@ -40,7 +40,7 @@ class UserData extends Seeder
                 'password' => bcrypt('123456'),
                 'nip' => '19872164861',
                 'nidn' => '363717314',
-                'level' => 3,
+                'id_level' => 3,
                 'email' => 'ketua@gmail.com'
             ],
         ];

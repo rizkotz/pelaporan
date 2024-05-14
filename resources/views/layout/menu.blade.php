@@ -1,10 +1,30 @@
-@if (auth()->check() && auth()->user()->level == 1)
-@foreach ($menusLv1 as $m1)
+{{-- @php
+    $menusLv2 = $menusLv2 ?? [];
+    $menusLv3 = $menusLv3 ?? [];
+@endphp --}}
+{{-- @if (auth()->check() && auth()->user()->id_level == 1) --}}
+{{-- @foreach ($menusLv1 as $m1)
 <li class="nav-item">
   <a href="{{ $m1->link }}" class="nav-link">
     <i class="nav-icon {{ $m1->icon }}"></i>
     <p>
       {{ $m1->name }}
+    </p>
+  </a>
+  <hr class="bg-secondary mt-auto mb-auto">
+</li>
+@endforeach --}}
+@foreach ($level_menus as $level_menu)
+@php
+
+    $menu = $menus->where('id', $level_menu->id_menu)->first();
+@endphp
+
+<li class="nav-item">
+  <a href="{{ $menu->link }}" class="nav-link">
+    <i class="nav-icon {{ $menu->icon }}"></i>
+    <p>
+      {{ $menu->name }}
     </p>
   </a>
   <hr class="bg-secondary mt-auto mb-auto">
@@ -101,7 +121,7 @@
     <hr class="bg-secondary mt-auto mb-auto">
 </li> --}}
 
-@elseif (auth()->check() && auth()->user()->level == 2)
+{{-- @elseif (auth()->check() && auth()->user()->id_level == 2)
 @foreach ($menusLv2 as $m2)
 <li class="nav-item">
   <a href="{{ $m2->link }}" class="nav-link">
@@ -112,7 +132,7 @@
   </a>
   <hr class="bg-secondary mt-auto mb-auto">
 </li>
-@endforeach
+@endforeach --}}
 {{-- <li class="nav-item">
     <a href="/dashboard" class="nav-link">
       <i class="nav-icon fa-solid fa-gauge"></i>
@@ -158,7 +178,7 @@
     </a>
     <hr class="bg-secondary mt-auto mb-auto">
 </li> --}}
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="/logout" class="nav-link">
       <i class="nav-icon fa-solid fa-right-from-bracket"></i>
       <p>
@@ -166,9 +186,9 @@
       </p>
     </a>
     <hr class="bg-secondary mt-auto mb-auto">
-</li>
+</li> --}}
 
-@elseif (auth()->check() && auth()->user()->level == 3)
+{{-- @elseif (auth()->check() && auth()->user()->id_level == 3)
 @foreach ($menusLv3 as $m3)
 <li class="nav-item">
   <a href="{{ $m3->link }}" class="nav-link">
@@ -179,7 +199,7 @@
   </a>
   <hr class="bg-secondary mt-auto mb-auto">
 </li>
-@endforeach
+@endforeach --}}
 {{-- <li class="nav-item">
     <a href="/dokumens" class="nav-link">
       <i class="nav-icon fa-solid fa-file"></i>
@@ -189,7 +209,7 @@
     </a>
     <hr class="bg-secondary mt-auto mb-auto">
 </li> --}}
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="/logout" class="nav-link">
       <i class="nav-icon fa-solid fa-right-from-bracket"></i>
       <p>
@@ -197,5 +217,5 @@
       </p>
     </a>
     <hr class="bg-secondary mt-auto mb-auto">
-</li>
-@endif
+</li> --}}
+{{-- @endif --}}

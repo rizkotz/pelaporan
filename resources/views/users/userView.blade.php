@@ -59,7 +59,8 @@
                                     {{ $user->nidn }}
                                 </td>
                                 <td class="text">
-                                    @php
+                                    {{ $user->Level->name }}
+                                    {{-- @php
                                         switch ($user->level) {
                                             case 1:
                                                 echo 'Superadmin';
@@ -79,7 +80,7 @@
                                             default:
                                                 echo 'Unknown';
                                         }
-                                    @endphp
+                                    @endphp --}}
                                 </td>
 
 

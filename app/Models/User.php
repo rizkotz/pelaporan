@@ -24,9 +24,14 @@ class User extends Authenticatable implements MustVerifyEmail
         'nidn',
         'password',
         'username',
-        'level',
+        'id_level',
         'menu_config',
     ];
+
+    public function Level()
+    {
+        return $this->belongsTo(Level::class, 'id_level');
+    }
     // public function menus(){
     //     return $this->belongsToMany(Menu::class, 'user_menu','user_id','menu_id');
     // }

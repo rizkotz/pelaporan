@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Level;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,6 +14,7 @@ class UserController extends Controller
     {
         //get users
         $users = User::latest()->paginate(5);
+        // $users = Level::all();
 
         //render view with users
         return view('users.userView', compact('users'))->with([
@@ -21,8 +23,10 @@ class UserController extends Controller
     }
 
     public function create(){
+        $levels = Level::all();
         return view('users.tambahUser')->with([
             'user' => Auth::user(),
+            'levels' => $levels,
         ]);
     }
 
@@ -34,6 +38,7 @@ class UserController extends Controller
          */
 
     public function store(Request $request){
+        // dd($request);
         //validate form
         $this->validate($request, [
             'name'     => 'required|min:3',
@@ -43,7 +48,7 @@ class UserController extends Controller
             'nidn'     => 'required|min:1',
             'password' => 'required',
             'confirmation' => 'required|same:password',
-            'level'     => 'required',
+            'id_level'     => 'required',
         ]);
 
         //create user
@@ -54,7 +59,7 @@ class UserController extends Controller
             'nip'    => $request->nip,
             'nidn'     => $request->nidn,
             'password' => bcrypt($request->password),
-            'level'     => $request->level,
+            'id_level'     => $request->id_level,
         ]);
 
         event(new Registered($user));
