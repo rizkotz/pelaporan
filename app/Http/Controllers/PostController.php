@@ -144,6 +144,49 @@ class PostController extends Controller
         return redirect()->route('posts.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
+    //submit tugas
+    public function submit(Request $request, $id){
+        $request->validate([
+            'hasilReviu' => 'required|mimes:doc,docx',
+            'hasilBerita' => 'required|mimes:doc,docx',
+            'hasilPengesahan' => 'required|mimes:doc,docx',
+            'hasilRubrik' => 'required|mimes:xls,xlsx',
+        ]);
+
+        $posts = Post::findOrFail($id);
+
+        if ($request->hasFile('hasilReviu')) {
+            $file = $request->file('hasilReviu');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('hasil_reviu'), $fileName);
+            $posts->hasilReviu = $fileName;
+            $posts->save();
+        }
+        if ($request->hasFile('hasilBerita')) {
+            $file = $request->file('hasilBerita');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('hasil_berita'), $fileName);
+            $posts->hasilBerita = $fileName;
+            $posts->save();
+        }
+        if ($request->hasFile('hasilPengesahan')) {
+            $file = $request->file('hasilPengesahan');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('hasil_pengesahan'), $fileName);
+            $posts->hasilPengesahan = $fileName;
+            $posts->save();
+        }
+        if ($request->hasFile('hasilRubrik')) {
+            $file = $request->file('hasilRubrik');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('hasil_rubrik'), $fileName);
+            $posts->hasilRubrik = $fileName;
+            $posts->save();
+        }
+
+        return redirect()->back()->with('success', 'Dokumen berhasil diunggah.');
+    }
+
     //tampil data
     public function tampilData($id){
         $posts = Post::find($id);

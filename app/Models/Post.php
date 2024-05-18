@@ -26,5 +26,9 @@ class Post extends Model
         'templateA',
         'templateB',
         'rubrik',
+        'hasilReviu',
+        'hasilBerita',
+        'hasilPengesahan',
+        'hasilRubrik',
     ];
 }

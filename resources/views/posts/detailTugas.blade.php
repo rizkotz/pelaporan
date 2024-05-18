@@ -18,7 +18,7 @@
                     <form action="/detailTugas/{{ $posts->id }}" method="GET" enctype="multipart/form-data">
 
                      @csrf
-                     <table class="table table-white table-sm">
+                    <table class="table table-white table-sm">
                         <tr>
                             <th class="text-right">Waktu : </th><td><i class="fa-regular fa-calendar-days mr-1" style="color: #0050db;"></i>
                                 {{ ($posts->waktu)? $posts->waktu : '' }}</td>
@@ -133,22 +133,51 @@
                         <tr>
                             <th class="text-right bg-success p-1 ">Pengumpulan : </th><td class="text-right bg-success p-1 "></td>
                         </tr>
-
+                    <!-- Form POST untuk pengumpulan dokumen -->
+                    <form action="/detailTugas/{{ $posts->id }}/submit" method="POST" enctype="multipart/form-data">
+                        @csrf
                             <tr>
-                                <th class="text-right">Dokumen : </th>
+                                <th class="text-right">Dokumen Reviu : </th>
                                 <td>
-                                Upload Dokumen harus berformat word (.doc / .docx)
+                                Upload Dokumen Reviu harus berformat word (.doc / .docx)
                                 <div class="input-group mb-3">
-                                    <input type="file" name="dokumen" class="form-control m-2" id="inputGroupFile">
+                                    <input type="file" name="hasilReviu" class="form-control m-2" id="inputGroupFile">
+                                    <label for="inputGroupFile" class="input-group-text m-2">Upload</label>
+                                </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Berita Acara : </th>
+                                <td>
+                                Upload Berita Acara harus berformat word (.doc / .docx)
+                                <div class="input-group mb-3">
+                                    <input type="file" name="hasilBerita" class="form-control m-2" id="inputGroupFile">
+                                    <label for="inputGroupFile" class="input-group-text m-2">Upload</label>
+                                </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Lembar Pengesahan : </th>
+                                <td>
+                                Upload Lembar Pengesahan harus berformat word (.doc / .docx)
+                                <div class="input-group mb-3">
+                                    <input type="file" name="hasilPengesahan" class="form-control m-2" id="inputGroupFile">
+                                    <label for="inputGroupFile" class="input-group-text m-2">Upload</label>
+                                </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Kertas Kerja : </th>
+                                <td>
+                                Upload Kertas Kerja harus berformat excel (.xls / .xlsx)
+                                <div class="input-group mb-3">
+                                    <input type="file" name="hasilRubrik" class="form-control m-2" id="inputGroupFile">
                                     <label for="inputGroupFile" class="input-group-text m-2">Upload</label>
                                 </div>
                                 <button type="submit" class="ml-2 mb-2 btn btn-md btn-primary">SIMPAN</button>
-
                                 </td>
                             </tr>
-
-
-
+                    </form>
                             <tr>
                                 <th class="text-right">Dokumen Pengumpulan : </th>
                                 <td>
@@ -163,15 +192,51 @@
                                         <tbody>
                                             <tr>
                                                 <td class="text-center">1</td>
-                                                <td>{{ $posts->pengumpulan }}</td>
+                                                <td>{{ $posts->hasilReviu }}</td>
                                                 <td>
                                                     <!-- Tambahkan tombol atau tautan untuk membuka dokumen -->
-                                                    <a href="{{ asset('pengumpulan/'.$posts->pengumpulan) }}" target="_blank" class="btn btn-info btn-sm" title="Buka Dokumen">
+                                                    <a href="{{ asset('hasil_reviu/'.$posts->hasilReviu) }}" target="_blank" class="btn btn-info btn-sm" title="Buka Dokumen">
                                                         <i class="fa-solid fa-eye"></i>
                                                     </a>
                                                 </td>
 
-                                                <td>File Tugas</td>
+                                                <td>Dokumen Reviu</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center">1</td>
+                                                <td>{{ $posts->hasilBerita }}</td>
+                                                <td>
+                                                    <!-- Tambahkan tombol atau tautan untuk membuka dokumen -->
+                                                    <a href="{{ asset('hasil_berita/'.$posts->hasilBerita) }}" target="_blank" class="btn btn-info btn-sm" title="Buka Dokumen">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </a>
+                                                </td>
+
+                                                <td>Berita Acara</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center">1</td>
+                                                <td>{{ $posts->hasilPengesahan }}</td>
+                                                <td>
+                                                    <!-- Tambahkan tombol atau tautan untuk membuka dokumen -->
+                                                    <a href="{{ asset('hasil_pengesahan/'.$posts->hasilPengesahan) }}" target="_blank" class="btn btn-info btn-sm" title="Buka Dokumen">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </a>
+                                                </td>
+
+                                                <td>Lembar Pengesahan</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center">1</td>
+                                                <td>{{ $posts->hasilRubrik }}</td>
+                                                <td>
+                                                    <!-- Tambahkan tombol atau tautan untuk membuka dokumen -->
+                                                    <a href="{{ asset('hasil_rubrik/'.$posts->hasilRubrik) }}" target="_blank" class="btn btn-info btn-sm" title="Buka Dokumen">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </a>
+                                                </td>
+
+                                                <td>Kertas Kerja</td>
                                             </tr>
                                         </tbody>
                                     </table>

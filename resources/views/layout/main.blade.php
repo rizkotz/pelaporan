@@ -49,8 +49,8 @@
       <!-- Navbar Search -->
       <div class="icon ml-auto">
         <h5>
-            <i class="fa-solid fa-user mr-3" style="color: #e6e6e6;"></i>
-            <a class="navbar-brand text" href="#">Admin</a>
+
+            <a class="navbar-brand text-white" href="#">SPI POLINEMA</a>
         </h5>
     </div>
     </ul>
