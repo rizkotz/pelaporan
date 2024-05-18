@@ -93,6 +93,10 @@ class PostController extends Controller
             'deskripsi'     => 'required|min:1',
             'bidang'     => 'required|min:1',
             'tanggungjawab' => 'required',
+            'dokumen' => 'mimes:doc,docx,pdf',
+            'templateA' => 'mimes:doc,docx',
+            'templateB' => 'mimes:doc,docx',
+            'rubrik' => 'mimes:xls,xlsx',
         ], [
             'anggota.required' => 'Anggota field is required.',
             'tanggungjawab.required' => 'Tanggungjawab field is required.'
@@ -109,12 +113,30 @@ class PostController extends Controller
             'bidang'     => $request->bidang,
             'tanggungjawab' => $request->tanggungjawab,
             'dokumen'   => $request->dokumen,
+            'templateA'   => $request->templateA,
+            'templateB'   => $request->templateB,
+            'rubrik'   => $request->rubrik,
         ]);
 
         $posts = Post::latest()->first();
         if($request->hasFile('dokumen')){
-            $request->file('dokumen')->move('pdf/',$request->file('dokumen')->getClientOriginalName());
+            $request->file('dokumen')->move('dokumenrev/',$request->file('dokumen')->getClientOriginalName());
             $posts->dokumen = $request->file('dokumen')->getClientOriginalName();
+            $posts->save();
+        }
+        if($request->hasFile('templateA')){
+            $request->file('templateA')->move('template_berita/',$request->file('templateA')->getClientOriginalName());
+            $posts->templateA = $request->file('templateA')->getClientOriginalName();
+            $posts->save();
+        }
+        if($request->hasFile('templateB')){
+            $request->file('templateB')->move('template_pengesahan/',$request->file('templateB')->getClientOriginalName());
+            $posts->templateB = $request->file('templateB')->getClientOriginalName();
+            $posts->save();
+        }
+        if($request->hasFile('rubrik')){
+            $request->file('rubrik')->move('template_rubrik/',$request->file('rubrik')->getClientOriginalName());
+            $posts->rubrik = $request->file('rubrik')->getClientOriginalName();
             $posts->save();
         }
 

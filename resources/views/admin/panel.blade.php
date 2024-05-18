@@ -35,7 +35,7 @@
                                     <select class="custom-select" name="link">
                                         <option selected>Pilih Halaman</option>
                                         <option value="/dashboard">Dashboard</option>
-                                        <option value="/dashboard">Reviu Laporan Keuangan</option>
+                                        <option value="/posts">PIC</option>
                                         <option value="/dashboard">Laporan Unit Kerja</option>
                                         <option value="/dashboard">Audit Eksternal</option>
                                         <option value="/dashboard">Laporan Hasil Pemeriksaan</option>
@@ -305,9 +305,9 @@
                                                                     <option value="/dashboard"
                                                                         {{ $menu->link == '/dashboard' ? 'selected' : '' }}>
                                                                         Dashboard</option>
-                                                                    <option value="/dashboard"
-                                                                        {{ $menu->link == '/dashboard' ? 'selected' : '' }}>
-                                                                        Reviu Laporan Keuangan</option>
+                                                                    <option value="/posts"
+                                                                        {{ $menu->link == '/posts' ? 'selected' : '' }}>
+                                                                        PIC</option>
                                                                     <option value="/dashboard"
                                                                         {{ $menu->link == '/dashboard' ? 'selected' : '' }}>
                                                                         Laporan Unit Kerja</option>

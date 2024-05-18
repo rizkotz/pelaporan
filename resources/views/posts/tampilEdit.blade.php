@@ -83,12 +83,48 @@
                             @enderror
                         </div>
                         <div class="card border mb-3">
-                        <label for="dokumen" class="form-label m-2"><b>DOKUMEN</b></label>
-                        <div class="input-group mb-3">
-                            <input type="file" name="dokumen" class="form-control m-2" id="inputGroupFile">
-                            <label for="inputGroupFile" class="input-group-text m-2">Upload</label>
-                        </div>
-                        </div>
+                            <label for="dokumen" class="form-label m-2"><b>DOKUMEN REVIU</b></label>
+                            <div class="input-group mb-3">
+                                <input type="file" name="dokumen" class="form-control m-2" id="inputGroupFile">
+                                <label for="inputGroupFile" class="input-group-text m-2">Upload</label>
+                            </div>
+                            <small class="form-text text-danger ml-4" style="font-style: italic;">
+                                *dokumen harus berformat word / pdf
+                            </small>
+                            </div>
+
+                            <div class="card border mb-3">
+                            <label for="templateA" class="form-label m-2"><b>TEMPLATE BERITA ACARA</b></label>
+                            <div class="input-group mb-3">
+                                <input type="file" name="templateA" class="form-control m-2" id="inputGroupFile">
+                                <label for="inputGroupFile" class="input-group-text m-2">Upload</label>
+                            </div>
+                            <small class="form-text text-danger ml-4" style="font-style: italic;">
+                                *dokumen harus berformat word
+                            </small>
+                            </div>
+
+                            <div class="card border mb-3">
+                            <label for="templateB" class="form-label m-2"><b>TEMPLATE LEMBAR PENGESAHAN</b></label>
+                            <div class="input-group mb-3">
+                                <input type="file" name="templateB" class="form-control m-2" id="inputGroupFile">
+                                <label for="inputGroupFile" class="input-group-text m-2">Upload</label>
+                            </div>
+                            <small class="form-text text-danger ml-4" style="font-style: italic;">
+                                *dokumen harus berformat word
+                            </small>
+                            </div>
+
+                            <div class="card border mb-3">
+                            <label for="rubrik" class="form-label m-2"><b>KERTAS KERJA (RUBRIK PENILAIAN)</b></label>
+                            <div class="input-group mb-3">
+                                <input type="file" name="rubrik" class="form-control m-2" id="inputGroupFile">
+                                <label for="inputGroupFile" class="input-group-text m-2">Upload</label>
+                            </div>
+                            <small class="form-text text-danger ml-4" style="font-style: italic;">
+                                *dokumen harus berformat excel
+                            </small>
+                            </div>
                         <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
                         <button type="reset" class="btn btn-md btn-warning">RESET</button>
 

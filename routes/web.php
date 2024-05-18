@@ -6,6 +6,7 @@ use App\Http\Controllers\AuditeController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PengumpulanController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -108,7 +109,6 @@ Route::resource('/admin/panel', MenuController::class)->middleware(['auth','cekU
         ->middleware('auth');
  Route::get('dokumen/download/{id}', [DokumenController::class,'download'])->name('download.dokumen')
         ->middleware('auth');
-
 
 //Route View
 Route::get('/dashboard',               [ProjectController::class,'dashboard'])->middleware('auth');

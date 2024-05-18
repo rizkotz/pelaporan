@@ -23,5 +23,8 @@ class Post extends Model
         'bidang',
         'tanggungjawab',
         'dokumen',
+        'templateA',
+        'templateB',
+        'rubrik',
     ];
 }
