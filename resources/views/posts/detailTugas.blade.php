@@ -2,7 +2,7 @@
 @section('title','Detail Tugas')
 @section('isi')
 
-<div class="col-md-10 p-5 pt-2">
+<div class="col-md-16 p-5 pt-2">
     <h3><i class="fa fa-angle-double-right"></i>Detail Tugas</h3><hr>
     <h4 class="tittle-1">
         <span class="span0">Detail Penugasan</span>
@@ -187,6 +187,7 @@
                                                 <th scope="col">No</th>
                                                 <th colspan="2">Nama Berkas</th>
                                                 <th scope="col">Keterangan</th>
+                                                <th scope="col">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -201,6 +202,13 @@
                                                 </td>
 
                                                 <td>Dokumen Reviu</td>
+                                                <td>
+                                                    @if($posts->approvalReviu == 'approved')
+                                                        <span class="badge badge-success">Disetujui</span>
+                                                    @else
+                                                        <span class="badge badge-warning">Pending</span>
+                                                    @endif
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-center">1</td>
@@ -213,6 +221,13 @@
                                                 </td>
 
                                                 <td>Berita Acara</td>
+                                                <td>
+                                                    @if($posts->approvalBerita == 'approved')
+                                                        <span class="badge badge-success">Disetujui</span>
+                                                    @else
+                                                        <span class="badge badge-warning">Pending</span>
+                                                    @endif
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-center">1</td>
@@ -225,6 +240,13 @@
                                                 </td>
 
                                                 <td>Lembar Pengesahan</td>
+                                                <td>
+                                                    @if($posts->approvalPengesahan == 'approved')
+                                                        <span class="badge badge-success">Disetujui</span>
+                                                    @else
+                                                        <span class="badge badge-warning">Pending</span>
+                                                    @endif
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-center">1</td>
@@ -235,8 +257,14 @@
                                                         <i class="fa-solid fa-eye"></i>
                                                     </a>
                                                 </td>
-
                                                 <td>Kertas Kerja</td>
+                                                <td>
+                                                    @if($posts->approvalRubrik == 'approved')
+                                                        <span class="badge badge-success">Disetujui</span>
+                                                    @else
+                                                        <span class="badge badge-warning">Pending</span>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

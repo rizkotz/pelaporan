@@ -30,5 +30,9 @@ class Post extends Model
         'hasilBerita',
         'hasilPengesahan',
         'hasilRubrik',
+        'approvalReviu',
+        'approvalBerita',
+        'approvalPengesahan',
+        'approvalRubrik',
     ];
 }

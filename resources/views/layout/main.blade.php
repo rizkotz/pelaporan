@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{{ asset('/') }}dist/css/adminlte.min.css">
   <link rel="stylesheet" href="{{ asset('style/style.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link rel="stylesheet" href="{{ asset('fontawesome-free/css/all.min.css') }}"
+  <link rel="stylesheet" href="{{ asset('fontawesome-free/css/all.min.css') }}">
 </head>
 <body onload="initClock()" class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -112,9 +112,10 @@
 
     <!-- Main content -->
     <section class="content">
-
-      <!-- Default box -->
-      @yield('isi')
+        <div class="container-fluid">
+            <!-- Default box -->
+            @yield('isi')
+        </div>
       <!-- /.card -->
 
     </section>

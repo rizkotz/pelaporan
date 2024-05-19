@@ -3,7 +3,7 @@
 
 @section('isi')
 
-<div class="col-md-10 p-5 pt-2">
+<div class="col-md-16 p-5 pt-2">
     <h3><i class="fa-solid fa-list-check mr-2"></i>DATA USER</h3><hr>
     <h4 class="tittle-1">
         <span class="span0">List</span>

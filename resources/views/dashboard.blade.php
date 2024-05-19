@@ -2,7 +2,7 @@
 @section('title','Dashboard')
 
 @section('isi')
-<div class="col-md-10 p-5 pt-2">
+<div class="col-md-16 p-5 pt-2">
     <h3><i class="fa-solid fa-gauge mr-2"></i>DASHBOARD</h3><hr>
     <div class="col-xl-7 col-xxl-7 mt-3 mb-3">
         <div class="card flex-fill w-100">

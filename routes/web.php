@@ -76,6 +76,10 @@ Route::resource('/admin/panel', MenuController::class)->middleware(['auth','cekU
         ->middleware('auth');
  Route::get('/detailTugas/{id}',      [PostController::class,'detailTugas'])->name('detailTugas')
         ->middleware('auth');
+ Route::get('/detailTugasKetua/{id}',   [PostController::class,'detailTugasKetua'])->name('detailTugasKetua')
+        ->middleware('auth','cekUserLogin');
+ Route::post('/posts/{id}/approve/{type}',   [PostController::class,'approve'])->name('posts.approve')
+        ->middleware('auth','cekUserLogin');
  Route::post('/detailTugas/{id}/submit', [PostController::class,'submit'])->middleware('auth');
  Route::get('/reviewLaporan/print',   [PostController::class,'print'])->middleware('auth');
  Route::get('/detailTugas/print/{id}',   [PostController::class,'print_id'])->middleware('auth');

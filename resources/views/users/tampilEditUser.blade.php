@@ -3,7 +3,7 @@
 
 @section('isi')
 
-<div class="col-md-10 p-5 pt-2">
+<div class="col-md-16 p-5 pt-2">
     <h3><i class="fa fa-angle-double-right"></i>Edit Data Anggota</h3><hr>
     <h4 class="tittle-1">
         <span class="span0">Tambahkan Detail Anggota</span>

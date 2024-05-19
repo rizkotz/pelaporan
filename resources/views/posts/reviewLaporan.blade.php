@@ -2,7 +2,7 @@
 @section('title','Review Laporan')
 @section('isi')
 
-<div class="col-md-10 p-5 pt-2">
+<div class="col-md-16 p-5 pt-2">
     <h3><i class="fa-solid fa-list-check mr-2"></i>REVIEW LAPORAN KEUANGAN</h3><hr>
     <h4 class="tittle-1">
         <span class="span0">List</span>
@@ -51,7 +51,7 @@
                             <th scope="col">Judul</th>
                             <th scope="col">Deskripsi</th>
                             <th scope="col">Bidang</th>
-                            <th colspan="3" scope="col" >Aksi</th>
+                            <th colspan="4" scope="col" >Aksi</th>
 
                         </tr>
                         </thead>
@@ -79,6 +79,7 @@
                                 </td>
 
                                 <td><a href="/detailTugas/{{ $post->id }}" class="btn fa-solid fa-list bg-info p-2 text-white" data-toggle="tooltip" title="Detail Tugas"></a> </td>
+                                <td><a href="/detailTugasKetua/{{ $post->id }}" class="btn fa-solid fa-list bg-primary p-2 text-white" data-toggle="tooltip" title="Detail Tugas Ketua"></a> </td>
                                 <td><a href="/tampilData/{{ $post->id }}" class="btn fa-regular fa-pen-to-square bg-warning p-2 text-white" data-toggle="tooltip" title="Edit Tugas"></a> </td>
 
                                 <td class="text-center">

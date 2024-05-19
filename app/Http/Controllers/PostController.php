@@ -204,6 +204,43 @@ class PostController extends Controller
         ]);
     }
 
+    //detail tugas ketua
+    public function detailTugasKetua($id){
+        $posts = Post::find($id);
+        return view('posts.detailTugasKetua', compact('posts'))->with([
+            'user' => Auth::user(),
+        ]);
+    }
+
+    //approval
+    public function approve($id, $type)
+{
+    $post = Post::find($id);
+    if (Auth::user()->id_level == 1 || Auth::user()->id_level == 3) {
+        switch ($type) {
+            case 'reviu':
+                $post->approvalReviu = 'approved';
+                break;
+            case 'berita':
+                $post->approvalBerita = 'approved';
+                break;
+            case 'pengesahan':
+                $post->approvalPengesahan = 'approved';
+                break;
+            case 'rubrik':
+                $post->approvalRubrik = 'approved';
+                break;
+            default:
+                return redirect()->route('detailTugasKetua', $id)->with('error', 'Tipe approval tidak valid');
+        }
+
+        $post->save();
+        return redirect()->route('detailTugasKetua', $id)->with('success', 'Dokumen berhasil di-approve');
+    }
+
+    return redirect()->route('detailTugasKetua', $id)->with('error', 'Anda tidak memiliki hak akses untuk approve dokumen ini');
+}
+
     //Edit Data
     public function updateData(Request $request, $id){
         $posts = Post::find($id);
