@@ -18,7 +18,7 @@ class CekUserLogin
     public function handle(Request $request, Closure $next)
     {
         //hanya admin (level 1) dan ketua (level 2) yang boleh melewati middleware ini
-        if (Auth::user()->id_level != 1 && Auth::user()->id_level != 2){
+        if (Auth::user()->id_level != 1 && Auth::user()->id_level != 3){
             abort(404);
         }
 

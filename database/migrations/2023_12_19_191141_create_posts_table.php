@@ -24,6 +24,17 @@ return new class extends Migration
             $table->string('bidang');
             $table->string('tanggungjawab');
             $table->string('dokumen');
+            $table->string('templateA')->nullable();
+            $table->string('templateB')->nullable();
+            $table->string('rubrik')->nullable();
+            $table->string('hasilReviu')->nullable();
+            $table->string('hasilBerita')->nullable();
+            $table->string('hasilPengesahan')->nullable();
+            $table->string('hasilRubrik')->nullable();
+            $table->string('approvalReviu')->nullable();
+            $table->string('approvalBerita')->nullable();
+            $table->string('approvalPengesahan')->nullable();
+            $table->string('approvalRubrik')->nullable();
             $table->timestamps();
         });
     }
