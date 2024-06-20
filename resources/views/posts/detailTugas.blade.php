@@ -7,9 +7,9 @@
     <h4 class="tittle-1">
         <span class="span0">Detail Penugasan</span>
     </h4>
-    <div class=" mb-2 ">
+    {{-- <div class=" mb-2 ">
         <a href="/detailTugas/print/{id}" target="_blank" class="btn fa-solid fa-print bg-primary p-2 text-white" data-toggle="tooltip" title="PRINT"></a>
-    </div>
+    </div> --}}
     <div class="row">
         <div class="col-md-12">
             <div class="card border-0 shadow rounded">
@@ -211,7 +211,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="text-center">1</td>
+                                                <td class="text-center">2</td>
                                                 <td>{{ $posts->hasilBerita }}</td>
                                                 <td>
                                                     <!-- Tambahkan tombol atau tautan untuk membuka dokumen -->
@@ -230,7 +230,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="text-center">1</td>
+                                                <td class="text-center">3</td>
                                                 <td>{{ $posts->hasilPengesahan }}</td>
                                                 <td>
                                                     <!-- Tambahkan tombol atau tautan untuk membuka dokumen -->
@@ -249,7 +249,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="text-center">1</td>
+                                                <td class="text-center">4</td>
                                                 <td>{{ $posts->hasilRubrik }}</td>
                                                 <td>
                                                     <!-- Tambahkan tombol atau tautan untuk membuka dokumen -->
@@ -265,9 +265,17 @@
                                                         <span class="badge badge-warning">Pending</span>
                                                     @endif
                                                 </td>
+
                                             </tr>
+
                                         </tbody>
                                     </table>
+                                    @if ($posts->approvalReviu == 'approved' &&
+                                                     $posts->approvalBerita == 'approved' &&
+                                                     $posts->approvalPengesahan == 'approved' &&
+                                                     $posts->approvalRubrik == 'approved')
+                                                     <a href="{{ route('printDetailTugas', ['id'=>$posts->id]) }}" target="_blank" class="btn fa-solid fa-print bg-primary ml-2 p-2 text-white" data-toggle="tooltip" title="PRINT"></a>
+                                                @endif
                                 </td>
                             </tr>
 

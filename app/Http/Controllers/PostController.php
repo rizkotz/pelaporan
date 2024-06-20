@@ -8,7 +8,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Dompdf\Dompdf;
+use Dompdf\Options;
+use PhpOffice\PhpWord\IOFactory;
+use setasign\Fpdi\Fpdi;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpWord\PhpWord;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -261,4 +266,109 @@ class PostController extends Controller
 
         return view('posts.reviewLaporan', ['posts' => $posts]);
     }
+
+      // Print Detail Tugas yang sudah dikonversi
+    public function printDetailTugas($id)
+    {
+        $post = Post::findOrFail($id);
+
+        // Periksa jika semua persetujuan telah disetujui
+        if ($post->approvalReviu == 'approved' &&
+            $post->approvalBerita == 'approved' &&
+            $post->approvalPengesahan == 'approved' &&
+            $post->approvalRubrik == 'approved') {
+
+            // Gabungkan dokumen-dokumen
+            $filePath = $this->mergeDocuments($id);
+
+            // Unduh dokumen gabungan
+            return response()->download($filePath, 'Dokumen_' . $post->id . '.docx');
+        } else {
+            // Jika tidak semua dokumen telah disetujui, kembalikan ke halaman sebelumnya dengan pesan kesalahan
+            return redirect()->back()->with('error', 'Tidak dapat membuat dokumen karena belum semua dokumen disetujui.');
+        }
+    }
+
+    // Konversi dan merge dokumen
+    public function mergeDocuments($id)
+{
+    $post = Post::findOrFail($id);
+
+    // Tentukan lokasi dokumen yang akan digabung
+    $pathDokumenReviu = public_path('hasil_reviu/' . $post->hasilReviu);
+    $pathDokumenBerita = public_path('hasil_berita/' . $post->hasilBerita);
+    $pathDokumenPengesahan = public_path('hasil_pengesahan/' . $post->hasilPengesahan);
+
+    // Buat objek PhpWord baru untuk dokumen yang digabung
+    $phpWord = new \PhpOffice\PhpWord\PhpWord();
+
+    // Fungsi untuk menambahkan konten dari dokumen ke section
+    $this->addContentFromDocx($phpWord, $pathDokumenReviu);
+    $this->addContentFromDocx($phpWord, $pathDokumenBerita);
+    $this->addContentFromDocx($phpWord, $pathDokumenPengesahan);
+
+    // Simpan dokumen yang digabungkan ke file sementara
+    $tempFile = storage_path('app/public/temp_document.docx');
+    $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+    $objWriter->save($tempFile);
+
+    return $tempFile; // Kembalikan path file dokumen yang digabung
+}
+
+// Fungsi untuk menambahkan konten dari file DOCX ke objek PhpWord
+private function addContentFromDocx($phpWord, $filePath)
+{
+    $source = \PhpOffice\PhpWord\IOFactory::load($filePath);
+
+    foreach ($source->getSections() as $section) {
+        $newSection = $phpWord->addSection();
+        foreach ($section->getElements() as $element) {
+            $this->copyElement($newSection, $element);
+        }
+    }
+}
+
+// Fungsi untuk menyalin elemen ke section baru
+private function copyElement($newSection, $element)
+{
+    $type = get_class($element);
+
+    switch ($type) {
+        case 'PhpOffice\PhpWord\Element\TextRun':
+            $textRun = $newSection->addTextRun($element->getParagraphStyle());
+            foreach ($element->getElements() as $childElement) {
+                if (method_exists($childElement, 'getText')) {
+                    $textRun->addText($childElement->getText(), $childElement->getFontStyle(), $childElement->getParagraphStyle());
+                }
+            }
+            break;
+        case 'PhpOffice\PhpWord\Element\Text':
+            $newSection->addText($element->getText(), $element->getFontStyle(), $element->getParagraphStyle());
+            break;
+        case 'PhpOffice\PhpWord\Element\Title':
+            $newSection->addTitle($element->getText(), $element->getDepth());
+            break;
+        case 'PhpOffice\PhpWord\Element\Image':
+            $newSection->addImage($element->getSource(), $element->getStyle());
+            break;
+        case 'PhpOffice\PhpWord\Element\Link':
+            $newSection->addLink($element->getSource(), $element->getText(), $element->getFontStyle(), $element->getParagraphStyle());
+            break;
+        case 'PhpOffice\PhpWord\Element\Table':
+            $newTable = $newSection->addTable($element->getStyle());
+            foreach ($element->getRows() as $row) {
+                $tableRow = $newTable->addRow();
+                foreach ($row->getCells() as $cell) {
+                    $tableCell = $tableRow->addCell();
+                    foreach ($cell->getElements() as $cellElement) {
+                        $this->copyElement($tableCell, $cellElement);
+                    }
+                }
+            }
+            break;
+        default:
+            // Handle other element types as needed
+            break;
+    }
+}
 }

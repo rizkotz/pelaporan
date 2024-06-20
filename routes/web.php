@@ -80,9 +80,11 @@ Route::resource('/admin/panel', MenuController::class)->middleware(['auth','cekU
         ->middleware('auth','cekUserLogin');
  Route::post('/posts/{id}/approve/{type}',   [PostController::class,'approve'])->name('posts.approve')
         ->middleware('auth','cekUserLogin');
+ Route::get('/detailTugas/print/{id}',  [PostController::class,'printDetailTugas'])->name('printDetailTugas')
+        ->middleware('auth');
  Route::post('/detailTugas/{id}/submit', [PostController::class,'submit'])->middleware('auth');
  Route::get('/reviewLaporan/print',   [PostController::class,'print'])->middleware('auth');
- Route::get('/detailTugas/print/{id}',   [PostController::class,'print_id'])->middleware('auth');
+//  Route::get('/detailTugas/print/{id}',   [PostController::class,'print_id'])->middleware('auth');
  Route::get('/reviewLaporan/printpdf',   [PostController::class,'printpdf'])->middleware('auth');
 
  //Route CRUD Anggota
