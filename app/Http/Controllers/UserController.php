@@ -60,6 +60,7 @@ class UserController extends Controller
             'nidn'     => $request->nidn,
             'password' => bcrypt($request->password),
             'id_level'     => $request->id_level,
+            'bagian_auditee' => $request->bagian_auditee,
         ]);
 
         event(new Registered($user));

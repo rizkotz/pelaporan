@@ -3,7 +3,7 @@
 @section('isi')
 
 <div class="col-md-16 p-5 pt-2">
-    <h3><i class="fa-solid fa-list-check mr-2"></i>REVIEW LAPORAN KEUANGAN</h3><hr>
+    <h3><i class="fa-solid fa-list-check mr-2"></i>PIC </h3><hr>
     <h4 class="tittle-1">
         <span class="span0">List</span>
         <span class="span1">Tugas</span>
@@ -15,7 +15,9 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
+                            @if (auth()->user()->id_level == 1 || auth()->user()->id_level ==2)
                             <a href="{{ route('posts.create') }}" class="btn btn-md btn-success mb-3">TAMBAH TUGAS</a>
+                            @endif
                         </div>
                         <div class="col-md-6">
                             <form action="/reviewLaporan/search" class="form=inline" method="GET">
@@ -41,7 +43,7 @@
 
 
 
-                    <table class="table table-bordered">
+                    <table class="table table-bordered mt-2">
                         <thead>
                         <tr class="text-center">
                             <th scope="col">Waktu</th>
@@ -49,7 +51,7 @@
                             <th scope="col">Jenis</th>
                             <th scope="col">Judul</th>
                             <th scope="col">Deskripsi</th>
-                            <th scope="col">Bidang</th>
+                            <th scope="col">Anggota</th>
                             <th colspan="4" scope="col" >Aksi</th>
 
                         </tr>
@@ -74,13 +76,15 @@
                                     {{ $post->deskripsi }}
                                 </td>
                                 <td class="text-center">
-                                    {{ $post->bidang }}
+                                    {{ $post->anggota }}
                                 </td>
-
+                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2 || auth()->user()->id_level == 4)
                                 <td><a href="/detailTugas/{{ $post->id }}" class="btn fa-solid fa-list bg-info p-2 text-white" data-toggle="tooltip" title="Detail Tugas"></a> </td>
+                                @endif
+                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 3)
                                 <td><a href="/detailTugasKetua/{{ $post->id }}" class="btn fa-solid fa-list bg-primary p-2 text-white" data-toggle="tooltip" title="Detail Tugas Ketua"></a> </td>
+                                @endif
                                 <td><a href="/tampilData/{{ $post->id }}" class="btn fa-regular fa-pen-to-square bg-warning p-2 text-white" data-toggle="tooltip" title="Edit Tugas"></a> </td>
-
                                 <td class="text-center">
                                     <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('posts.destroy', $post->id) }}" method="POST">
 

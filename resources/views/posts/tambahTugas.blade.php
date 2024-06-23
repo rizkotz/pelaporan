@@ -18,9 +18,7 @@
 
                         <div class="form-group">
                             <label class="font-weight-bold">HARI TANGGAL</label>
-                            <input type="text" class="form-control @error('waktu') is-invalid @enderror" name="waktu" value="{{ old('waktu') }}" placeholder="Masukkan Hari dan Tanggal Penugasan...">
-
-                            <!-- error message untuk nama -->
+                            <input type="text" class="form-control @error('waktu') is-invalid @enderror" id="waktu" name="waktu" value="{{ old('waktu') }}" placeholder="Masukkan Hari dan Tanggal Penugasan..." readonly>
                             @error('waktu')
                                 <div class="alert alert-danger mt-2">
                                     {{ $message }}
@@ -171,8 +169,47 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+@push('styles')
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@endpush
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(function() {
+        $.datepicker.setDefaults($.datepicker.regional['id']);
+        $("#waktu").datepicker({
+            dateFormat: "DD, d MM yy",
+            onSelect: function(dateText, inst) {
+                var date = $(this).datepicker('getDate');
+                var dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                var day = dayNames[date.getUTCDay()];
+                var formattedDate = day + ", " + $.datepicker.formatDate("d MM yy", date);
+                $(this).val(formattedDate);
+            }
+        }).attr('readonly', 'readonly');
+    });
+
+    $.datepicker.regional['id'] = {
+        closeText: 'Tutup',
+        prevText: '←',
+        nextText: '→',
+        currentText: 'Hari ini',
+        monthNames: ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
+        monthNamesShort: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
+        dayNames: ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],
+        dayNamesShort: ['Min','Sen','Sel','Rab','Kam','Jum','Sab'],
+        dayNamesMin: ['Mi','Se','Se','Ra','Ka','Ju','Sa'],
+        weekHeader: 'Mg',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 0,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['id']);
+</script>
+@endpush
 
 @endsection

@@ -39,7 +39,7 @@
                                         <option value="/dashboard">Laporan Unit Kerja</option>
                                         <option value="/dashboard">Audit Eksternal</option>
                                         <option value="/dashboard">Laporan Hasil Pemeriksaan</option>
-                                        <option value="/anggotas">Anggota</option>
+                                        <option value="/dokumens">Dokumen</option>
                                         <option value="/audites">Auditee</option>
                                         <option value="/users">User</option>
                                         <option value="/admin/panel">Menu</option>
@@ -317,15 +317,15 @@
                                                                     <option value="/dashboard"
                                                                         {{ $menu->link == '/dashboard' ? 'selected' : '' }}>
                                                                         Laporan Hasil Pemeriksaan</option>
-                                                                    <option value="/anggotas"
-                                                                        {{ $menu->link == '/anggotas' ? 'selected' : '' }}>
-                                                                        Anggota</option>
+                                                                    <option value="/dokumens"
+                                                                        {{ $menu->link == '/dokumens' ? 'selected' : '' }}>
+                                                                        Dokumen</option>
                                                                     <option value="/audites"
                                                                         {{ $menu->link == '/audites' ? 'selected' : '' }}>
                                                                         Auditee</option>
                                                                     <option value="/users"
                                                                         {{ $menu->link == '/users' ? 'selected' : '' }}>
-                                                                        Auditee</option>
+                                                                        User</option>
                                                                     <option value="/admin/panel"
                                                                         {{ $menu->link == '/admin/panel' ? 'selected' : '' }}>
                                                                         Menu</option>

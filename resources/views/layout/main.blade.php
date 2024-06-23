@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="{{ asset('style/style.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ asset('fontawesome-free/css/all.min.css') }}">
+  @stack('styles')
 </head>
 <body onload="initClock()" class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -184,5 +185,6 @@
 <script src="{{ asset('/') }}dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('/') }}dist/js/demo.js"></script>
+@stack('scripts')
 </body>
 </html>
