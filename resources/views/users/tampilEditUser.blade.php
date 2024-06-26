@@ -1,27 +1,26 @@
 @extends('layout.main')
-@section('title','Edit Anggota')
+@section('title','Edit User')
 
 @section('isi')
-
 <div class="col-md-16 p-5 pt-2">
-    <h3><i class="fa fa-angle-double-right"></i>Edit Data Anggota</h3><hr>
+    <h3><i class="fa fa-angle-double-right"></i>Edit Data User</h3><hr>
     <h4 class="tittle-1">
-        <span class="span0">Tambahkan Detail Anggota</span>
+        <span class="span0">Tambahkan Detail User</span>
     </h4>
     <div class="row">
         <div class="col-md-12">
             <div class="card border-0 shadow rounded">
                 <div class="card-body">
-                    <form action="/updateDataAnggota/{{ $anggotas->id }}" method="POST" enctype="multipart/form-data">
+                    <form action="/updateDataUser/{{ $users->id }}" method="POST" enctype="multipart/form-data">
 
                         @csrf
 
                         <div class="form-group">
                             <label class="font-weight-bold">NAMA</label>
-                            <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ $anggotas->nama }}" placeholder="Masukkan Nama...">
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $users->name) }}" placeholder="Masukkan Nama...">
 
                             <!-- error message untuk nama -->
-                            @error('nama')
+                            @error('name')
                                 <div class="alert alert-danger mt-2">
                                     {{ $message }}
                                 </div>
@@ -29,10 +28,32 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="font-weight-bold">NIP</label>
-                            <input type="text" class="form-control @error('nip') is-invalid @enderror" name="nip" value="{{  $anggotas->nip }}" placeholder="Masukkan NIP...">
+                            <label class="font-weight-bold">USERNAME</label>
+                            <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username', $users->username) }}" placeholder="Masukkan Username...">
 
-                            <!-- error message untuk merek -->
+                            <!-- error message untuk nama -->
+                            @error('username')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">EMAIL</label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $users->email) }}" placeholder="Masukkan Email...">
+
+                            <!-- error message untuk email -->
+                            @error('email')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">NIP</label>
+                            <input type="text" class="form-control @error('nip') is-invalid @enderror" name="nip" value="{{ old('nip', $users->nip) }}" placeholder="Masukkan NIP...">
+
+                            <!-- error message untuk nip -->
                             @error('nip')
                                 <div class="alert alert-danger mt-2">
                                     {{ $message }}
@@ -41,9 +62,9 @@
                         </div>
                         <div class="form-group">
                             <label class="font-weight-bold">NIDN</label>
-                            <input type="text" class="form-control @error('nidn') is-invalid @enderror" name="nidn" value="{{  $anggotas->nidn }}" placeholder="Masukkan NIDN...">
+                            <input type="text" class="form-control @error('nidn') is-invalid @enderror" name="nidn" value="{{ old('nidn', $users->nidn) }}" placeholder="Masukkan NIDN...">
 
-                            <!-- error message untuk merek -->
+                            <!-- error message untuk nidn -->
                             @error('nidn')
                                 <div class="alert alert-danger mt-2">
                                     {{ $message }}
@@ -51,15 +72,47 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label class="font-weight-bold">JABATAN</label>
-                            <input type="text" class="form-control @error('jabatan') is-invalid @enderror" name="jabatan" value="{{  $anggotas->jabatan }}" placeholder="Masukkan Jabatan...">
+                            <label class="font-weight-bold">PASSWORD</label>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Masukkan Password...">
 
-                            <!-- error message untuk merek -->
-                            @error('jabatan')
+                            <!-- error message untuk password -->
+                            @error('password')
                                 <div class="alert alert-danger mt-2">
                                     {{ $message }}
                                 </div>
                             @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">KONFIRMASI PASSWORD</label>
+                            <input type="password" class="form-control" name="password_confirmation" placeholder="Konfirmasi Password">
+                        </div>
+                        <div class="form-group">
+                            <label class="font-weight-bold">JABATAN</label>
+                            <select id="level" name="id_level" class="form-control">
+                                <option value="">- Pilih Jabatan -</option>
+                                @foreach ($levels as $level)
+                                    <option value="{{ $level->id }}" {{ old('id_level', $users->id_level) == $level->id ? 'selected' : '' }}>{{ $level->name }}</option>
+                                @endforeach
+                            </select>
+                            <!-- error message untuk level -->
+                            @error('id_level')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div id="auditeeForm" style="display: none;">
+                            <div class="form-group">
+                                <label class="font-weight-bold">AUDITEE BAGIAN</label>
+                                <select name="bagian_auditee" class="form-control">
+                                    <option value="">- Pilih Bagian -</option>
+                                    <option value="1" {{ old('bagian_auditee', $users->bagian_auditee) == 1 ? 'selected' : '' }}>Bagian 1</option>
+                                    <option value="2" {{ old('bagian_auditee', $users->bagian_auditee) == 2 ? 'selected' : '' }}>Bagian 2</option>
+                                    <option value="3" {{ old('bagian_auditee', $users->bagian_auditee) == 3 ? 'selected' : '' }}>Bagian 3</option>
+                                    <option value="4" {{ old('bagian_auditee', $users->bagian_auditee) == 4 ? 'selected' : '' }}>Bagian 4</option>
+                                    <option value="5" {{ old('bagian_auditee', $users->bagian_auditee) == 5 ? 'selected' : '' }}>Bagian 5</option>
+                                </select>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
@@ -75,5 +128,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#level').change(function(){
+            if($(this).val() == '5'){ // If Auditee is selected
+                $('#auditeeForm').show();
+            } else {
+                $('#auditeeForm').hide();
+            }
+        });
+    });
+</script>
 
 @endsection

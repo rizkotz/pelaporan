@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Charts\TugasLaporChart;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -195,8 +196,9 @@ class PostController extends Controller
     //tampil data
     public function tampilData($id){
         $posts = Post::find($id);
+        $users = User::all();
         //dd($posts);
-        return view('posts.tampilEdit', compact('posts'))->with([
+        return view('posts.tampilEdit', compact('posts','users'))->with([
             'user' => Auth::user(),
         ]);
     }
@@ -204,7 +206,8 @@ class PostController extends Controller
     //detail tugas
     public function detailTugas($id){
         $posts = Post::find($id);
-        return view('posts.detailTugas', compact('posts'))->with([
+        $comments = Comment::where('post_id', $posts->id)->get();
+        return view('posts.detailTugas', compact('posts','comments'))->with([
             'user' => Auth::user(),
         ]);
     }
@@ -245,14 +248,153 @@ class PostController extends Controller
 
     return redirect()->route('detailTugasKetua', $id)->with('error', 'Anda tidak memiliki hak akses untuk approve dokumen ini');
 }
+// Disapproval
+public function disapprove($id, $type)
+{
+    $post = Post::find($id);
+    if (Auth::user()->id_level == 1 || Auth::user()->id_level == 3) {
+        switch ($type) {
+            case 'reviu':
+                $post->approvalReviu = 'rejected';
+                break;
+            case 'berita':
+                $post->approvalBerita = 'rejected';
+                break;
+            case 'pengesahan':
+                $post->approvalPengesahan = 'rejected';
+                break;
+            case 'rubrik':
+                $post->approvalRubrik = 'rejected';
+                break;
+            default:
+                return redirect()->route('detailTugasKetua', $id)->with('error', 'Tipe approval tidak valid');
+        }
+
+        $post->save();
+        return redirect()->route('detailTugasKetua', $id)->with('success', 'Dokumen berhasil ditolak');
+    }
+
+    return redirect()->route('detailTugasKetua', $id)->with('error', 'Anda tidak memiliki hak akses untuk menolak dokumen ini');
+}
+
+//Comment Ketua
+public function showCommentForm($id, $type)
+    {
+        $post = Post::findOrFail($id);
+        return view('comments.create', compact('post', 'type'));
+    }
+
+    public function postComment(Request $request, $id, $type)
+    {
+        $post = Post::findOrFail($id);
+
+        // Validasi input komentar
+        $request->validate([
+            'comment' => 'required|string',
+        ]);
+
+        // Simpan komentar ke dalam database
+        $post->comments()->create([
+            'user_id' => auth()->id(),
+            'comment' => $request->input('comment'),
+            'type' => $type,
+        ]);
+
+        return redirect()->back()->with('success', 'Komentar berhasil disimpan.');
+    }
 
     //Edit Data
-    public function updateData(Request $request, $id){
-        $posts = Post::find($id);
-        $posts->update($request->all());
+    public function updateData(Request $request, $id)
+{
+    $post = Post::find($id);
 
-        return redirect()->route('posts.index')->with('success','Data Berhasil Diupdate!');
+    //validate form
+    $this->validate($request, [
+        'waktu'     => 'required|min:1',
+        'anggota'   => 'required',
+        'tempat'     => 'required|min:1',
+        'jenis'     => 'required|min:1',
+        'judul'     => 'required|min:1',
+        'deskripsi'     => 'required|min:1',
+        'bidang'     => 'required|min:1',
+        'tanggungjawab' => 'required',
+        'dokumen' => 'mimes:doc,docx,pdf',
+        'templateA' => 'mimes:doc,docx',
+        'templateB' => 'mimes:doc,docx',
+        'rubrik' => 'mimes:xls,xlsx',
+    ], [
+        'anggota.required' => 'Anggota field is required.',
+        'tanggungjawab.required' => 'Tanggungjawab field is required.'
+    ]);
+
+    //update post
+    $post->waktu = $request->waktu;
+    $post->anggota = $request->anggota;
+    $post->tempat = $request->tempat;
+    $post->jenis = $request->jenis;
+    $post->judul = $request->judul;
+    $post->deskripsi = $request->deskripsi;
+    $post->bidang = $request->bidang;
+    $post->tanggungjawab = $request->tanggungjawab;
+
+    if ($request->hasFile('dokumen')) {
+        $file = $request->file('dokumen');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('dokumenrev'), $filename);
+        $post->dokumen = $filename;
     }
+
+    if ($request->hasFile('templateA')) {
+        $file = $request->file('templateA');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('template_berita'), $filename);
+        $post->templateA = $filename;
+    }
+
+    if ($request->hasFile('templateB')) {
+        $file = $request->file('templateB');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('template_pengesahan'), $filename);
+        $post->templateB = $filename;
+    }
+
+    if ($request->hasFile('rubrik')) {
+        $file = $request->file('rubrik');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('template_rubrik'), $filename);
+        $post->rubrik = $filename;
+    }
+
+    $post->save();
+
+    return redirect()->route('posts.index')->with('success', 'Data Berhasil Diupdate!');
+}
+
+    //Hapus Data
+    public function destroy($id)
+{
+    $post = Post::findOrFail($id);
+
+    // Hapus file terkait jika ada
+    if ($post->dokumen) {
+        Storage::delete('dokumenrev/' . $post->dokumen);
+    }
+    if ($post->templateA) {
+        Storage::delete('template_berita/' . $post->templateA);
+    }
+    if ($post->templateB) {
+        Storage::delete('template_pengesahan/' . $post->templateB);
+    }
+    if ($post->rubrik) {
+        Storage::delete('template_rubrik/' . $post->rubrik);
+    }
+
+    // Hapus record dari database
+    $post->delete();
+
+    return redirect()->route('posts.index')
+                    ->with('success', 'Data berhasil dihapus.');
+}
 
     //Searching
     public function show(Request $request){
@@ -266,6 +408,15 @@ class PostController extends Controller
 
         return view('posts.reviewLaporan', ['posts' => $posts]);
     }
+    public function search(Request $request)
+{
+    $search = $request->input('search');
+    $posts = Post::where('judul', 'like', '%' . $search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $search . '%')
+                  ->paginate(10);
+
+    return view('posts.index', compact('posts'));
+}
 
       // Print Detail Tugas yang sudah dikonversi
     public function printDetailTugas($id)

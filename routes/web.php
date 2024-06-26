@@ -80,33 +80,42 @@ Route::resource('/admin/panel', MenuController::class)->middleware(['auth','cekU
         ->middleware('auth','cekUserLogin');
  Route::post('/posts/{id}/approve/{type}',   [PostController::class,'approve'])->name('posts.approve')
         ->middleware('auth','cekUserLogin');
+ Route::post('/posts/{id}/disapprove/{type}', [PostController::class, 'disapprove'])->name('posts.disapprove')
+        ->middleware('auth', 'cekUserLogin');
  Route::get('/detailTugas/print/{id}',  [PostController::class,'printDetailTugas'])->name('printDetailTugas')
         ->middleware('auth');
+ Route::delete('/posts/{id}',   [PostController::class,'destroy'])->name('destroy')->middleware('auth');
  Route::post('/detailTugas/{id}/submit', [PostController::class,'submit'])->middleware('auth');
  Route::get('/reviewLaporan/print',   [PostController::class,'print'])->middleware('auth');
 //  Route::get('/detailTugas/print/{id}',   [PostController::class,'print_id'])->middleware('auth');
  Route::get('/reviewLaporan/printpdf',   [PostController::class,'printpdf'])->middleware('auth');
+ // Menampilkan form komentar
+Route::get('/posts/{id}/comment/{type}', [PostController::class, 'showCommentForm'])->name('posts.comment');
 
- //Route CRUD Anggota
- Route::resource('/anggotas', AnggotaController::class)->middleware('auth');
- Route::get('/tampilDataAnggota/{id}', [AnggotaController::class,'tampilDataAnggota'])->name('tampilDataAnggota')
-        ->middleware('auth');
- Route::post('/updateDataAnggota/{id}', [AnggotaController::class,'updateDataAnggota'])->name('updateDataAnggota')
-        ->middleware('auth');
+// Menyimpan komentar
+Route::post('/posts/{id}/comment/{type}', [PostController::class, 'postComment'])->name('posts.comment.store');
 
- //Route CRUD Auditee
- Route::resource('/audites', AuditeController::class)->middleware('auth');
- Route::get('tampilDataAudite/{id}', [AuditeController::class,'tampilDataAudite'])->name('tampilDataAudite')
-        ->middleware('auth');
- Route::get('updateDataAudite/{id}', [AuditeController::class,'updateDataAudite'])->name('updateDataAudite')
-        ->middleware('auth');
+//  //Route CRUD Anggota
+//  Route::resource('/anggotas', AnggotaController::class)->middleware('auth');
+//  Route::get('/tampilDataAnggota/{id}', [AnggotaController::class,'tampilDataAnggota'])->name('tampilDataAnggota')
+//         ->middleware('auth');
+//  Route::post('/updateDataAnggota/{id}', [AnggotaController::class,'updateDataAnggota'])->name('updateDataAnggota')
+//         ->middleware('auth');
+
+//  //Route CRUD Auditee
+//  Route::resource('/audites', AuditeController::class)->middleware('auth');
+//  Route::get('tampilDataAudite/{id}', [AuditeController::class,'tampilDataAudite'])->name('tampilDataAudite')
+//         ->middleware('auth');
+//  Route::get('updateDataAudite/{id}', [AuditeController::class,'updateDataAudite'])->name('updateDataAudite')
+//         ->middleware('auth');
 
  //Route CRUD User
  Route::resource('/users', UserController::class)->middleware('auth');
- Route::get('/tampilDataUser/{id}', [UserController::class,'tampilDataAnggota'])->name('tampilDataUser')
+ Route::get('/tampilDataUser/{id}', [UserController::class,'tampilDataUser'])->name('tampilDataUser')
         ->middleware('auth');
- Route::post('/updateDataUser/{id}', [UserController::class,'updateDataAnggota'])->name('updateDataUser')
+ Route::post('/updateDataUser/{id}', [UserController::class,'updateDataUser'])->name('updateDataUser')
         ->middleware('auth');
+ Route::delete('/users/{id}',   [UserController::class,'destroy'])->name('users.destroy')->middleware('auth');
 
  //Route CRUD Dokumen
  Route::resource('/dokumens', DokumenController::class)->middleware('auth');
@@ -141,9 +150,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 //Route setelah verif
-Route::get('/dashboard', function () {
-    // Only verified users may access this route...
-})->middleware(['auth', 'verified']);
+Route::get('/dashboard', [ProjectController::class, 'dashboard'])->middleware(['auth', 'verified']);
 
 
 

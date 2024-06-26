@@ -73,25 +73,65 @@ class UserController extends Controller
     //tampil data
     public function tampilDataUser($id){
         $users = User::find($id);
+        $levels = Level::all();
         //dd($users);
-        return view('users.tampilEdituser', compact('users'))->with([
+        return view('users.tampilEdituser', compact('users','levels'))->with([
             'user' => Auth::user(),
         ]);
     }
 
     //Edit Data
     public function updateDataUser(Request $request, $id){
-        $users = User::find($id);
-        $users->update($request->all());
+         // Validasi input
+        $this->validate($request, [
+            'name' => 'required|min:3',
+            'username' => 'required',
+            'email' => 'required|min:4|email|unique:users,email,' . $id,
+            'nip' => 'required|min:1',
+            'nidn' => 'required|min:1',
+            'id_level' => 'required',
+        ]);
+
+        // Mencari user berdasarkan ID
+        $user = User::find($id);
+
+        // Update data user kecuali password
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->nip = $request->nip;
+        $user->nidn = $request->nidn;
+        $user->id_level = $request->id_level;
+        $user->bagian_auditee = $request->bagian_auditee;
+
+        // Jika password diisi, hash password baru
+        if ($request->filled('password')) {
+            $this->validate($request, [
+                'password' => 'required|confirmed',
+            ]);
+            $user->password = bcrypt($request->password);
+        }
+
+        // Simpan perubahan
+        $user->save();
 
         return redirect()->route('users.index')->with('success','Data Berhasil Diupdate!');
     }
 
+    //Hapus Data User
+    public function destroy($id)
+{
+    $user = User::findOrFail($id);
+    $user->delete();
+
+    return redirect()->route('users.index')
+        ->with('success', 'User berhasil dihapus.');
+}
     //Searching
     public function show(Request $request){
 
         if($request->has('search')){
-            $users = User::where('nama','nip','LIKE','%'.$request->search.'%')->get();
+            $users = User::where('name','nip','LIKE','%'.$request->search.'%')->get();
         }
         else{
             $users = User::all();
@@ -102,13 +142,10 @@ class UserController extends Controller
 
     public function search(Request $request){
 
-        if($request->has('search')){
-            $users = User::where('nama','LIKE','%'.$request->search.'%')->get();
-        }
-        else{
-            $users = User::all();
-        }
-
-        return view('users.userView', ['users' => $users]);
+        $search = $request->input('search');
+        $users = User::where('name','like','%'. $search . '%')
+                      ->orWhere('nip', 'like', '%' .$search . '%')
+                      ->paginate(10);
+        return view('users.userView', compact('users'));
     }
 }

@@ -16,10 +16,12 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <a href="{{ route('users.create') }}" class="btn btn-md btn-success mb-3">TAMBAH USER</a>
+                            @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
+                                <a href="{{ route('users.create') }}" class="btn btn-md btn-success mb-3">TAMBAH USER</a>
+                            @endif
                         </div>
                         <div class="col-md-6">
-                            <form action="/userAnggota/search" class="form=inline" method="GET">
+                            <form action="/userView/search" class="form=inline" method="GET">
                                 <div class="input-group mb-5">
                                 <input type="search" name="search" class="form-control float-right" placeholder="Search: Masukkan Nama...">
                                 <div class="input-group-append">
@@ -42,6 +44,7 @@
                             <th scope="col">NIP</th>
                             <th scope="col">NIDN</th>
                             <th scope="col">Jabatan</th>
+                            <th colspan="2" scope="col">Aksi</th>
 
                         </tr>
                         </thead>
@@ -82,6 +85,20 @@
                                         }
                                     @endphp --}}
                                 </td>
+                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
+                                    <td><a href="/tampilDataUser/{{ $user->id }}" class="btn fa-regular fa-pen-to-square bg-warning p-2 text-white" data-toggle="tooltip" title="Edit User"></a> </td>
+                                @endif
+                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
+                                <td class="text-center">
+                                    <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('users.destroy', $user->id) }}" method="POST">
+
+                                        @csrf
+                                        @method('DELETE')
+                                        <!-- <button type="submit" class="fa-solid fa-trash bg-danger p-2 text white"></button> -->
+                                        <button type="submit" class="btn fa-solid fa-trash bg-danger p-2 text-white" data-toggle="tooltip" title="Hapus User"></button>
+                                    </form>
+                                </td>
+                                @endif
 
 
                             </tr>
@@ -93,7 +110,7 @@
                         </tbody>
                     </table>
                     <!-- PAGINATION (Hilangi -- nya)-->
-                    {{-- $anggotas->links() --}}
+                    {{ $users->links('pagination::bootstrap-4') }}
 
                 </div>
             </div>

@@ -7,9 +7,9 @@
     <h4 class="tittle-1">
         <span class="span0">Detail Penugasan</span>
     </h4>
-    <div class=" mb-2 ">
+    {{-- <div class=" mb-2 ">
         <a href="/detailTugas/print/{{ $posts->id }}" target="_blank" class="btn fa-solid fa-print bg-primary p-2 text-white" data-toggle="tooltip" title="PRINT"></a>
-    </div>
+    </div> --}}
     <div class="row">
         <div class="col-md-12">
             <div class="card border-0 shadow rounded">
@@ -159,6 +159,10 @@
                                                     @csrf
                                                     <button type="submit" class="btn btn-success">Approve</button>
                                                 </form>
+                                                <form action="{{ route('posts.disapprove', ['id' => $posts->id, 'type' => 'reviu']) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                                </form>
                                                 @endif
                                             </td>
                                         </tr>
@@ -176,6 +180,10 @@
                                                 <form action="{{ route('posts.approve', ['id' => $posts->id, 'type' => 'berita']) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success">Approve</button>
+                                                </form>
+                                                <form action="{{ route('posts.disapprove', ['id' => $posts->id, 'type' => 'berita']) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">Reject</button>
                                                 </form>
                                                 @endif
                                             </td>
@@ -195,6 +203,10 @@
                                                     @csrf
                                                     <button type="submit" class="btn btn-success">Approve</button>
                                                 </form>
+                                                <form action="{{ route('posts.disapprove', ['id' => $posts->id, 'type' => 'pengesahan']) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                                </form>
                                                 @endif
                                             </td>
                                         </tr>
@@ -213,13 +225,30 @@
                                                     @csrf
                                                     <button type="submit" class="btn btn-success">Approve</button>
                                                 </form>
+                                                <form action="{{ route('posts.disapprove', ['id' => $posts->id, 'type' => 'rubrik']) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                                </form>
                                                 @endif
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
+
                         </tr>
+                        <th class="text-right">Komentar : </th>
+                            <td>
+                                @if((Auth::user()->id_level == 1 || Auth::user()->id_level == 3))
+                                    <form action="{{ route('posts.comment.store', ['id' => $posts->id, 'type' => 'reviu']) }}" method="POST">
+                                        @csrf
+                                        <div class="input-group mb-2">
+                                        <textarea name="comment" rows="3" cols="50" placeholder="Masukkan komentar"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm mt-0">Kirim Komentar</button>
+                                    </form>
+                                @endif
+                            </td>
                     </table>
                 </div>
             </div>

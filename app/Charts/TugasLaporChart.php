@@ -16,22 +16,20 @@ class TugasLaporChart
 
     public function build(): \ArielMejiaDev\LarapexCharts\BarChart
     {
-        $tugasLapor = Post::get();
-        $data = [
-            $tugasLapor->where('bidang', 'reviu')->count(),
-            $tugasLapor->where('bidang', 'keuangan')->count(),
-        ];
-        $label = [
-            'reviu',
-            'keuangan',
-        ];
+        $postCounts = Post::select('bidang', \DB::raw('count(*) as total'))
+                          ->groupBy('bidang')
+                          ->get()
+                          ->pluck('total', 'bidang')
+                          ->toArray();
+
+        $labels = array_keys($postCounts);
+        $data = array_values($postCounts);
 
         return $this->chart->barChart()
             ->setTitle('Data Penugasan')
             ->setSubtitle('Data Penugasan Tahun 2023/2024')
-            ->addData('reviu',[40,90,70,50])
-            ->addData('audit',[30,75,60,40])
+            ->addData('Jumlah Penugasan', $data)
             ->setHeight(300)
-            ->setLabels(['January','February','March','April']);
+            ->setLabels($labels);
     }
 }

@@ -205,6 +205,8 @@
                                                 <td>
                                                     @if($posts->approvalReviu == 'approved')
                                                         <span class="badge badge-success">Disetujui</span>
+                                                    @elseif($posts->approvalReviu == 'rejected')
+                                                        <span class="badge badge-danger">Ditolak</span>
                                                     @else
                                                         <span class="badge badge-warning">Pending</span>
                                                     @endif
@@ -224,6 +226,8 @@
                                                 <td>
                                                     @if($posts->approvalBerita == 'approved')
                                                         <span class="badge badge-success">Disetujui</span>
+                                                    @elseif($posts->approvalBerita == 'rejected')
+                                                        <span class="badge badge-danger">Ditolak</span>
                                                     @else
                                                         <span class="badge badge-warning">Pending</span>
                                                     @endif
@@ -243,6 +247,8 @@
                                                 <td>
                                                     @if($posts->approvalPengesahan == 'approved')
                                                         <span class="badge badge-success">Disetujui</span>
+                                                    @elseif($posts->approvalPengesahan == 'rejected')
+                                                        <span class="badge badge-danger">Ditolak</span>
                                                     @else
                                                         <span class="badge badge-warning">Pending</span>
                                                     @endif
@@ -261,6 +267,8 @@
                                                 <td>
                                                     @if($posts->approvalRubrik == 'approved')
                                                         <span class="badge badge-success">Disetujui</span>
+                                                    @elseif($posts->approvalRubrik == 'rejected')
+                                                        <span class="badge badge-danger">Ditolak</span>
                                                     @else
                                                         <span class="badge badge-warning">Pending</span>
                                                     @endif
@@ -275,7 +283,20 @@
                                                      $posts->approvalPengesahan == 'approved' &&
                                                      $posts->approvalRubrik == 'approved')
                                                      <a href="{{ route('printDetailTugas', ['id'=>$posts->id]) }}" target="_blank" class="btn fa-solid fa-print bg-primary ml-2 p-2 text-white" data-toggle="tooltip" title="PRINT"></a>
-                                                @endif
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Komentar Ketua : </th>
+                                <td>
+                                <ul>
+                                    @foreach($comments as $comment)
+                                    @if($comment->type === 'reviu')
+                                        <li>{{ $comment->comment }}</li>
+                                        <!-- Tambahkan informasi tambahan seperti waktu komentar atau penulis jika perlu -->
+                                    @endif
+                                @endforeach
+                                </ul>
                                 </td>
                             </tr>
 

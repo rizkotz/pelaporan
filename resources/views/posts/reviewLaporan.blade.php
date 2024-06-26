@@ -84,7 +84,10 @@
                                 @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 3)
                                 <td><a href="/detailTugasKetua/{{ $post->id }}" class="btn fa-solid fa-list bg-primary p-2 text-white" data-toggle="tooltip" title="Detail Tugas Ketua"></a> </td>
                                 @endif
+                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
                                 <td><a href="/tampilData/{{ $post->id }}" class="btn fa-regular fa-pen-to-square bg-warning p-2 text-white" data-toggle="tooltip" title="Edit Tugas"></a> </td>
+                                @endif
+                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
                                 <td class="text-center">
                                     <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('posts.destroy', $post->id) }}" method="POST">
 
@@ -94,6 +97,7 @@
                                         <button type="submit" class="btn fa-solid fa-trash bg-danger p-2 text-white" data-toggle="tooltip" title="Hapus Tugas"></button>
                                     </form>
                                 </td>
+                                @endif
 
                             </tr>
                         @empty
@@ -103,8 +107,8 @@
                         @endforelse
                         </tbody>
                     </table>
-                    <!-- PAGINATION (Hilangi -- nya)-->
-                    {{-- $posts->links() --}}
+                    <!-- PAGINATION -->
+                    {{ $posts->links('pagination::bootstrap-4') }}
 
                 </div>
             </div>

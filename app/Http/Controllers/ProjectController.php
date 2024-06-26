@@ -6,34 +6,44 @@ use App\Charts\TugasLaporChart;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
-/*
-    public function index(TugasLaporChart $tugasLaporChart){
-        $data['tugasLaporChart'] = $tugasLaporChart->build();
-        return view('dashboard');
-    }
-*/
     public function dashboard(TugasLaporChart $tugasLaporChart){
-        return view('dashboard', ['tugasLaporChart'=> $tugasLaporChart->build()])->with([
+        // Hitung total data
+        $totalPosts = Post::count();
+
+        // Hitung data yang di-approve oleh ketua
+        $approvedPosts = Post::whereNotNull('approvalReviu')
+                             ->orWhereNotNull('approvalBerita')
+                             ->orWhereNotNull('approvalPengesahan')
+                             ->orWhereNotNull('approvalRubrik')
+                             ->count();
+
+        // Hitung persentase data yang di-approve
+        $approvalRate = $totalPosts > 0 ? ($approvedPosts / $totalPosts) * 100 : 0;
+
+        // Hitung jumlah data sesuai dengan bidang
+        $bidangCounts = Post::select('bidang', \DB::raw('count(*) as total'))
+                            ->groupBy('bidang')
+                            ->pluck('total', 'bidang')
+                            ->toArray();
+
+        return view('dashboard', [
+            'tugasLaporChart' => $tugasLaporChart->build(),
+            'approvalRate' => $approvalRate,
+            'bidangCounts' => $bidangCounts,
             'user' => Auth::user(),
         ]);
     }
 
     public function search(Request $request){
+        $search = $request->input('search');
+        $posts = Post::where('judul', 'like', '%' . $search . '%')
+                     ->orWhere('deskripsi', 'like', '%' . $search . '%')
+                     ->paginate(10);
 
-        if($request->has('search')){
-            $posts = Post::where('judul','LIKE','%'.$request->search.'%')->get();
-        }
-        else{
-            $posts = Post::all();
-        }
-
-        return view('posts.reviewLaporan', ['posts' => $posts]);
+        return view('posts.reviewLaporan', compact('posts'));
     }
-
-
-
-
 }

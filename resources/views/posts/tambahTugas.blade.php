@@ -183,7 +183,7 @@
             dateFormat: "DD, d MM yy",
             onSelect: function(dateText, inst) {
                 var date = $(this).datepicker('getDate');
-                var dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                var dayNames = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu","Minggu"];
                 var day = dayNames[date.getUTCDay()];
                 var formattedDate = day + ", " + $.datepicker.formatDate("d MM yy", date);
                 $(this).val(formattedDate);
@@ -198,8 +198,8 @@
         currentText: 'Hari ini',
         monthNames: ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
         monthNamesShort: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
-        dayNames: ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],
-        dayNamesShort: ['Min','Sen','Sel','Rab','Kam','Jum','Sab'],
+        dayNames: ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'],
+        dayNamesShort: ['Sen','Sel','Rab','Kam','Jum','Sab','Min'],
         dayNamesMin: ['Mi','Se','Se','Ra','Ka','Ju','Sa'],
         weekHeader: 'Mg',
         dateFormat: 'dd/mm/yy',
