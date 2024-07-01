@@ -42,8 +42,29 @@ class ProjectController extends Controller
         $search = $request->input('search');
         $posts = Post::where('judul', 'like', '%' . $search . '%')
                      ->orWhere('deskripsi', 'like', '%' . $search . '%')
+                     ->orWhere('waktu', 'like', '%' . $search . '%')
                      ->paginate(10);
 
         return view('posts.reviewLaporan', compact('posts'));
+    }
+    public function searchKetua(Request $request){
+        $search = $request->input('search');
+        $posts = Post::where('judul', 'like', '%' . $search . '%')
+                     ->orWhere('deskripsi', 'like', '%' . $search . '%')
+                     ->orWhere('waktu', 'like', '%' . $search . '%')
+                     ->orWhere('tanggungjawab', 'like', '%' . $search . '%')
+                     ->paginate(10);
+
+        return view('posts.reviewLaporanKetua', compact('posts'));
+    }
+    public function searchAkhir(Request $request){
+        $search = $request->input('search');
+        $posts = Post::whereNotNull('laporan_akhir') //filter yang telah upload laporan akhir
+                     ->where(function($query) use ($search){
+                        $query->where('judul', 'LIKE' ,'%'.$search . '%')
+                              ->orWhere('deskripsi','LIKE','%'.$search . '%');
+                     })
+                     ->paginate(10);
+        return view('posts.laporanAkhir', compact('posts'));
     }
 }

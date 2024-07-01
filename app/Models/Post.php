@@ -34,9 +34,38 @@ class Post extends Model
         'approvalBerita',
         'approvalPengesahan',
         'approvalRubrik',
+        'laporan_akhir',
+        'koreksiReviu',
+        'koreksiBerita',
+        'koreksiPengesahan',
+        'koreksiRubrik',
     ];
     public function comments()
 {
     return $this->hasMany(Comment::class);
+}
+public function getApprovalStatusAttribute()
+{
+    $approvedCount = 0;
+
+    if ($this->approvalReviu == 'approved') $approvedCount++;
+    if ($this->approvalBerita == 'approved') $approvedCount++;
+    if ($this->approvalPengesahan == 'approved') $approvedCount++;
+    if ($this->approvalRubrik == 'approved') $approvedCount++;
+
+    return $approvedCount;
+}
+
+public function getStatusAttribute()
+{
+    $approvedCount = $this->approval_status;
+
+    if ($approvedCount == 0) {
+        return 'Belum';
+    } elseif ($approvedCount < 4) {
+        return 'Progres';
+    } else {
+        return 'Selesai';
+    }
 }
 }

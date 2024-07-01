@@ -16,12 +16,7 @@
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        {{-- <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tambah Menu</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div> --}}
+
                         <form action="/admin/panel" method="post">
                             @csrf
                             <div class="modal-body">
@@ -36,13 +31,17 @@
                                         <option selected>Pilih Halaman</option>
                                         <option value="/dashboard">Dashboard</option>
                                         <option value="/posts">PIC</option>
-                                        <option value="/dashboard">Laporan Unit Kerja</option>
+                                        {{-- <option value="/dashboard">Laporan Unit Kerja</option>
                                         <option value="/dashboard">Audit Eksternal</option>
-                                        <option value="/dashboard">Laporan Hasil Pemeriksaan</option>
+                                        <option value="/dashboard">Laporan Hasil Pemeriksaan</option> --}}
                                         <option value="/dokumens">Dokumen</option>
-                                        <option value="/audites">Auditee</option>
+                                        {{-- <option value="/audites">Auditee</option> --}}
                                         <option value="/users">User</option>
+                                        <option value="/laporanAkhir">Laporan Akhir</option>
+                                        <option value="/reviewKetua">PIC Ketua</option>
                                         <option value="/admin/panel">Menu</option>
+                                        <!-- Ganti dengan route yang sesuai -->
+                                        <option value="/profileDataUser/{{ Auth::user()->id }}">Profil</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -54,6 +53,10 @@
                                         <option value="fa-regular fa-user">&#xf2bd; </option>
                                         <option value="fa-solid fa-file">&#xf15b; </option>
                                         <option value="fa-brands fa-facebook">&#xf09a; </option>
+                                        <option value="fa-solid fa-gear">&#xf013; </option>
+
+
+
                                     </select>
                                 </div>
                                 <div>
@@ -69,30 +72,7 @@
                                                 for="customCheck{{ $level->id }}">{{ $level->name }}</label>
                                         </div>
                                     @endforeach
-                                    {{-- <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1"
-                                            name="admin">
-                                        <label class="custom-control-label" style="font-weight: 100;"
-                                            for="customCheck1">Admin</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck2"
-                                            name="ketua">
-                                        <label class="custom-control-label" style="font-weight: 100;"
-                                            for="customCheck2">Ketua</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck3"
-                                            name="anggota">
-                                        <label class="custom-control-label" style="font-weight: 100;"
-                                            for="customCheck3">Anggota</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck4"
-                                            name="auditee">
-                                        <label class="custom-control-label" style="font-weight: 100;"
-                                            for="customCheck4">Auditee</label>
-                                    </div> --}}
+
                                 </div>
 
                             </div>
@@ -101,6 +81,7 @@
                                 <button type="submit" class="btn btn-primary">Save changes</button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -179,86 +160,7 @@
                                             </div>
                                         </td>
                                         @endforeach
-                                        {{-- <td class="text">
-                                            <div class="form-check">
-                                                <label>
-                                                    <form action="/admin/panel/{{ $menu->id }}" method="post">
-                                                        @method('put')
-                                                        @csrf
-                                                        <input type="hidden" id="inputmenu" class="form-control"
-                                                            name="admin"
-                                                            value="{{ $menu->admin == '1' ? 'false' : '1' }}">
-                                                        <button type="submit"
-                                                            class="btn btn-sm btn-{{ $menu->admin == '1' ? 'success' : 'secondary' }}"
-                                                            style="margin:0;"
-                                                            onclick="return confirm('Apakah anda yakin?')">
-                                                            <i
-                                                                class="fa-solid fa-{{ $menu->admin == '1' ? 'check' : 'square' }}"></i>
-                                                        </button>
-                                                    </form>
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td class="text">
-                                            <div class="form-check">
-                                                <label>
-                                                    <form action="/admin/panel/{{ $menu->id }}" method="post">
-                                                        @method('put')
-                                                        @csrf
-                                                        <input type="hidden" id="inputmenu" class="form-control"
-                                                            name="ketua"
-                                                            value="{{ $menu->ketua == '1' ? 'false' : '1' }}">
-                                                        <button type="submit"
-                                                            class="btn btn-sm btn-{{ $menu->ketua == '1' ? 'success' : 'secondary' }}"
-                                                            style="margin:0;"
-                                                            onclick="return confirm('Apakah anda yakin?')">
-                                                            <i
-                                                                class="fa-solid fa-{{ $menu->ketua == '1' ? 'check' : 'square' }}"></i>
-                                                        </button>
-                                                    </form>
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td class="text">
-                                            <div class="form-check">
-                                                <label>
-                                                    <form action="/admin/panel/{{ $menu->id }}" method="post">
-                                                        @method('put')
-                                                        @csrf
-                                                        <input type="hidden" id="inputmenu" class="form-control"
-                                                            name="anggota"
-                                                            value="{{ $menu->anggota == '1' ? 'false' : '1' }}">
-                                                        <button type="submit"
-                                                            class="btn btn-sm btn-{{ $menu->anggota == '1' ? 'success' : 'secondary' }}"
-                                                            style="margin:0;"
-                                                            onclick="return confirm('Apakah anda yakin?')">
-                                                            <i
-                                                                class="fa-solid fa-{{ $menu->anggota == '1' ? 'check' : 'square' }}"></i>
-                                                        </button>
-                                                    </form>
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td class="text">
-                                            <div class="form-check">
-                                                <label>
-                                                    <form action="/admin/panel/{{ $menu->id }}" method="post">
-                                                        @method('put')
-                                                        @csrf
-                                                        <input type="hidden" id="inputmenu" class="form-control"
-                                                            name="auditee"
-                                                            value="{{ $menu->auditee == '1' ? 'false' : '1' }}">
-                                                        <button type="submit"
-                                                            class="btn btn-sm btn-{{ $menu->auditee == '1' ? 'success' : 'secondary' }}"
-                                                            style="margin:0;"
-                                                            onclick="return confirm('Apakah anda yakin?')">
-                                                            <i
-                                                                class="fa-solid fa-{{ $menu->auditee == '1' ? 'check' : 'square' }}"></i>
-                                                        </button>
-                                                    </form>
-                                                </label>
-                                            </div>
-                                        </td> --}}
+
 
                                         <td>
                                             <button type="button" class="btn btn-sm btn-warning" data-toggle="modal"
@@ -308,7 +210,7 @@
                                                                     <option value="/posts"
                                                                         {{ $menu->link == '/posts' ? 'selected' : '' }}>
                                                                         PIC</option>
-                                                                    <option value="/dashboard"
+                                                                    {{-- <option value="/dashboard"
                                                                         {{ $menu->link == '/dashboard' ? 'selected' : '' }}>
                                                                         Laporan Unit Kerja</option>
                                                                     <option value="/dashboard"
@@ -316,16 +218,25 @@
                                                                         Audit Eksternal</option>
                                                                     <option value="/dashboard"
                                                                         {{ $menu->link == '/dashboard' ? 'selected' : '' }}>
-                                                                        Laporan Hasil Pemeriksaan</option>
+                                                                        Laporan Hasil Pemeriksaan</option> --}}
                                                                     <option value="/dokumens"
                                                                         {{ $menu->link == '/dokumens' ? 'selected' : '' }}>
                                                                         Dokumen</option>
-                                                                    <option value="/audites"
+                                                                    {{-- <option value="/audites"
                                                                         {{ $menu->link == '/audites' ? 'selected' : '' }}>
-                                                                        Auditee</option>
+                                                                        Auditee</option> --}}
                                                                     <option value="/users"
                                                                         {{ $menu->link == '/users' ? 'selected' : '' }}>
                                                                         User</option>
+                                                                    <option value="/laporanAkhir"
+                                                                        {{ $menu->link == '/laporanAkhir' ? 'selected' : '' }}>
+                                                                        Laporan Akhir</option>
+                                                                    <option value="/reviewKetua"
+                                                                        {{ $menu->link == '/reviewKetua' ? 'selected' : '' }}>
+                                                                        PIC Ketua</option>
+                                                                    <option value="/profileDataUser/{{ Auth::user()->id }}"
+                                                                        {{ $menu->link == '/profileDataUser' ? 'selected' : '' }}>
+                                                                        Profil</option>
                                                                     <option value="/admin/panel"
                                                                         {{ $menu->link == '/admin/panel' ? 'selected' : '' }}>
                                                                         Menu</option>

@@ -31,6 +31,9 @@ class LevelSeeder extends Seeder
             [
                 'name' => 'Auditee',
             ],
+            [
+                'name' => 'Sekretaris',
+            ],
 
         ];
 

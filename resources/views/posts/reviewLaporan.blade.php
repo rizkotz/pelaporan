@@ -3,11 +3,26 @@
 @section('isi')
 
 <div class="col-md-16 p-5 pt-2">
-    <h3><i class="fa-solid fa-list-check mr-2"></i>PIC </h3><hr>
+    <h3><i class="fa-solid fa-list-check mr-2"></i>PIC Kegiatan</h3><hr>
     <h4 class="tittle-1">
         <span class="span0">List</span>
         <span class="span1">Tugas</span>
     </h4>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <form action="{{ route('posts.index') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" name="tanggungjawab" class="form-control" placeholder="Tanggung Jawab" value="{{ request('tanggungjawab') }}">
+                    <input type="text" name="anggota" class="form-control" placeholder="Anggota" value="{{ request('anggota') }}">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i> Filter
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card border-0 shadow rounded">
@@ -20,7 +35,7 @@
                             @endif
                         </div>
                         <div class="col-md-6">
-                            <form action="/reviewLaporan/search" class="form=inline" method="GET">
+                            <form action="/reviewLaporan/search"  method="GET">
                                 <div class="input-group">
                                 <input type="search" name="search" class="form-control float-right" placeholder="Search: Masukkan Judul">
                                 <div class="input-group-append">
@@ -52,6 +67,7 @@
                             <th scope="col">Judul</th>
                             <th scope="col">Deskripsi</th>
                             <th scope="col">Anggota</th>
+                            <th scope="col">PIC</th>
                             <th colspan="4" scope="col" >Aksi</th>
 
                         </tr>
@@ -78,10 +94,13 @@
                                 <td class="text-center">
                                     {{ $post->anggota }}
                                 </td>
+                                <td class="text-center">
+                                    {{ $post->tanggungjawab }}
+                                </td>
                                 @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2 || auth()->user()->id_level == 4)
-                                <td><a href="/detailTugas/{{ $post->id }}" class="btn fa-solid fa-list bg-info p-2 text-white" data-toggle="tooltip" title="Detail Tugas"></a> </td>
+                                <td><a href="/detailTugas/{{ $post->id }}" class="btn fa-solid fa-list bg-success p-2 text-white" data-toggle="tooltip" title="Detail Tugas"></a> </td>
                                 @endif
-                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 3)
+                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 3 || auth()->user()->id_level == 6)
                                 <td><a href="/detailTugasKetua/{{ $post->id }}" class="btn fa-solid fa-list bg-primary p-2 text-white" data-toggle="tooltip" title="Detail Tugas Ketua"></a> </td>
                                 @endif
                                 @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)

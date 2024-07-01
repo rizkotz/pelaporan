@@ -24,16 +24,127 @@ class PostController extends Controller
      * @return void
      */
 
-    public function index(TugasLaporChart $tugasLaporChart)
+    public function index(Request $request ,TugasLaporChart $tugasLaporChart)
     {
-        //get posts
-        $posts = Post::latest()->paginate(5);
+        //get user data
+        $users = Auth::user();
+
+        //get filtering data from request
+        // $tanggungjawab = $request->input('tanggungjawab');
+        // $anggota = $request->input('anggota');
+
+        //query to get posts based on tanggungjawab and anggota
+        $query = Post::query();
+
+        if ($users->id_level == 1 || $users->id_level == 2){
+            //Admin: see all post
+        }
+        else {
+            $query->where(function ($q) use ($users){
+                $q->where('tanggungjawab', $users->name)
+                ->orWhere('anggota','LIKE','%' . $users->name . '%');
+            });
+        }
+
+        //get filtering data from request
+        $tanggungjawab = $request->input('tanggungjawab');
+        $anggota = $request->input('anggota');
+
+        if ($tanggungjawab){
+            $query->where('tanggungjawab', 'LIKE', '%'.$tanggungjawab . '%');
+        }
+        if ($anggota){
+            $query->where('anggota', 'LIKE', '%' .$anggota . '%');
+        }
+
+        //get filtered posts
+        $posts = $query->latest()->paginate(5);
 
         //render view with posts
-        return view('posts.reviewLaporan', compact('posts'),
-        ['tugasLaporChart'=> $tugasLaporChart->build()])->with([
-            'user' => Auth::user(),
-        ]);
+        return view('posts.reviewLaporan', compact('posts'))
+            ->with('tugasLaporChart', $tugasLaporChart->build())
+            ->with('users', $users)
+            ->with('tanggungjawab', $tanggungjawab)
+            ->with('anggota',$anggota);
+    }
+    public function laporanAkhir(Request $request ,TugasLaporChart $tugasLaporChart){
+        //get user data
+        $users = Auth::user();
+
+        //query to get posts based on tanggungjawab and anggota
+        $query = Post::query();
+
+        if ($users->id_level == 1 || $users->id_level == 2){
+            //Admin: see all post
+        }
+        else {
+            $query->where(function ($q) use ($users){
+                $q->where('tanggungjawab', $users->name)
+                ->orWhere('anggota','LIKE','%' . $users->name . '%');
+            });
+        }
+
+        //get filtering data from request
+        $tanggungjawab = $request->input('tanggungjawab');
+        $anggota = $request->input('anggota');
+
+        if ($tanggungjawab){
+            $query->where('tanggungjawab', 'LIKE', '%'.$tanggungjawab . '%');
+        }
+        if ($anggota){
+            $query->where('anggota', 'LIKE', '%' .$anggota . '%');
+        }
+
+        // Filter only posts that have laporan_akhir
+        $query->whereNotNull('laporan_akhir');
+
+        //get filtered posts
+        $posts = $query->latest()->paginate(5);
+
+        //render view with posts
+        return view('posts.laporanAkhir', compact('posts'))
+            ->with('tugasLaporChart', $tugasLaporChart->build())
+            ->with('users', $users)
+            ->with('tanggungjawab', $tanggungjawab)
+            ->with('anggota',$anggota);
+    }
+    public function reviewKetua(Request $request ,TugasLaporChart $tugasLaporChart){
+        //get user data
+        $users = Auth::user();
+
+        //query to get posts based on tanggungjawab and anggota
+        $query = Post::query();
+
+        if ($users->id_level == 1 || $users->id_level == 2 || $users->id_level == 3 || $users->id_level == 6){
+            //Admin: see all post
+        }
+        else {
+            $query->where(function ($q) use ($users){
+                $q->where('tanggungjawab', $users->name)
+                ->orWhere('anggota','LIKE','%' . $users->name . '%');
+            });
+        }
+
+        //get filtering data from request
+        $tanggungjawab = $request->input('tanggungjawab');
+        $anggota = $request->input('anggota');
+
+        if ($tanggungjawab){
+            $query->where('tanggungjawab', 'LIKE', '%'.$tanggungjawab . '%');
+        }
+        if ($anggota){
+            $query->where('anggota', 'LIKE', '%' .$anggota . '%');
+        }
+
+        //get filtered posts
+        $posts = $query->latest()->paginate(5);
+
+        //render view with posts
+        return view('posts.reviewLaporanKetua', compact('posts'))
+            ->with('tugasLaporChart', $tugasLaporChart->build())
+            ->with('users', $users)
+            ->with('tanggungjawab', $tanggungjawab)
+            ->with('anggota',$anggota);
     }
     public function print()
     {
@@ -189,6 +300,78 @@ class PostController extends Controller
             $posts->hasilRubrik = $fileName;
             $posts->save();
         }
+
+        return redirect()->back()->with('success', 'Dokumen berhasil diunggah.');
+    }
+
+    //submit laporan akhir
+    public function submit_akhir(Request $request, $id){
+        $request->validate([
+            'laporan_akhir' => 'required|mimes:pdf',
+        ]);
+
+        $posts = Post::findOrFail($id);
+
+        if ($request->hasFile('laporan_akhir')) {
+            $file = $request->file('laporan_akhir');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('hasil_akhir'), $fileName);
+            $posts->laporan_akhir = $fileName;
+            $posts->save();
+        }
+
+        return redirect()->back()->with('success', 'Dokumen berhasil diunggah.');
+    }
+
+    //koreksi ketua
+    public function koreksi_ketua(Request $request, $id){
+        $request->validate([
+            'file_type' => 'required|in:koreksiReviu,koreksiBerita,koreksiPengesahan,koreksiRubrik',
+            'koreksiReviu' => 'nullable|mimes:doc,docx',
+            'koreksiBerita' => 'nullable|mimes:doc,docx',
+            'koreksiPengesahan' => 'nullable|mimes:doc,docx',
+            'koreksiRubrik' => 'nullable|mimes:xls,xlsx',
+        ]);
+
+        $posts = Post::findOrFail($id);
+        $fileType = $request->input('file_type');
+
+        switch ($fileType) {
+            case 'koreksiReviu':
+                if ($request->hasFile('koreksiReviu')) {
+                    $file = $request->file('koreksiReviu');
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move(public_path('koreksi_reviu'), $fileName);
+                    $posts->koreksiReviu = $fileName;
+                }
+                break;
+            case 'koreksiBerita':
+                if ($request->hasFile('koreksiBerita')) {
+                    $file = $request->file('koreksiBerita');
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move(public_path('koreksi_berita'), $fileName);
+                    $posts->koreksiBerita = $fileName;
+                }
+                break;
+            case 'koreksiPengesahan':
+                if ($request->hasFile('koreksiPengesahan')) {
+                    $file = $request->file('koreksiPengesahan');
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move(public_path('koreksi_pengesahan'), $fileName);
+                    $posts->koreksiPengesahan = $fileName;
+                }
+                break;
+            case 'koreksiRubrik':
+                if ($request->hasFile('koreksiRubrik')) {
+                    $file = $request->file('koreksiRubrik');
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move(public_path('koreksi_rubrik'), $fileName);
+                    $posts->koreksiRubrik = $fileName;
+                }
+                break;
+        }
+
+        $posts->save();
 
         return redirect()->back()->with('success', 'Dokumen berhasil diunggah.');
     }
@@ -397,27 +580,25 @@ public function showCommentForm($id, $type)
 }
 
     //Searching
-    public function show(Request $request){
+    public function show(Request $request)
+{
+    $search = $request->input('search');
+    $posts = Post::where('judul', 'LIKE', '%' . $search . '%')
+                 ->orWhere('waktu', 'LIKE', '%' . $search . '%') // Sesuaikan dengan format pencarian
+                 ->paginate(10);
 
-        if($request->has('search')){
-            $posts = Post::where('judul','LIKE','%'.$request->search.'%')->get();
-        }
-        else{
-            $posts = Post::all();
-        }
+    return view('posts.reviewLaporan', compact('posts'));
+}
 
-        return view('posts.reviewLaporan', ['posts' => $posts]);
-    }
-    public function search(Request $request)
+public function search(Request $request)
 {
     $search = $request->input('search');
     $posts = Post::where('judul', 'like', '%' . $search . '%')
-                  ->orWhere('deskripsi', 'like', '%' . $search . '%')
-                  ->paginate(10);
+                 ->orWhere('waktu', 'like', '%' . $search . '%') // Sesuaikan dengan format pencarian
+                 ->paginate(10);
 
     return view('posts.index', compact('posts'));
 }
-
       // Print Detail Tugas yang sudah dikonversi
     public function printDetailTugas($id)
     {

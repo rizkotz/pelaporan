@@ -118,6 +118,33 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success','Data Berhasil Diupdate!');
     }
 
+    //Update Profil
+    public function updateProfile(Request $request, $id)
+    {
+        $this->validate($request, [
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'password' => 'nullable|min:4|confirmed',
+        ]);
+
+        $user = User::find($id);
+
+        if ($request->hasFile('profile_picture')) {
+            $image = $request->file('profile_picture');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/profile_pictures');
+            $image->move($destinationPath, $name);
+            $user->profile_picture = $name;
+        }
+
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('profileDataUser', $id)->with('success', 'Profile updated successfully');
+    }
+
     //Hapus Data User
     public function destroy($id)
 {
@@ -148,4 +175,15 @@ class UserController extends Controller
                       ->paginate(10);
         return view('users.userView', compact('users'));
     }
+
+    //profil user
+    public function profileDataUser()
+{
+    $user = auth()->user();
+    if (!$user) {
+        abort(404); // Jika user tidak ditemukan, tampilkan halaman 404
+    }
+    $levels = Level::all();
+    return view('profile.profileView', compact('user', 'levels'));
+}
 }

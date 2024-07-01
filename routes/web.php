@@ -70,6 +70,10 @@ Route::resource('/admin/panel', MenuController::class)->middleware(['auth','cekU
 
  //Route CRUD Post Controller
  Route::resource('/posts', PostController::class)->middleware('auth');
+ Route::get('/laporanAkhir',    [PostController::class,'laporanAkhir'])->name('laporanAkhir')
+        ->middleware('auth');
+ Route::get('/reviewKetua',    [PostController::class,'reviewKetua'])->name('reviewKetua')
+        ->middleware('auth');
  Route::get('/tampilData/{id}', [PostController::class,'tampilData'])->name('tampilData')
         ->middleware('auth');
  Route::post('/updateData/{id}', [PostController::class,'updateData'])->name('updateData')
@@ -86,12 +90,13 @@ Route::resource('/admin/panel', MenuController::class)->middleware(['auth','cekU
         ->middleware('auth');
  Route::delete('/posts/{id}',   [PostController::class,'destroy'])->name('destroy')->middleware('auth');
  Route::post('/detailTugas/{id}/submit', [PostController::class,'submit'])->middleware('auth');
+ Route::post('/detailTugasKetua/{id}/koreksi_ketua', [PostController::class, 'koreksi_ketua'])->middleware('auth');
+ Route::post('/detailTugas/{id}/submit_akhir', [PostController::class,'submit_akhir'])->middleware('auth');
  Route::get('/reviewLaporan/print',   [PostController::class,'print'])->middleware('auth');
 //  Route::get('/detailTugas/print/{id}',   [PostController::class,'print_id'])->middleware('auth');
  Route::get('/reviewLaporan/printpdf',   [PostController::class,'printpdf'])->middleware('auth');
  // Menampilkan form komentar
 Route::get('/posts/{id}/comment/{type}', [PostController::class, 'showCommentForm'])->name('posts.comment');
-
 // Menyimpan komentar
 Route::post('/posts/{id}/comment/{type}', [PostController::class, 'postComment'])->name('posts.comment.store');
 
@@ -116,6 +121,11 @@ Route::post('/posts/{id}/comment/{type}', [PostController::class, 'postComment']
  Route::post('/updateDataUser/{id}', [UserController::class,'updateDataUser'])->name('updateDataUser')
         ->middleware('auth');
  Route::delete('/users/{id}',   [UserController::class,'destroy'])->name('users.destroy')->middleware('auth');
+ //Route Profile
+ Route::get('/profileDataUser/{id}', [UserController::class, 'profileDataUser'])->name('profileDataUser')
+        ->middleware('auth');
+ Route::post('/profile/{id}/update', [UserController::class, 'updateProfile'])->name('profile.update')
+        ->middleware('auth');
 
  //Route CRUD Dokumen
  Route::resource('/dokumens', DokumenController::class)->middleware('auth');
@@ -132,6 +142,8 @@ Route::get('/',                        [ProjectController::class,'dashboard'])->
 
 //Route Search
 Route::get('/reviewLaporan/search',     [ProjectController::class,'search'])->middleware('auth');
+Route::get('/reviewLaporanKetua/searchKetua', [ProjectController::class,'searchKetua'])->middleware('auth');
+Route::get('/laporanAkhir/searchAkhir',     [ProjectController::class,'searchAkhir'])->middleware('auth');
 Route::get('/userAnggota/search',     [AnggotaController::class,'search'])->middleware('auth');
 Route::get('/userView/search',     [UserController::class,'search'])->middleware('auth');
 Route::get('/userAudite/search',        [AuditeController::class,'search'])->middleware('auth');

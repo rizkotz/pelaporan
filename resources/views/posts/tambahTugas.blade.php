@@ -39,6 +39,22 @@
                         </div>
 
                         <div class="form-group">
+                            <label class="font-weight-bold">PIC (PENANGGUNG JAWAB)</label>
+                            <select name ="tanggungjawab" class="form-control" text="black">
+                                <option value="">- Pilih PIC -</option>
+                                @foreach ($users as $tanggungjawab)
+                                    <option value="{{ $tanggungjawab->name }}" {{ old('anggota') == $tanggungjawab->name ? 'selected':null }}>{{ $tanggungjawab->name }}</option>
+                                @endforeach
+                            </select>
+                            <!-- error message untuk penanggung jawab -->
+                            @error('tanggungjawab')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label class="font-weight-bold">ANGGOTA</label>
                             <select name ="anggota" class="form-control">
                                 <option value="">- Pilih Anggota -</option>
@@ -93,22 +109,6 @@
 
                             <!-- error message untuk merek -->
                             @error('bidang')
-                                <div class="alert alert-danger mt-2">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label class="font-weight-bold">PENANGGUNG JAWAB</label>
-                            <select name ="tanggungjawab" class="form-control" text="black">
-                                <option value="">- Pilih Penanggung Jawab -</option>
-                                @foreach ($users as $tanggungjawab)
-                                    <option value="{{ $tanggungjawab->name }}" {{ old('anggota') == $tanggungjawab->name ? 'selected':null }}>{{ $tanggungjawab->name }}</option>
-                                @endforeach
-                            </select>
-                            <!-- error message untuk penanggung jawab -->
-                            @error('tanggungjawab')
                                 <div class="alert alert-danger mt-2">
                                     {{ $message }}
                                 </div>

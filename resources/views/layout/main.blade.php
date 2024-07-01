@@ -52,7 +52,37 @@
       <div class="icon ml-auto">
         <h5>
 
-            <a class="navbar-brand text-white" href="#">SPI POLINEMA</a>
+            <a class="navbar-brand text-white" href="#">
+                @if(auth()->user()->profile_picture)
+                <img src="/profile_pictures/{{ auth()->user()->profile_picture }}" class="img-circle elevation-2" alt="User Image" width="30" height="30">
+              @else
+                <i class="fa-solid fa-user img-circle elevation-2" style="color: #e6e6e6;"></i>
+              @endif
+              <span class="small-role">
+              @switch(auth()->user()->id_level)
+                  @case(1)
+                      Super Administrator
+                      @break
+                  @case(2)
+                      Administrator
+                      @break
+                  @case(3)
+                      Ketua
+                      @break
+                  @case(4)
+                      Anggota
+                      @break
+                  @case(5)
+                      Auditee
+                      @break
+                  @case(6)
+                      Sekretaris
+                      @break
+                  @default
+                      Unknown
+              @endswitch
+              </span>
+            </a>
         </h5>
     </div>
     </ul>

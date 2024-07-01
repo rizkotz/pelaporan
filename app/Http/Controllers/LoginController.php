@@ -26,9 +26,12 @@ class LoginController extends Controller
             [
                 'username' => 'required',
                 'password' => 'required',
+                'g-recaptcha-response' => 'required|captcha',
             ],
             [
                 'username.required' => 'Username tidak boleh kosong',
+                'g-recaptcha-response.required' => 'Harap isi CAPTCHA dengan benar.',
+                'g-recaptcha-response.captcha' => 'CAPTCHA yang anda masukkan salah.',
             ]
         );
         $kredensial = $request->only('username', 'password');
@@ -49,7 +52,7 @@ class LoginController extends Controller
 
         return back()->withErrors([
             'username' => 'Maaf username atau password anda salah',
-        ])->onlyInput('username');
+        ])->withInput($request->only('username'));
     }
 
         public function logout(Request $request){

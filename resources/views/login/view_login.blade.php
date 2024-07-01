@@ -18,7 +18,7 @@
 
     <style>
         body {
-            background-image: url('https://masuk-ptn.com/images/product/524bac3991958498e0e40a465cdb259ceae3972b.png');
+            background-image: url('{{ asset('img/LoginBackground.jpg') }}');
             background-size: cover;
             background-repeat: no-repeat;
         }
@@ -31,62 +31,54 @@
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <h1><strong>Login</strong>SPI</h1>
+                <h1><strong><span class="text-warning">Login</span></strong><span class="text-primary">SPI</span></h1>
+                <h2>Politeknik Negeri Malang</h2>
             </div>
             <div class="card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">Silahkan login untuk masuk sistem</p>
 
                 <form action="{{ url('login/proses') }}" method="post">
                     @csrf
                     <div class="input-group mb-3">
-                        <input autofocus type="text" class="form-control"
-                            @error('username')
-                            is-invalid
-                            @enderror
+                        <input autofocus type="text" class="form-control @error('username') is-invalid @enderror"
                             placeholder="Username" name="username" value="{{ old('username') }}">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
                             </div>
                         </div>
-
                         @error('username')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
                         @enderror
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control"
-                        @error('password')
-                            is-invalid
-                        @enderror
-                        placeholder="Password" name="password">
+                        <input type="password" class="form-control @error('password') is-invalid @enderror"
+                            placeholder="Password" name="password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
                         @error('password')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="input-group mb-3">
+                        <strong>Captcha : </strong>
+                        {!! NoCaptcha::renderJs() !!}
+                        {!! NoCaptcha::display() !!}
+                        @error('g-recaptcha-response')
+                        <span class="invalid-feedback" style="display: block;">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="row">
-                        {{-- <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div> --}}
-                        <!-- /.col -->
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </div>
-                        <!-- /.col -->
                     </div>
                 </form>
 
