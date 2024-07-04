@@ -30,7 +30,11 @@
 
                         <div class="form-group">
                             <label class="font-weight-bold">JENIS</label>
-                            <input type="text" class="form-control @error('jenis') is-invalid @enderror" name="jenis" value="{{  $dokumens->jenis }}" placeholder="Masukkan Jenis Dokumen...">
+                            <select name ="jenis" class="form-control">
+                                <option value="">- Pilih Jenis Dokumen -</option>
+                                <option value="Peraturan">Reviu</option>
+                                <option value="Template">Keuangan</option>
+                            </select>
 
                             <!-- error message untuk merek -->
                             @error('jenis')

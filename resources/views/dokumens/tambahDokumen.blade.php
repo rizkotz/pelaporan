@@ -32,8 +32,8 @@
                             <label class="font-weight-bold">JENIS</label>
                             <select name ="jenis" class="form-control">
                                 <option value="">- Pilih Jenis Dokumen -</option>
-                                <option value="Peraturan">Peraturan</option>
-                                <option value="Template">Template</option>
+                                <option value="Peraturan">Reviu</option>
+                                <option value="Template">Keuangan</option>
                             </select>
 
                             <!-- error message untuk merek -->

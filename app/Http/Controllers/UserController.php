@@ -22,7 +22,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function create(){
+    public function create()
+    {
         $levels = Level::all();
         return view('users.tambahUser')->with([
             'user' => Auth::user(),
@@ -31,13 +32,14 @@ class UserController extends Controller
     }
 
     /**
-         * store
-         *
-         * @param Request $request
-         * @return void
-         */
+     * store
+     *
+     * @param Request $request
+     * @return void
+     */
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         // dd($request);
         //validate form
         $this->validate($request, [
@@ -71,18 +73,20 @@ class UserController extends Controller
     }
 
     //tampil data
-    public function tampilDataUser($id){
+    public function tampilDataUser($id)
+    {
         $users = User::find($id);
         $levels = Level::all();
         //dd($users);
-        return view('users.tampilEdituser', compact('users','levels'))->with([
+        return view('users.tampilEdituser', compact('users', 'levels'))->with([
             'user' => Auth::user(),
         ]);
     }
 
     //Edit Data
-    public function updateDataUser(Request $request, $id){
-         // Validasi input
+    public function updateDataUser(Request $request, $id)
+    {
+        // Validasi input
         $this->validate($request, [
             'name' => 'required|min:3',
             'username' => 'required',
@@ -115,7 +119,7 @@ class UserController extends Controller
         // Simpan perubahan
         $user->save();
 
-        return redirect()->route('users.index')->with('success','Data Berhasil Diupdate!');
+        return redirect()->route('users.index')->with('success', 'Data Berhasil Diupdate!');
     }
 
     //Update Profil
@@ -130,7 +134,7 @@ class UserController extends Controller
 
         if ($request->hasFile('profile_picture')) {
             $image = $request->file('profile_picture');
-            $name = time().'.'.$image->getClientOriginalExtension();
+            $name = time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/profile_pictures');
             $image->move($destinationPath, $name);
             $user->profile_picture = $name;
@@ -147,43 +151,44 @@ class UserController extends Controller
 
     //Hapus Data User
     public function destroy($id)
-{
-    $user = User::findOrFail($id);
-    $user->delete();
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
 
-    return redirect()->route('users.index')
-        ->with('success', 'User berhasil dihapus.');
-}
+        return redirect()->route('users.index')
+            ->with('success', 'User berhasil dihapus.');
+    }
     //Searching
-    public function show(Request $request){
+    public function show(Request $request)
+    {
 
-        if($request->has('search')){
-            $users = User::where('name','nip','LIKE','%'.$request->search.'%')->get();
-        }
-        else{
+        if ($request->has('search')) {
+            $users = User::where('name', 'nip', 'LIKE', '%' . $request->search . '%')->get();
+        } else {
             $users = User::all();
         }
 
         return view('users.userView', ['users' => $users]);
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
 
         $search = $request->input('search');
-        $users = User::where('name','like','%'. $search . '%')
-                      ->orWhere('nip', 'like', '%' .$search . '%')
-                      ->paginate(10);
+        $users = User::where('name', 'like', '%' . $search . '%')
+            ->orWhere('nip', 'like', '%' . $search . '%')
+            ->paginate(10);
         return view('users.userView', compact('users'));
     }
 
     //profil user
     public function profileDataUser()
-{
-    $user = auth()->user();
-    if (!$user) {
-        abort(404); // Jika user tidak ditemukan, tampilkan halaman 404
+    {
+        $user = auth()->user();
+        if (!$user) {
+            abort(404); // Jika user tidak ditemukan, tampilkan halaman 404
+        }
+        $levels = Level::all();
+        return view('profile.profileView', compact('user', 'levels'));
     }
-    $levels = Level::all();
-    return view('profile.profileView', compact('user', 'levels'));
-}
 }

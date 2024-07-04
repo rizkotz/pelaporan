@@ -66,8 +66,8 @@
                             <th scope="col">Jenis</th>
                             <th scope="col">Judul</th>
                             <th scope="col">Deskripsi</th>
-                            <th scope="col">Anggota</th>
                             <th scope="col">PIC</th>
+                            <th scope="col">Anggota</th>
                             <th colspan="4" scope="col" >Aksi</th>
 
                         </tr>
@@ -92,17 +92,21 @@
                                     {{ $post->deskripsi }}
                                 </td>
                                 <td class="text-center">
-                                    {{ $post->anggota }}
+                                    <span class="badge badge-primary">
+                                    {{ $post->tanggungjawab }}
+                                    </span>
                                 </td>
                                 <td class="text-center">
-                                    {{ $post->tanggungjawab }}
+                                    <span class="badge badge-secondary">
+                                    {{ $post->anggota }}
+                                    </span>
                                 </td>
-                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2 || auth()->user()->id_level == 4)
+                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2 || auth()->user()->id_level == 3 || auth()->user()->id_level == 4 || auth()->user()->id_level == 6)
                                 <td><a href="/detailTugas/{{ $post->id }}" class="btn fa-solid fa-list bg-success p-2 text-white" data-toggle="tooltip" title="Detail Tugas"></a> </td>
                                 @endif
-                                @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 3 || auth()->user()->id_level == 6)
+                                {{-- @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 3 || auth()->user()->id_level == 6)
                                 <td><a href="/detailTugasKetua/{{ $post->id }}" class="btn fa-solid fa-list bg-primary p-2 text-white" data-toggle="tooltip" title="Detail Tugas Ketua"></a> </td>
-                                @endif
+                                @endif --}}
                                 @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
                                 <td><a href="/tampilData/{{ $post->id }}" class="btn fa-regular fa-pen-to-square bg-warning p-2 text-white" data-toggle="tooltip" title="Edit Tugas"></a> </td>
                                 @endif

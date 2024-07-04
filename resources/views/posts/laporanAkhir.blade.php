@@ -67,6 +67,9 @@
                                 @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2 || auth()->user()->id_level == 4)
                                 <td><a href="/detailTugas/{{ $post->id }}" class="btn fa-solid fa-list bg-primary p-2 text-white" data-toggle="tooltip" title="Detail Tugas"></a> </td>
                                 @endif
+                                @if (auth()->user()->id_level == 3 || auth()->user()->id_level == 6)
+                                <td><a href="/detailTugasKetua/{{ $post->id }}" class="btn fa-solid fa-list bg-info p-2 text-white" data-toggle="tooltip" title="Detail Tugas"></a> </td>
+                                @endif
                             </tr>
                         @empty
                             <div class="alert alert-danger">

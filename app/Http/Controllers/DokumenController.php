@@ -6,10 +6,11 @@ use App\Models\Dokumen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpWord\Shared\Validate;
 
 class DokumenController extends Controller
 {
-        /**
+    /**
      * index
      *
      * @return void
@@ -25,25 +26,28 @@ class DokumenController extends Controller
         ]);
     }
 
-    public function create(){
+    public function create()
+    {
         return view('dokumens.tambahDokumen')->with([
             'user' => Auth::user(),
         ]);
     }
 
     /**
-         * store
-         *
-         * @param Request $request
-         * @return void
-         */
+     * store
+     *
+     * @param Request $request
+     * @return void
+     */
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         //validate form
         $this->validate($request, [
             'judul'     => 'required|min:1',
             'jenis'     => 'required|min:1',
+            'dokumen' => 'mimes:doc,docx,pdf',
         ]);
 
         //create dokumen
@@ -54,8 +58,8 @@ class DokumenController extends Controller
         ]);
 
         $dokumens = Dokumen::latest()->first();
-        if($request->hasFile('dokumen')){
-            $request->file('dokumen')->move('dokumen/',$request->file('dokumen')->getClientOriginalName());
+        if ($request->hasFile('dokumen')) {
+            $request->file('dokumen')->move('dokumen_auditee/', $request->file('dokumen')->getClientOriginalName());
             $dokumens->dokumen = $request->file('dokumen')->getClientOriginalName();
             $dokumens->save();
         }
@@ -65,40 +69,66 @@ class DokumenController extends Controller
     }
 
     //tampil data
-    public function tampilDataDokumen($id){
+    public function tampilDataDokumen($id)
+    {
         $dokumens = Dokumen::find($id);
         //dd($dokumens);
         return view('dokumens.tampilEditDokumen', compact('dokumens'));
     }
 
     //Edit Data
-    public function updateDataDokumen(Request $request, $id){
+    public function updateDataDokumen(Request $request, $id)
+    {
         $dokumens = Dokumen::find($id);
-        $dokumens->update($request->all());
+        //validate form
+        $this->validate($request,[
+            'judul'     => 'required|min:1',
+            'jenis'     => 'required|min:1',
+            'dokumen' => 'mimes:doc,docx,pdf',
+        ]);
 
-        return redirect()->route('dokumens.index')->with('success','Data Berhasil Diupdate!');
+        //update dokumens
+        $dokumens->judul = $request->judul;
+        $dokumens->jenis = $request->jenis;
+
+        if ($request->hasFile('dokumen')) {
+            $file = $request->file('dokumen');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('dokumen_auditee'), $filename);
+            $dokumens->dokumen = $filename;
+        }
+        $dokumens->save();
+
+        return redirect()->route('dokumens.index')->with('success', 'Data Berhasil Diupdate!');
     }
 
-    //Searching
-    public function show(Request $request){
+    //Hapus Delete Dokumen
+    public function destroy($id)
+    {
+        $dokumens = Dokumen::findOrFail($id);
+        $dokumens->delete();
 
-        if($request->has('search')){
-            $dokumens = Dokumen::where('judul','LIKE','%'.$request->search.'%')->get();
-        }
-        else{
+        return redirect()->route('dokumens.index')
+            ->with('success', 'Dokumen berhasil dihapus.');
+    }
+    //Searching
+    public function show(Request $request)
+    {
+
+        if ($request->has('search')) {
+            $dokumens = Dokumen::where('judul', 'LIKE', '%' . $request->search . '%')->get();
+        } else {
             $dokumens = Dokumen::all();
         }
 
         return view('dokumens.Dokumen', ['dokumens' => $dokumens]);
     }
-    public function search(Request $request){
-
-        if($request->has('search')){
-            $dokumens = Dokumen::where('judul','LIKE','%'.$request->search.'%')->get();
-        }
-        else{
-            $dokumens = Dokumen::all();
-        }
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+        $dokumens = Dokumen::where('judul', 'like', '%' . $search . '%')
+            ->orWhere('jenis', 'like', '%' . $search . '%')
+            ->paginate(10);
 
         return view('dokumens.dokumen', ['dokumens' => $dokumens]);
     }
@@ -106,7 +136,7 @@ class DokumenController extends Controller
     public function download($id)
     {
         $dokumens = Dokumen::findOrFail($id);
-        $filePath = public_path('dokumen/'.$dokumens->dokumen);
+        $filePath = public_path('dokumen/' . $dokumens->dokumen);
 
         // Verifikasi bahwa file ada sebelum mencoba mengunduh
         if (Dokumen::exists($filePath)) {

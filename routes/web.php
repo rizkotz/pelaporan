@@ -135,6 +135,8 @@ Route::post('/posts/{id}/comment/{type}', [PostController::class, 'postComment']
         ->middleware('auth');
  Route::get('dokumen/download/{id}', [DokumenController::class,'download'])->name('download.dokumen')
         ->middleware('auth');
+ Route::delete('/dokumens/{id}',   [DokumenController::class,'destroy'])->name('dokumens.destroy')->middleware('auth');
+
 
 //Route View
 Route::get('/dashboard',               [ProjectController::class,'dashboard'])->middleware('auth');
@@ -165,6 +167,8 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 Route::get('/dashboard', [ProjectController::class, 'dashboard'])->middleware(['auth', 'verified']);
 
 
+//Feedback
+Route::get('/feedback', [ProjectController::class, 'feedback'])->middleware('auth');
 
 //template
 Route::get('/welcome', function () {
