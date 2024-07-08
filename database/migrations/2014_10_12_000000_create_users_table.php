@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('nidn');
             $table->json('menu_config')->nullable();
             $table->string('bagian_auditee')->nullable();
+            $table->string('profile_picture')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

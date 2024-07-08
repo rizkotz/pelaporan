@@ -23,7 +23,9 @@ class UserData extends Seeder
                 'nip' => '19872164861',
                 'nidn' => '363717314',
                 'id_level' => 1,
-                'email' => 'superadmin@gmail.com'
+                'email' => 'superadmin@gmail.com',
+                'email_verified_at' => now(),
+                'is_approved' => true,
             ],
             [
                 'name' => 'Administrator',
@@ -32,7 +34,9 @@ class UserData extends Seeder
                 'nip' => '19872164861',
                 'nidn' => '363717314',
                 'id_level' => 2,
-                'email' => 'admin@gmail.com'
+                'email' => 'admin@gmail.com',
+                'email_verified_at' => now(),
+                'is_approved' => true,
             ],
             [
                 'name' => 'Ketua',
@@ -41,7 +45,9 @@ class UserData extends Seeder
                 'nip' => '19872164861',
                 'nidn' => '363717314',
                 'id_level' => 3,
-                'email' => 'ketua@gmail.com'
+                'email' => 'ketua@gmail.com',
+                'email_verified_at' => now(),
+                'is_approved' => true,
             ],
         ];
 

@@ -1,5 +1,5 @@
 @extends('layout.main')
-@section('title','Review Laporan')
+@section('title','PIC Kegiatan Ketua')
 @section('isi')
 
 <div class="col-md-16 p-5 pt-2">

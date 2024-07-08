@@ -191,4 +191,20 @@ class UserController extends Controller
         $levels = Level::all();
         return view('profile.profileView', compact('user', 'levels'));
     }
+    public function approveUser($id)
+    {
+        $user = User::find($id);
+        $user->is_approved = true;
+        $user->save();
+
+        return redirect()->route('users.index')->with('success', 'User berhasil disetujui!');
+    }
+
+    public function disapproveUser($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+
+        return redirect()->route('users.index')->with('success', 'User berhasil ditolak!');
+    }
 }

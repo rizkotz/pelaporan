@@ -12,6 +12,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,130 +27,90 @@ use Illuminate\Support\Facades\Route;
 
 //Route Login
 //Route::get('login',     [LoginController::class, 'index'])->name('login');
-Route::controller(LoginController::class)->group(function(){
-    Route::get('login','index')->name('login');
-    Route::post('login/proses','proses');
-    Route::get('logout','logout');
+Route::controller(LoginController::class)->group(function () {
+    Route::get('login', 'index')->name('login');
+    Route::post('login/proses', 'proses');
+    Route::get('logout', 'logout');
+    Route::get('register', 'create')->name('register');
+    Route::post('register', 'store')->name('register.store');
 });
 
-// Route::group(['middleware' => ['auth']], function(){
-//     Route::group(['middleware' => ['cekUserLogin:1']], function(){
-//         Route::resource('dashboard', ProjectController::class);
-
-//         //Route CRUD Post Controller
-//         Route::resource('/posts', PostController::class);
-//         Route::get('/tampilData/{id}', [PostController::class,'tampilData'])->name('tampilData');
-//         Route::post('/updateData/{id}', [PostController::class,'updateData'])->name('updateData');
-//         Route::get('/detailTugas/{id}',      [PostController::class,'detailTugas'])->name('detailTugas');
-
-//         //Route CRUD Anggota
-//         Route::resource('/anggotas', AnggotaController::class);
-//         Route::get('/tampilDataAnggota/{id}', [AnggotaController::class,'tampilDataAnggota'])->name('tampilDataAnggota');
-//         Route::post('/updateDataAnggota/{id}', [AnggotaController::class,'updateDataAnggota'])->name('updateDataAnggota');
-
-//         //Route CRUD Auditee
-//         Route::resource('/audites', AuditeController::class);
-//         Route::get('tampilDataAudite/{id}', [AuditeController::class,'tampilDataAudite'])->name('tampilDataAudite');
-//         Route::get('updateDataAudite/{id}', [AuditeController::class,'updateDataAudite'])->name('updateDataAudite');
-
-//         //Route CRUD Dokumen
-//         Route::resource('/dokumens', DokumenController::class);
-//         Route::get('/tampilDataDokumen/{id}', [DokumenController::class,'tampilDataDokumen'])->name('tampilDataDokumen');
-//         Route::post('/updateDataDokumen/{id}', [DokumenController::class,'updateDataDokumen'])->name('updateDataDokumen');
-//         Route::get('dokumen/download/{id}', [DokumenController::class,'download'])->name('download.dokumen');
-
-//         //Rute untuk Admin Panel
-//     Route::get('/admin/panel', [AdminPanelController::class, 'index'])->name('admin.panel');
-//     Route::post('/admin/panel/{userId}/save-menu-config', [AdminPanelController::class, 'saveMenuConfig'])->name('admin.saveMenuConfig');
-//     });
-
-// });
 
 //Route Admin Menu Setting
-Route::resource('/admin/panel', MenuController::class)->middleware(['auth','cekUserLogin']);
+Route::resource('/admin/panel', MenuController::class)->middleware(['auth', 'cekUserLogin']);
 
- //Route CRUD Post Controller
- Route::resource('/posts', PostController::class)->middleware('auth');
- Route::get('/laporanAkhir',    [PostController::class,'laporanAkhir'])->name('laporanAkhir')
-        ->middleware('auth');
- Route::get('/reviewKetua',    [PostController::class,'reviewKetua'])->name('reviewKetua')
-        ->middleware('auth');
- Route::get('/tampilData/{id}', [PostController::class,'tampilData'])->name('tampilData')
-        ->middleware('auth');
- Route::post('/updateData/{id}', [PostController::class,'updateData'])->name('updateData')
-        ->middleware('auth');
- Route::get('/detailTugas/{id}',      [PostController::class,'detailTugas'])->name('detailTugas')
-        ->middleware('auth');
- Route::get('/detailTugasKetua/{id}',   [PostController::class,'detailTugasKetua'])->name('detailTugasKetua')
-        ->middleware('auth','cekUserLogin');
- Route::post('/posts/{id}/approve/{type}',   [PostController::class,'approve'])->name('posts.approve')
-        ->middleware('auth','cekUserLogin');
- Route::post('/posts/{id}/disapprove/{type}', [PostController::class, 'disapprove'])->name('posts.disapprove')
-        ->middleware('auth', 'cekUserLogin');
- Route::get('/detailTugas/print/{id}',  [PostController::class,'printDetailTugas'])->name('printDetailTugas')
-        ->middleware('auth');
- Route::delete('/posts/{id}',   [PostController::class,'destroy'])->name('destroy')->middleware('auth');
- Route::post('/detailTugas/{id}/submit', [PostController::class,'submit'])->middleware('auth');
- Route::post('/detailTugasKetua/{id}/koreksi_ketua', [PostController::class, 'koreksi_ketua'])->middleware('auth');
- Route::post('/detailTugas/{id}/submit_akhir', [PostController::class,'submit_akhir'])->middleware('auth');
- Route::get('/reviewLaporan/print',   [PostController::class,'print'])->middleware('auth');
+//Route CRUD Post Controller
+Route::resource('/posts', PostController::class)->middleware(['auth', 'approved']);
+Route::get('/laporanAkhir',    [PostController::class, 'laporanAkhir'])->name('laporanAkhir')
+    ->middleware('auth');
+Route::get('/reviewKetua',    [PostController::class, 'reviewKetua'])->name('reviewKetua')
+    ->middleware('auth');
+Route::get('/tampilData/{id}', [PostController::class, 'tampilData'])->name('tampilData')
+    ->middleware('auth');
+Route::post('/updateData/{id}', [PostController::class, 'updateData'])->name('updateData')
+    ->middleware('auth');
+Route::get('/detailTugas/{id}',      [PostController::class, 'detailTugas'])->name('detailTugas')
+    ->middleware('auth');
+Route::get('/detailTugasKetua/{id}',   [PostController::class, 'detailTugasKetua'])->name('detailTugasKetua')
+    ->middleware('auth', 'cekUserLogin');
+Route::post('/posts/{id}/approve/{type}',   [PostController::class, 'approve'])->name('posts.approve')
+    ->middleware('auth', 'cekUserLogin');
+Route::post('/posts/{id}/disapprove/{type}', [PostController::class, 'disapprove'])->name('posts.disapprove')
+    ->middleware('auth', 'cekUserLogin');
+Route::get('/detailTugas/print/{id}',  [PostController::class, 'printDetailTugas'])->name('printDetailTugas')
+    ->middleware('auth');
+Route::delete('/posts/{id}',   [PostController::class, 'destroy'])->name('destroy')->middleware('auth');
+Route::post('/detailTugas/{id}/submit', [PostController::class, 'submit'])->middleware('auth');
+Route::post('/detailTugasKetua/{id}/koreksi_ketua', [PostController::class, 'koreksi_ketua'])->middleware('auth');
+Route::post('/detailTugas/{id}/submit_akhir', [PostController::class, 'submit_akhir'])->middleware('auth');
+Route::get('/reviewLaporan/print',   [PostController::class, 'print'])->middleware('auth');
 //  Route::get('/detailTugas/print/{id}',   [PostController::class,'print_id'])->middleware('auth');
- Route::get('/reviewLaporan/printpdf',   [PostController::class,'printpdf'])->middleware('auth');
- // Menampilkan form komentar
+Route::get('/reviewLaporan/printpdf',   [PostController::class, 'printpdf'])->middleware('auth');
+// Menampilkan form komentar
 Route::get('/posts/{id}/comment/{type}', [PostController::class, 'showCommentForm'])->name('posts.comment');
 // Menyimpan komentar
 Route::post('/posts/{id}/comment/{type}', [PostController::class, 'postComment'])->name('posts.comment.store');
 
-//  //Route CRUD Anggota
-//  Route::resource('/anggotas', AnggotaController::class)->middleware('auth');
-//  Route::get('/tampilDataAnggota/{id}', [AnggotaController::class,'tampilDataAnggota'])->name('tampilDataAnggota')
-//         ->middleware('auth');
-//  Route::post('/updateDataAnggota/{id}', [AnggotaController::class,'updateDataAnggota'])->name('updateDataAnggota')
-//         ->middleware('auth');
+//Route CRUD User
+Route::resource('/users', UserController::class)->middleware('auth');
+Route::get('/tampilDataUser/{id}', [UserController::class, 'tampilDataUser'])->name('tampilDataUser')
+    ->middleware('auth');
+Route::post('/updateDataUser/{id}', [UserController::class, 'updateDataUser'])->name('updateDataUser')
+    ->middleware('auth');
+Route::delete('/users/{id}',   [UserController::class, 'destroy'])->name('users.destroy')->middleware('auth');
+//Route Profile
+Route::get('/profileDataUser/{id}', [UserController::class, 'profileDataUser'])->name('profileDataUser')
+    ->middleware('auth');
+Route::post('/profile/{id}/update', [UserController::class, 'updateProfile'])->name('profile.update')
+    ->middleware('auth');
+Route::post('/users/{id}/approve', [UserController::class, 'approveUser'])->name('users.approve')
+    ->middleware('auth');
+Route::post('/users/{id}/disapprove', [UserController::class, 'disapproveUser'])->name('users.disapprove')
+    ->middleware('auth');
 
-//  //Route CRUD Auditee
-//  Route::resource('/audites', AuditeController::class)->middleware('auth');
-//  Route::get('tampilDataAudite/{id}', [AuditeController::class,'tampilDataAudite'])->name('tampilDataAudite')
-//         ->middleware('auth');
-//  Route::get('updateDataAudite/{id}', [AuditeController::class,'updateDataAudite'])->name('updateDataAudite')
-//         ->middleware('auth');
-
- //Route CRUD User
- Route::resource('/users', UserController::class)->middleware('auth');
- Route::get('/tampilDataUser/{id}', [UserController::class,'tampilDataUser'])->name('tampilDataUser')
-        ->middleware('auth');
- Route::post('/updateDataUser/{id}', [UserController::class,'updateDataUser'])->name('updateDataUser')
-        ->middleware('auth');
- Route::delete('/users/{id}',   [UserController::class,'destroy'])->name('users.destroy')->middleware('auth');
- //Route Profile
- Route::get('/profileDataUser/{id}', [UserController::class, 'profileDataUser'])->name('profileDataUser')
-        ->middleware('auth');
- Route::post('/profile/{id}/update', [UserController::class, 'updateProfile'])->name('profile.update')
-        ->middleware('auth');
-
- //Route CRUD Dokumen
- Route::resource('/dokumens', DokumenController::class)->middleware('auth');
- Route::get('/tampilDataDokumen/{id}', [DokumenController::class,'tampilDataDokumen'])->name('tampilDataDokumen')
-        ->middleware('auth');
- Route::post('/updateDataDokumen/{id}', [DokumenController::class,'updateDataDokumen'])->name('updateDataDokumen')
-        ->middleware('auth');
- Route::get('dokumen/download/{id}', [DokumenController::class,'download'])->name('download.dokumen')
-        ->middleware('auth');
- Route::delete('/dokumens/{id}',   [DokumenController::class,'destroy'])->name('dokumens.destroy')->middleware('auth');
+//Route CRUD Dokumen
+Route::resource('/dokumens', DokumenController::class)->middleware(['auth', 'approved']);
+Route::get('/tampilDataDokumen/{id}', [DokumenController::class, 'tampilDataDokumen'])->name('tampilDataDokumen')
+    ->middleware('auth');
+Route::post('/updateDataDokumen/{id}', [DokumenController::class, 'updateDataDokumen'])->name('updateDataDokumen')
+    ->middleware('auth');
+Route::get('dokumen/download/{id}', [DokumenController::class, 'download'])->name('download.dokumen')
+    ->middleware('auth');
+Route::delete('/dokumens/{id}',   [DokumenController::class, 'destroy'])->name('dokumens.destroy')->middleware('auth');
 
 
 //Route View
-Route::get('/dashboard',               [ProjectController::class,'dashboard'])->middleware('auth');
-Route::get('/',                        [ProjectController::class,'dashboard'])->middleware('auth');
+Route::get('/dashboard',               [ProjectController::class, 'dashboard'])->middleware(['auth', 'approved']);
+Route::get('/',                        [ProjectController::class, 'dashboard'])->middleware(['auth', 'approved']);
 
 //Route Search
-Route::get('/reviewLaporan/search',     [ProjectController::class,'search'])->middleware('auth');
-Route::get('/reviewLaporanKetua/searchKetua', [ProjectController::class,'searchKetua'])->middleware('auth');
-Route::get('/laporanAkhir/searchAkhir',     [ProjectController::class,'searchAkhir'])->middleware('auth');
-Route::get('/userAnggota/search',     [AnggotaController::class,'search'])->middleware('auth');
-Route::get('/userView/search',     [UserController::class,'search'])->middleware('auth');
-Route::get('/userAudite/search',        [AuditeController::class,'search'])->middleware('auth');
-Route::get('/dokumen/search',           [DokumenController::class,'search'])->middleware('auth');
+Route::get('/reviewLaporan/search',     [ProjectController::class, 'search'])->middleware('auth');
+Route::get('/reviewLaporanKetua/searchKetua', [ProjectController::class, 'searchKetua'])->middleware('auth');
+Route::get('/laporanAkhir/searchAkhir',     [ProjectController::class, 'searchAkhir'])->middleware('auth');
+Route::get('/userAnggota/search',     [AnggotaController::class, 'search'])->middleware('auth');
+Route::get('/userView/search',     [UserController::class, 'search'])->middleware('auth');
+Route::get('/userAudite/search',        [AuditeController::class, 'search'])->middleware('auth');
+Route::get('/dokumen/search',           [DokumenController::class, 'search'])->middleware('auth');
 
 //Route Verifikasi Email
 Route::get('/email/verify', function () {
@@ -164,7 +125,14 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 //Route setelah verif
-Route::get('/dashboard', [ProjectController::class, 'dashboard'])->middleware(['auth', 'verified']);
+Route::get('/dashboard', [ProjectController::class, 'dashboard'])->middleware(['auth', 'verified', 'approved']);
+
+//Route kirim ulang verifikasi email
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Email verifikasi telah dikirim ulang!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 
 //Feedback

@@ -28,6 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'menu_config',
         'bagian_auditee',
         'profile_picture',
+        'is_approved',
     ];
 
     public function Level()

@@ -22,7 +22,6 @@
             background-size: cover;
             background-repeat: no-repeat;
         }
-
     </style>
 </head>
 
@@ -48,9 +47,9 @@
                             </div>
                         </div>
                         @error('username')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
                         @enderror
                     </div>
                     <div class="input-group mb-3">
@@ -62,9 +61,9 @@
                             </div>
                         </div>
                         @error('password')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
                         @enderror
                     </div>
                     <div class="input-group mb-3">
@@ -72,7 +71,7 @@
                         {!! NoCaptcha::renderJs() !!}
                         {!! NoCaptcha::display() !!}
                         @error('g-recaptcha-response')
-                        <span class="invalid-feedback" style="display: block;">{{ $message }}</span>
+                            <span class="invalid-feedback" style="display: block;">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="row">
@@ -81,6 +80,12 @@
                         </div>
                     </div>
                 </form>
+                <div class="row mt-3">
+                    <div class="col-12 text-center">
+                        <a href="{{ route('register') }}" class="text-center">Belum punya akun? Register</a>
+                    </div>
+                </div>
+
 
                 {{-- <div class="social-auth-links text-center mt-2 mb-3">
         <a href="#" class="btn btn-block btn-primary">

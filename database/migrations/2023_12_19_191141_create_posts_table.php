@@ -35,6 +35,15 @@ return new class extends Migration
             $table->string('approvalBerita')->nullable();
             $table->string('approvalPengesahan')->nullable();
             $table->string('approvalRubrik')->nullable();
+            $table->timestamp('hasilReviu_uploaded_at')->nullable();
+            $table->timestamp('hasilBerita_uploaded_at')->nullable();
+            $table->timestamp('hasilPengesahan_uploaded_at')->nullable();
+            $table->timestamp('hasilRubrik_uploaded_at')->nullable();
+            $table->string('koreksiReviu')->nullable();
+            $table->string('koreksiBerita')->nullable();
+            $table->string('koreksiPengesahan')->nullable();
+            $table->string('koreksiRubrik')->nullable();
+            $table->string('laporan_akhir')->nullable();
             $table->timestamps();
         });
     }
