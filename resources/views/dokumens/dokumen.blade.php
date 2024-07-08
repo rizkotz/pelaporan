@@ -1,6 +1,5 @@
 @extends('layout.main')
 @section('title', 'Dokumen')
-
 @section('isi')
 
     <div class="col-md-16 p-5 pt-2">
@@ -39,11 +38,7 @@
                                         DOKUMEN</a>
                                 @endif
                             </div>
-
                         </div>
-
-
-
 
                         <table class="table table-bordered">
                             <thead>

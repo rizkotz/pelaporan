@@ -30,10 +30,6 @@ class PostController extends Controller
         //get user data
         $users = Auth::user();
 
-        //get filtering data from request
-        // $tanggungjawab = $request->input('tanggungjawab');
-        // $anggota = $request->input('anggota');
-
         //query to get posts based on tanggungjawab and anggota
         $query = Post::query();
 

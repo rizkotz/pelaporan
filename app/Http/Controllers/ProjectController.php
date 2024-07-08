@@ -72,6 +72,8 @@ class ProjectController extends Controller
         $posts = Post::where('judul', 'like', '%' . $search . '%')
             ->orWhere('deskripsi', 'like', '%' . $search . '%')
             ->orWhere('waktu', 'like', '%' . $search . '%')
+            ->orWhere('tanggungjawab', 'LIKE', '%' . $search . '%')
+            ->orWhere('anggota', 'LIKE', '%' . $search . '%')
             ->paginate(10);
 
         return view('posts.reviewLaporan', compact('posts'));
