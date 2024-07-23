@@ -100,6 +100,16 @@ class ProjectController extends Controller
             ->paginate(10);
         return view('posts.laporanAkhir', compact('posts'));
     }
+    public function searchTindakLanjut(Request $request)
+    {
+        $search = $request->input('search');
+        $posts = Post::whereNotNull('dokumen_tindak_lanjut') //filter yang telah upload tindak lanjut
+            ->where(function ($query) use ($search) {
+                $query->where('judul_tindak_lanjut', 'LIKE', '%' . $search . '%');
+            })
+            ->paginate(10);
+        return view('posts.dokumen_tindakLanjut', compact('posts'));
+    }
     public function feedback()
     {
         return view('feedback');

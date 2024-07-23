@@ -70,6 +70,12 @@ Route::get('/reviewLaporan/printpdf',   [PostController::class, 'printpdf'])->mi
 Route::get('/posts/{id}/comment/{type}', [PostController::class, 'showCommentForm'])->name('posts.comment');
 // Menyimpan komentar
 Route::post('/posts/{id}/comment/{type}', [PostController::class, 'postComment'])->name('posts.comment.store');
+Route::get('/tambahTindakLanjut/{id}', [PostController::class, 'tambahTindakLanjut'])->name('tambahTindakLanjut')
+    ->middleware('auth');
+Route::post('/tambahTindakLanjut/store/{id}', [PostController::class, 'storeTindakLanjut'])->name('storeTindakLanjut')
+    ->middleware('auth');
+    Route::get('/dokumen-tindak-lanjut', [PostController::class, 'dokumenTindakLanjut'])->name('dokumenTindakLanjut')
+    ->middleware('auth');
 
 //Route CRUD User
 Route::resource('/users', UserController::class)->middleware('auth');
@@ -107,6 +113,7 @@ Route::get('/',                        [ProjectController::class, 'dashboard'])-
 Route::get('/reviewLaporan/search',     [ProjectController::class, 'search'])->middleware('auth');
 Route::get('/reviewLaporanKetua/searchKetua', [ProjectController::class, 'searchKetua'])->middleware('auth');
 Route::get('/laporanAkhir/searchAkhir',     [ProjectController::class, 'searchAkhir'])->middleware('auth');
+Route::get('/tindakLanjut/search',     [ProjectController::class, 'searchTindakLanjut'])->middleware('auth');
 Route::get('/userAnggota/search',     [AnggotaController::class, 'search'])->middleware('auth');
 Route::get('/userView/search',     [UserController::class, 'search'])->middleware('auth');
 Route::get('/userAudite/search',        [AuditeController::class, 'search'])->middleware('auth');

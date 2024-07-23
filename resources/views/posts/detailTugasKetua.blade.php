@@ -147,6 +147,7 @@
                                                 'label' => 'Dokumen Reviu',
                                                 'approval' => $posts->approvalReviu,
                                                 'type' => 'reviu',
+                                                'approval_at' => $posts->approvalReviu_at,
                                                 'uploaded_at' => $posts->hasilReviu_uploaded_at,
                                             ],
                                             [
@@ -155,6 +156,7 @@
                                                 'label' => 'Berita Acara',
                                                 'approval' => $posts->approvalBerita,
                                                 'type' => 'berita',
+                                                'approval_at' => $posts->approvalBerita_at,
                                                 'uploaded_at' => $posts->hasilBerita_uploaded_at,
                                             ],
                                             [
@@ -163,6 +165,7 @@
                                                 'label' => 'Lembar Pengesahan',
                                                 'approval' => $posts->approvalPengesahan,
                                                 'type' => 'pengesahan',
+                                                'approval_at' => $posts->approvalPengesahan_at,
                                                 'uploaded_at' => $posts->hasilPengesahan_uploaded_at,
                                             ],
                                             [
@@ -171,6 +174,7 @@
                                                 'label' => 'Kertas Kerja',
                                                 'approval' => $posts->approvalRubrik,
                                                 'type' => 'rubrik',
+                                                'approval_at' => $posts->approvalRubrik_at,
                                                 'uploaded_at' => $posts->hasilRubrik_uploaded_at,
                                             ],
                                         ];
@@ -188,7 +192,7 @@
                                                     <th colspan="2">Nama Berkas</th>
                                                     <th scope="col">Keterangan</th>
                                                     <th scope="col">Waktu Pengumpulan</th>
-                                                    <th colspan="3" scope="col">Aksi</th>
+                                                    <th colspan="3" scope="col">Approving</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -209,6 +213,9 @@
                                                             {{ \Carbon\Carbon::parse($document['uploaded_at'])->format('d F Y') }}
                                                         </td>
                                                         <td>
+                                                            @if ($document['approval'] == 'approved')
+                                                                {{ \Carbon\Carbon::parse($document['approval_at'])->format('d F Y') }}
+                                                            @endif
                                                             @if ((Auth::user()->id_level == 1 || Auth::user()->id_level == 3) && $document['approval'] != 'approved')
                                                                 <form
                                                                     action="{{ route('posts.approve', ['id' => $posts->id, 'type' => $document['type']]) }}"

@@ -39,6 +39,8 @@ class Post extends Model
         'koreksiBerita',
         'koreksiPengesahan',
         'koreksiRubrik',
+        'judul_tindak_lanjut',
+        'dokumen_tindak_lanjut',
     ];
     public function comments()
 {

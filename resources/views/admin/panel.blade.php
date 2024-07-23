@@ -31,11 +31,8 @@
                                         <option selected>Pilih Halaman</option>
                                         <option value="/dashboard">Dashboard</option>
                                         <option value="/posts">PIC</option>
-                                        {{-- <option value="/dashboard">Laporan Unit Kerja</option>
-                                        <option value="/dashboard">Audit Eksternal</option>
-                                        <option value="/dashboard">Laporan Hasil Pemeriksaan</option> --}}
-                                        <option value="/dokumens">Dokumen</option>
-                                        {{-- <option value="/audites">Auditee</option> --}}
+                                        <option value="/dokumens">Dokumen Reviu</option>
+                                        <option value="/dokumen-tindak-lanjut">Dokumen Tindak Lanjut</option>
                                         <option value="/users">User</option>
                                         <option value="/laporanAkhir">Laporan Akhir</option>
                                         <option value="/reviewKetua">PIC Ketua</option>
@@ -53,6 +50,7 @@
                                         <option value="fa-solid fa-user">&#xf007; </option>
                                         <option value="fa-regular fa-user">&#xf2bd; </option>
                                         <option value="fa-solid fa-file">&#xf15b; </option>
+                                        <option value="fa-regular fa-file">&#xf15b; </option>
                                         <option value="fa-brands fa-facebook">&#xf09a; </option>
                                         <option value="fa-solid fa-gear">&#xf013; </option>
                                         <option value="fa-solid fa-thumbs-up">&#xf164; </option>
@@ -212,21 +210,12 @@
                                                                     <option value="/posts"
                                                                         {{ $menu->link == '/posts' ? 'selected' : '' }}>
                                                                         PIC</option>
-                                                                    {{-- <option value="/dashboard"
-                                                                        {{ $menu->link == '/dashboard' ? 'selected' : '' }}>
-                                                                        Laporan Unit Kerja</option>
-                                                                    <option value="/dashboard"
-                                                                        {{ $menu->link == '/dashboard' ? 'selected' : '' }}>
-                                                                        Audit Eksternal</option>
-                                                                    <option value="/dashboard"
-                                                                        {{ $menu->link == '/dashboard' ? 'selected' : '' }}>
-                                                                        Laporan Hasil Pemeriksaan</option> --}}
                                                                     <option value="/dokumens"
                                                                         {{ $menu->link == '/dokumens' ? 'selected' : '' }}>
-                                                                        Dokumen</option>
-                                                                    {{-- <option value="/audites"
-                                                                        {{ $menu->link == '/audites' ? 'selected' : '' }}>
-                                                                        Auditee</option> --}}
+                                                                        Dokumen Reviu</option>
+                                                                    <option value="/dokumen-tindak-lanjut"
+                                                                        {{ $menu->link == '/dokumen-tindak-lanjut' ? 'selected' : '' }}>
+                                                                        Dokumen Tindak Lanjut</option>
                                                                     <option value="/users"
                                                                         {{ $menu->link == '/users' ? 'selected' : '' }}>
                                                                         User</option>
@@ -267,6 +256,10 @@
 
                                                                         &#xf2bd; </option>
                                                                     <option value="fa-solid fa-file"
+                                                                        {{ $menu->icon == 'fa-solid fa-file' ? 'selected' : '' }}>
+
+                                                                        &#xf15b; </option>
+                                                                    <option value="fa-regular fa-file"
                                                                         {{ $menu->icon == 'fa-solid fa-file' ? 'selected' : '' }}>
 
                                                                         &#xf15b; </option>

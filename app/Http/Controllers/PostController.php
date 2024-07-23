@@ -426,18 +426,23 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         if (Auth::user()->id_level == 1 || Auth::user()->id_level == 3) {
+            $currentTimestamp = now();
             switch ($type) {
                 case 'reviu':
                     $post->approvalReviu = 'approved';
+                    $post->approvalReviu_at = $currentTimestamp;
                     break;
                 case 'berita':
                     $post->approvalBerita = 'approved';
+                    $post->approvalBerita_at = $currentTimestamp;
                     break;
                 case 'pengesahan':
                     $post->approvalPengesahan = 'approved';
+                    $post->approvalPengesahan_at = $currentTimestamp;
                     break;
                 case 'rubrik':
                     $post->approvalRubrik = 'approved';
+                    $post->approvalRubrik_at = $currentTimestamp;
                     break;
                 default:
                     return redirect()->route('detailTugasKetua', $id)->with('error', 'Tipe approval tidak valid');
@@ -722,5 +727,38 @@ class PostController extends Controller
                 // Handle other element types as needed
                 break;
         }
+    }
+    public function dokumenTindakLanjut()
+    {
+        $posts = Post::whereNotNull('dokumen_tindak_lanjut')
+                 ->latest()
+                 ->paginate(10);
+        return view('posts.dokumen_tindakLanjut', compact('posts'));
+    }
+    public function tambahTindakLanjut($id)
+    {
+        $posts = Post::find($id);
+        return view('posts.tambahTindakLanjut', compact('posts'));
+    }
+
+    public function storeTindakLanjut(Request $request, $id)
+    {
+        $request->validate([
+            'dokumen_tindak_lanjut' => 'required|file|mimes:pdf,doc,docx|max:2048',
+        ]);
+
+        $posts = Post::findOrFail($id);
+        $currentTimestamp = now();
+
+        if ($request->hasFile('dokumen_tindak_lanjut')) {
+            $dokumen = $request->file('dokumen_tindak_lanjut');
+            $dokumenName = time() . '_' . $dokumen->getClientOriginalName();
+            $dokumen->move(public_path('dokumen_tindaklanjut'), $dokumenName);
+            $posts->judul_tindak_lanjut = 'Tindak Lanjut ' . $posts->judul;
+            $posts->dokumen_tindak_lanjut = $dokumenName;
+            $posts->tindakLanjut_at = $currentTimestamp;
+            $posts->save();
+        }
+        return redirect()->route('laporanAkhir')->with('success', 'Dokumen Tindak Lanjut berhasil ditambahkan');
     }
 }

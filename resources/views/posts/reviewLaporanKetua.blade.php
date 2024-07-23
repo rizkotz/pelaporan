@@ -7,7 +7,7 @@
         <hr>
         <h4 class="tittle-1">
             <span class="span0">List</span>
-            <span class="span1">Tugas</span>
+            <span class="span1">Kegiatan</span>
         </h4>
         <div class="row">
             <div class="col-md-6 mb-2">

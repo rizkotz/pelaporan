@@ -236,6 +236,7 @@
                                             'path' => 'hasil_reviu',
                                             'label' => 'Dokumen Reviu',
                                             'approval' => $posts->approvalReviu,
+                                            'approval_at' => $posts->approvalReviu_at,
                                             'uploaded_at' => $posts->hasilReviu_uploaded_at,
                                         ],
                                         [
@@ -243,6 +244,7 @@
                                             'path' => 'hasil_berita',
                                             'label' => 'Berita Acara',
                                             'approval' => $posts->approvalBerita,
+                                            'approval_at' => $posts->approvalBerita_at,
                                             'uploaded_at' => $posts->hasilBerita_uploaded_at,
                                         ],
                                         [
@@ -250,6 +252,7 @@
                                             'path' => 'hasil_pengesahan',
                                             'label' => 'Lembar Pengesahan',
                                             'approval' => $posts->approvalPengesahan,
+                                            'approval_at' => $posts->approvalPengesahan_at,
                                             'uploaded_at' => $posts->hasilPengesahan_uploaded_at,
                                         ],
                                         [
@@ -257,6 +260,7 @@
                                             'path' => 'hasil_rubrik',
                                             'label' => 'Kertas Kerja',
                                             'approval' => $posts->approvalRubrik,
+                                            'approval_at' => $posts->approvalRubrik_at,
                                             'uploaded_at' => $posts->hasilRubrik_uploaded_at,
                                         ],
                                     ];
@@ -294,6 +298,9 @@
                                                     <td>
                                                         @if ($file['approval'] == 'approved')
                                                             <span class="badge badge-success">Disetujui</span>
+                                                            <div>
+                                                                <small>{{ \Carbon\Carbon::parse($file['approval_at'])->format('d F Y') }}</small>
+                                                            </div>
                                                         @elseif($file['approval'] == 'rejected')
                                                             <span class="badge badge-danger">Ditolak</span>
                                                         @else
