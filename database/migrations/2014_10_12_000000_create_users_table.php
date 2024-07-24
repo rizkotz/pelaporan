@@ -23,10 +23,10 @@ return new class extends Migration
             $table->unsignedBigInteger('id_level');
             $table->foreign('id_level')->references('id')->on('levels')->onDelete('cascade');
             $table->string('nip');
-            $table->string('nidn');
             $table->json('menu_config')->nullable();
             $table->string('bagian_auditee')->nullable();
             $table->string('profile_picture')->nullable();
+            $table->boolean('is_approved')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

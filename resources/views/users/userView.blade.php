@@ -45,7 +45,6 @@
                                 <tr class="text-center">
                                     <th scope="col">Nama</th>
                                     <th scope="col">NIP</th>
-                                    <th scope="col">NIDN</th>
                                     <th scope="col">Jabatan</th>
                                     <th colspan="4" scope="col">Aksi</th>
 
@@ -60,9 +59,6 @@
                                         </td>
                                         <td class="text">
                                             {{ $user->nip }}
-                                        </td>
-                                        <td class="text">
-                                            {{ $user->nidn }}
                                         </td>
                                         <td class="text">
                                             {{ $user->Level->name }}

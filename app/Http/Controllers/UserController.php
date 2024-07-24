@@ -47,7 +47,6 @@ class UserController extends Controller
             'username' => 'required',
             'email' => 'required|min:4|email|unique:users',
             'nip'     => 'required|min:1',
-            'nidn'     => 'required|min:1',
             'password' => 'required',
             'confirmation' => 'required|same:password',
             'id_level'     => 'required',
@@ -59,7 +58,6 @@ class UserController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'nip'    => $request->nip,
-            'nidn'     => $request->nidn,
             'password' => bcrypt($request->password),
             'id_level'     => $request->id_level,
             'bagian_auditee' => $request->bagian_auditee,
@@ -92,7 +90,6 @@ class UserController extends Controller
             'username' => 'required',
             'email' => 'required|min:4|email|unique:users,email,' . $id,
             'nip' => 'required|min:1',
-            'nidn' => 'required|min:1',
             'id_level' => 'required',
         ]);
 
@@ -104,7 +101,6 @@ class UserController extends Controller
         $user->username = $request->username;
         $user->email = $request->email;
         $user->nip = $request->nip;
-        $user->nidn = $request->nidn;
         $user->id_level = $request->id_level;
         $user->bagian_auditee = $request->bagian_auditee;
 

@@ -279,7 +279,7 @@ class PostController extends Controller
                 if ($request->hasFile('hasilReviu')) {
                     $file = $request->file('hasilReviu');
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('hasil_reviu'), $fileName);
+                    $file->move(('hasil_reviu/'), $fileName);
                     $posts->hasilReviu = $fileName;
                     $posts->hasilReviu_uploaded_at = $currentTimestamp;
                 }
@@ -288,7 +288,7 @@ class PostController extends Controller
                 if ($request->hasFile('hasilBerita')) {
                     $file = $request->file('hasilBerita');
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('hasil_berita'), $fileName);
+                    $file->move(('hasil_berita/'), $fileName);
                     $posts->hasilBerita = $fileName;
                     $posts->hasilBerita_uploaded_at = $currentTimestamp;
                 }
@@ -297,7 +297,7 @@ class PostController extends Controller
                 if ($request->hasFile('hasilPengesahan')) {
                     $file = $request->file('hasilPengesahan');
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('hasil_pengesahan'), $fileName);
+                    $file->move(('hasil_pengesahan/'), $fileName);
                     $posts->hasilPengesahan = $fileName;
                     $posts->hasilPengesahan_uploaded_at = $currentTimestamp;
                 }
@@ -306,7 +306,7 @@ class PostController extends Controller
                 if ($request->hasFile('hasilRubrik')) {
                     $file = $request->file('hasilRubrik');
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('hasil_rubrik'), $fileName);
+                    $file->move(('hasil_rubrik/'), $fileName);
                     $posts->hasilRubrik = $fileName;
                     $posts->hasilRubrik_uploaded_at = $currentTimestamp;
                 }
@@ -329,7 +329,7 @@ class PostController extends Controller
         if ($request->hasFile('laporan_akhir')) {
             $file = $request->file('laporan_akhir');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('hasil_akhir'), $fileName);
+            $file->move(('hasil_akhir/'), $fileName);
             $posts->laporan_akhir = $fileName;
             $posts->save();
         }
@@ -356,7 +356,7 @@ class PostController extends Controller
                 if ($request->hasFile('koreksiReviu')) {
                     $file = $request->file('koreksiReviu');
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('koreksi_reviu'), $fileName);
+                    $file->move(('koreksi_reviu/'), $fileName);
                     $posts->koreksiReviu = $fileName;
                 }
                 break;
@@ -364,7 +364,7 @@ class PostController extends Controller
                 if ($request->hasFile('koreksiBerita')) {
                     $file = $request->file('koreksiBerita');
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('koreksi_berita'), $fileName);
+                    $file->move(('koreksi_berita/'), $fileName);
                     $posts->koreksiBerita = $fileName;
                 }
                 break;
@@ -372,7 +372,7 @@ class PostController extends Controller
                 if ($request->hasFile('koreksiPengesahan')) {
                     $file = $request->file('koreksiPengesahan');
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('koreksi_pengesahan'), $fileName);
+                    $file->move(('koreksi_pengesahan/'), $fileName);
                     $posts->koreksiPengesahan = $fileName;
                 }
                 break;
@@ -380,7 +380,7 @@ class PostController extends Controller
                 if ($request->hasFile('koreksiRubrik')) {
                     $file = $request->file('koreksiRubrik');
                     $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('koreksi_rubrik'), $fileName);
+                    $file->move(('koreksi_rubrik/'), $fileName);
                     $posts->koreksiRubrik = $fileName;
                 }
                 break;
@@ -546,28 +546,28 @@ class PostController extends Controller
         if ($request->hasFile('dokumen')) {
             $file = $request->file('dokumen');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('dokumenrev'), $filename);
+            $file->move(('dokumenrev/'), $filename);
             $post->dokumen = $filename;
         }
 
         if ($request->hasFile('templateA')) {
             $file = $request->file('templateA');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('template_berita'), $filename);
+            $file->move(('template_berita/'), $filename);
             $post->templateA = $filename;
         }
 
         if ($request->hasFile('templateB')) {
             $file = $request->file('templateB');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('template_pengesahan'), $filename);
+            $file->move(('template_pengesahan/'), $filename);
             $post->templateB = $filename;
         }
 
         if ($request->hasFile('rubrik')) {
             $file = $request->file('rubrik');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('template_rubrik'), $filename);
+            $file->move(('template_rubrik/'), $filename);
             $post->rubrik = $filename;
         }
 
@@ -753,7 +753,7 @@ class PostController extends Controller
         if ($request->hasFile('dokumen_tindak_lanjut')) {
             $dokumen = $request->file('dokumen_tindak_lanjut');
             $dokumenName = time() . '_' . $dokumen->getClientOriginalName();
-            $dokumen->move(public_path('dokumen_tindaklanjut'), $dokumenName);
+            $dokumen->move(('dokumen_tindaklanjut/'), $dokumenName);
             $posts->judul_tindak_lanjut = 'Tindak Lanjut ' . $posts->judul;
             $posts->dokumen_tindak_lanjut = $dokumenName;
             $posts->tindakLanjut_at = $currentTimestamp;

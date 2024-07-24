@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Charts\TugasLaporChart;
+use App\Models\Peta;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -109,6 +110,16 @@ class ProjectController extends Controller
             })
             ->paginate(10);
         return view('posts.dokumen_tindakLanjut', compact('posts'));
+    }
+    public function searchPetaRisiko(Request $request)
+    {
+        $search = $request->input('search');
+        $petas = Peta::where('judul', 'like', '%' . $search . '%')
+        ->orWhere('waktu', 'like', '%' . $search . '%')
+        ->orWhere('nama', 'LIKE', '%' . $search . '%')
+        ->orWhere('dokumen', 'LIKE', '%' . $search . '%')
+        ->paginate(10);
+        return view('pr.petaRisiko', compact('petas'));
     }
     public function feedback()
     {

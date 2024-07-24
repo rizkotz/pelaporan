@@ -233,7 +233,7 @@
                                     $files = [
                                         [
                                             'name' => $posts->hasilReviu,
-                                            'path' => 'hasil_reviu',
+                                            'path' => 'hasil_reviu/',
                                             'label' => 'Dokumen Reviu',
                                             'approval' => $posts->approvalReviu,
                                             'approval_at' => $posts->approvalReviu_at,
@@ -241,7 +241,7 @@
                                         ],
                                         [
                                             'name' => $posts->hasilBerita,
-                                            'path' => 'hasil_berita',
+                                            'path' => 'hasil_berita/',
                                             'label' => 'Berita Acara',
                                             'approval' => $posts->approvalBerita,
                                             'approval_at' => $posts->approvalBerita_at,
@@ -249,7 +249,7 @@
                                         ],
                                         [
                                             'name' => $posts->hasilPengesahan,
-                                            'path' => 'hasil_pengesahan',
+                                            'path' => 'hasil_pengesahan/',
                                             'label' => 'Lembar Pengesahan',
                                             'approval' => $posts->approvalPengesahan,
                                             'approval_at' => $posts->approvalPengesahan_at,
@@ -257,7 +257,7 @@
                                         ],
                                         [
                                             'name' => $posts->hasilRubrik,
-                                            'path' => 'hasil_rubrik',
+                                            'path' => 'hasil_rubrik/',
                                             'label' => 'Kertas Kerja',
                                             'approval' => $posts->approvalRubrik,
                                             'approval_at' => $posts->approvalRubrik_at,
@@ -324,22 +324,22 @@
                                     $files = [
                                         [
                                             'name' => $posts->koreksiReviu,
-                                            'path' => 'koreksi_reviu',
+                                            'path' => 'koreksi_reviu/',
                                             'label' => 'Dokumen Reviu',
                                         ],
                                         [
                                             'name' => $posts->koreksiBerita,
-                                            'path' => 'koreksi_berita',
+                                            'path' => 'koreksi_berita/',
                                             'label' => 'Berita Acara',
                                         ],
                                         [
                                             'name' => $posts->koreksiPengesahan,
-                                            'path' => 'koreksi_pengesahan',
+                                            'path' => 'koreksi_pengesahan/',
                                             'label' => 'Lembar Pengesahan',
                                         ],
                                         [
                                             'name' => $posts->koreksiRubrik,
-                                            'path' => 'koreksi_rubrik',
+                                            'path' => 'koreksi_rubrik/',
                                             'label' => 'Kertas Kerja',
                                         ],
                                     ];

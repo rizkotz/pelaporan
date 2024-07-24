@@ -70,7 +70,8 @@
                             @if (auth()->user()->id_level == 1 ||
                                     auth()->user()->id_level == 2 ||
                                     auth()->user()->id_level == 3 ||
-                                    auth()->user()->id_level == 4)
+                                    auth()->user()->id_level == 4 ||
+                                    auth()->user()->id_level == 6)
                                 <a href="/posts">
                                     <p class="card-text text-white">Lihat Detail <i
                                             class="fa fa-angle-double-right ml-2"></i></p>

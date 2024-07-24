@@ -35,6 +35,10 @@ return new class extends Migration
             $table->string('approvalBerita')->nullable();
             $table->string('approvalPengesahan')->nullable();
             $table->string('approvalRubrik')->nullable();
+            $table->timestamp('approvalReviu_at')->nullable();
+            $table->timestamp('approvalBerita_at')->nullable();
+            $table->timestamp('approvalPengesahan_at')->nullable();
+            $table->timestamp('approvalRubrik_at')->nullable();
             $table->timestamp('hasilReviu_uploaded_at')->nullable();
             $table->timestamp('hasilBerita_uploaded_at')->nullable();
             $table->timestamp('hasilPengesahan_uploaded_at')->nullable();
@@ -44,6 +48,9 @@ return new class extends Migration
             $table->string('koreksiPengesahan')->nullable();
             $table->string('koreksiRubrik')->nullable();
             $table->string('laporan_akhir')->nullable();
+            $table->string('judul_tindak_lanjut')->nullable();
+            $table->string('dokumen_tindak_lanjut')->nullable();
+            $table->timestamp('tindakLanjut_at')->nullable();
             $table->timestamps();
         });
     }

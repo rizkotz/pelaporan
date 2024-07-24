@@ -345,22 +345,22 @@
                                 $files = [
                                     [
                                         'name' => $posts->koreksiReviu,
-                                        'path' => 'koreksi_reviu',
+                                        'path' => 'koreksi_reviu/',
                                         'label' => 'Dokumen Reviu',
                                     ],
                                     [
                                         'name' => $posts->koreksiBerita,
-                                        'path' => 'koreksi_berita',
+                                        'path' => 'koreksi_berita/',
                                         'label' => 'Berita Acara',
                                     ],
                                     [
                                         'name' => $posts->koreksiPengesahan,
-                                        'path' => 'koreksi_pengesahan',
+                                        'path' => 'koreksi_pengesahan/',
                                         'label' => 'Lembar Pengesahan',
                                     ],
                                     [
                                         'name' => $posts->koreksiRubrik,
-                                        'path' => 'koreksi_rubrik',
+                                        'path' => 'koreksi_rubrik/',
                                         'label' => 'Kertas Kerja',
                                     ],
                                 ];

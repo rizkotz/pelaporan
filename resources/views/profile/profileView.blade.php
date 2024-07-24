@@ -26,9 +26,6 @@
                         <tr>
                             <th class="text-left">NIP : </th><td>{{ $user->nip }}</td>
                         </tr>
-                        <tr>
-                            <th class="text-left">NIDN : </th><td>{{ $user->nidn }}</td>
-                        </tr>
 
                         <!-- Tambahkan konten profil lainnya sesuai kebutuhan -->
                     </table>

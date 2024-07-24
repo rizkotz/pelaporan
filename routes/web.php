@@ -7,6 +7,7 @@ use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PengumpulanController;
+use App\Http\Controllers\PetaController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -77,6 +78,27 @@ Route::post('/tambahTindakLanjut/store/{id}', [PostController::class, 'storeTind
     Route::get('/dokumen-tindak-lanjut', [PostController::class, 'dokumenTindakLanjut'])->name('dokumenTindakLanjut')
     ->middleware('auth');
 
+//Route CRUD Peta Controller
+Route::resource('/petas', PetaController::class)->middleware(['auth', 'approved']);
+Route::get('/petas/{id}/tugas', [PetaController::class, 'tugas'])->name('petas.tugas')
+    ->middleware('auth');
+Route::post('/petas/{id}/tambahtugas', [PetaController::class, 'tambahtugas'])->name('petas.tambahtugas')
+    ->middleware('auth');
+Route::get('/detailPR/{id}', [PetaController::class, 'detailPR'])->name('detailPR')
+    ->middleware('auth');
+Route::get('/tampilData/{id}', [PetaController::class, 'tampilData'])->name('tampilData')
+    ->middleware('auth');
+Route::post('/updateData/{id}', [PetaController::class, 'updateData'])->name('updateData')
+    ->middleware('auth');
+Route::delete('/petas/{id}',   [PetaController::class, 'destroy'])->name('destroy')->middleware('auth');
+Route::post('/petas/{id}/approve',   [PetaController::class, 'approve'])->name('petas.approve')
+    ->middleware('auth');
+Route::post('/petas/{id}/disapprove', [PetaController::class, 'disapprove'])->name('petas.disapprove')
+    ->middleware('auth');
+
+Route::post('/detailTugasKetua/{id}/koreksi_ketua', [PetaController::class, 'koreksi_ketua'])->middleware('auth');
+
+
 //Route CRUD User
 Route::resource('/users', UserController::class)->middleware('auth');
 Route::get('/tampilDataUser/{id}', [UserController::class, 'tampilDataUser'])->name('tampilDataUser')
@@ -113,10 +135,9 @@ Route::get('/',                        [ProjectController::class, 'dashboard'])-
 Route::get('/reviewLaporan/search',     [ProjectController::class, 'search'])->middleware('auth');
 Route::get('/reviewLaporanKetua/searchKetua', [ProjectController::class, 'searchKetua'])->middleware('auth');
 Route::get('/laporanAkhir/searchAkhir',     [ProjectController::class, 'searchAkhir'])->middleware('auth');
+Route::get('/petaRisiko/search',     [ProjectController::class, 'searchPetaRisiko'])->middleware('auth');
 Route::get('/tindakLanjut/search',     [ProjectController::class, 'searchTindakLanjut'])->middleware('auth');
-Route::get('/userAnggota/search',     [AnggotaController::class, 'search'])->middleware('auth');
 Route::get('/userView/search',     [UserController::class, 'search'])->middleware('auth');
-Route::get('/userAudite/search',        [AuditeController::class, 'search'])->middleware('auth');
 Route::get('/dokumen/search',           [DokumenController::class, 'search'])->middleware('auth');
 
 //Route Verifikasi Email

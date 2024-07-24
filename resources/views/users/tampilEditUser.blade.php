@@ -61,17 +61,6 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label class="font-weight-bold">NIDN</label>
-                            <input type="text" class="form-control @error('nidn') is-invalid @enderror" name="nidn" value="{{ old('nidn', $users->nidn) }}" placeholder="Masukkan NIDN...">
-
-                            <!-- error message untuk nidn -->
-                            @error('nidn')
-                                <div class="alert alert-danger mt-2">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
                             <label class="font-weight-bold">PASSWORD</label>
                             <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Masukkan Password...">
 

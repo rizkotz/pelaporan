@@ -31,6 +31,7 @@
                                         <option selected>Pilih Halaman</option>
                                         <option value="/dashboard">Dashboard</option>
                                         <option value="/posts">PIC</option>
+                                        <option value="/petas">Peta Risiko</option>
                                         <option value="/dokumens">Dokumen Reviu</option>
                                         <option value="/dokumen-tindak-lanjut">Dokumen Tindak Lanjut</option>
                                         <option value="/users">User</option>
@@ -47,6 +48,7 @@
                                     <select class="custom-select" name="icon" style=" font-family: 'FontAwesome' ">
                                         <option value="fa-solid fa-gauge">&#xf624; </option>
                                         <option value="fa-solid fa-list-check">&#xf0ae; </option>
+                                        <option value="fa-regular fa-newspaper">&#xf1ea; </option>
                                         <option value="fa-solid fa-user">&#xf007; </option>
                                         <option value="fa-regular fa-user">&#xf2bd; </option>
                                         <option value="fa-solid fa-file">&#xf15b; </option>
@@ -210,6 +212,9 @@
                                                                     <option value="/posts"
                                                                         {{ $menu->link == '/posts' ? 'selected' : '' }}>
                                                                         PIC</option>
+                                                                    <option value="/posts"
+                                                                        {{ $menu->link == '/petas' ? 'selected' : '' }}>
+                                                                        Peta Risiko</option>
                                                                     <option value="/dokumens"
                                                                         {{ $menu->link == '/dokumens' ? 'selected' : '' }}>
                                                                         Dokumen Reviu</option>
@@ -247,13 +252,14 @@
                                                                     <option value="fa-solid fa-list-check"
                                                                         {{ $menu->icon == 'fa-solid fa-list-check' ? 'selected' : '' }}>
                                                                         &#xf0ae; </option>
+                                                                    <option value="fa-regular fa-newspaper"
+                                                                        {{ $menu->icon == 'fa-regular fa-newspaper' ? 'selected' : '' }}>
+                                                                        &#xf1ea; </option>
                                                                     <option value="fa-solid fa-user"
                                                                         {{ $menu->icon == 'fa-solid fa-user' ? 'selected' : '' }}>
-
                                                                         &#xf007; </option>
                                                                     <option value="fa-regular fa-user"
                                                                         {{ $menu->icon == 'fa-reguler fa-user' ? 'selected' : '' }}>
-
                                                                         &#xf2bd; </option>
                                                                     <option value="fa-solid fa-file"
                                                                         {{ $menu->icon == 'fa-solid fa-file' ? 'selected' : '' }}>

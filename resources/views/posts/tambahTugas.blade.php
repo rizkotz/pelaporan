@@ -63,7 +63,8 @@
                                     <option value="">- Pilih Anggota -</option>
                                     @foreach ($users as $anggota)
                                         <option value="{{ $anggota->name }}"
-                                            {{ old('anggota') == $anggota->name ? 'selected' : null }}>{{ $anggota->name }}
+                                            {{ old('anggota') == $anggota->name ? 'selected' : null }}>
+                                            {{ $anggota->name }}
                                         </option>
                                     @endforeach
                                 </select>
