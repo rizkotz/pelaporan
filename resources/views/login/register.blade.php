@@ -101,18 +101,6 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label class="font-weight-bold">NIDN</label>
-                                <input type="text" class="form-control @error('nidn') is-invalid @enderror"
-                                    name="nidn" value="{{ old('nidn') }}" placeholder="Masukkan NIDN...">
-
-                                <!-- error message untuk merek -->
-                                @error('nidn')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
                                 <label class="font-weight-bold">PASSWORD</label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror"
                                     name="password" value="{{ old('password') }}" placeholder="Masukkan Password...">
@@ -146,7 +134,7 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div id="auditeeForm" style="display: none;">
+                            {{-- <div id="auditeeForm" style="display: none;">
                                 <div class="form-group">
                                     <label class="font-weight-bold">AUDITEE BAGIAN</label>
                                     <select name="bagian_auditee" class="form-control">
@@ -158,7 +146,7 @@
                                         <option value="5">Bagian 5</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <button type="submit" class="btn btn-md btn-primary">REGISTER</button>
                             <button type="reset" class="btn btn-md btn-warning">RESET</button>
@@ -173,7 +161,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('#level').change(function() {
                 if ($(this).val() == '5') { // If Auditee is selected
@@ -183,7 +171,7 @@
                 }
             });
         });
-    </script>
+    </script> --}}
     <!-- jQuery -->
     <script src="{{ asset('/') }}plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->

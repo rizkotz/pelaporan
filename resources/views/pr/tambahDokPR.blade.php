@@ -18,7 +18,7 @@
                             <div class="form-group">
                                 <label class="font-weight-bold">JUDUL</label>
                                 <input type="text" class="form-control @error('judul') is-invalid @enderror"
-                                    name="judul" value="{{ old('judul') }}" placeholder="Masukkan Judul Tugas...">
+                                    name="judul" value="{{ old('judul') }}" placeholder="Masukkan Judul Dokumen...">
 
                                 <!-- error message untuk judul -->
                                 @error('judul')
@@ -29,10 +29,12 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="font-weight-bold">JENIS</label>
-                                <input type="text" class="form-control @error('jenis') is-invalid @enderror"
-                                    name="jenis" value="{{ old('jenis') }}" placeholder="Masukkan Jenis Tugas...">
-
+                                <label class="font-weight-bold">UNIT KERJA</label>
+                                <select name="jenis" class="form-control select2 @error('jenis') is-invalid @enderror">
+                                    @foreach ($unitKerjas as $unit)
+                                        <option value="{{ $unit->nama_unit_kerja }}">{{ $unit->nama_unit_kerja }}</option>
+                                    @endforeach
+                                </select>
                                 <!-- error message untuk jenis -->
                                 @error('jenis')
                                     <div class="alert alert-danger mt-2">
@@ -64,46 +66,31 @@
 
     @push('styles')
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+        <style>
+            .select2-container .select2-selection--single {
+                height: 38px; /* Adjust height to match other form controls */
+            }
+            .select2-container .select2-selection--single .select2-selection__rendered {
+                line-height: 30px; /* Align text vertically */
+            }
+            .select2-container .select2-selection--single .select2-selection__arrow {
+                height: 36px; /* Adjust height of the dropdown arrow */
+            }
+        </style>
     @endpush
 
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
         <script>
-            $(function() {
-                $.datepicker.setDefaults($.datepicker.regional['id']);
-                $("#waktu").datepicker({
-                    dateFormat: "DD, d MM yy",
-                    onSelect: function(dateText, inst) {
-                        var date = $(this).datepicker('getDate');
-                        var dayNames = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
-                        var day = dayNames[date.getUTCDay()];
-                        var formattedDate = day + ", " + $.datepicker.formatDate("d MM yy", date);
-                        $(this).val(formattedDate);
-                    }
-                }).attr('readonly', 'readonly');
+            $(document).ready(function() {
+                $('.select2').select2({
+                    placeholder: 'Pilih Unit Kerja',
+                    allowClear: true
+                });
             });
-
-            $.datepicker.regional['id'] = {
-                closeText: 'Tutup',
-                prevText: '←',
-                nextText: '→',
-                currentText: 'Hari ini',
-                monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September',
-                    'Oktober', 'November', 'Desember'
-                ],
-                monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-                dayNames: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
-                dayNamesShort: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-                dayNamesMin: ['Mi', 'Se', 'Se', 'Ra', 'Ka', 'Ju', 'Sa'],
-                weekHeader: 'Mg',
-                dateFormat: 'dd/mm/yy',
-                firstDay: 0,
-                isRTL: false,
-                showMonthAfterYear: false,
-                yearSuffix: ''
-            };
-            $.datepicker.setDefaults($.datepicker.regional['id']);
         </script>
     @endpush
 

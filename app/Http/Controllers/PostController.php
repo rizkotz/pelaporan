@@ -652,9 +652,9 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         // Tentukan lokasi dokumen yang akan digabung
-        $pathDokumenReviu = public_path('hasil_reviu/' . $post->hasilReviu);
-        $pathDokumenBerita = public_path('hasil_berita/' . $post->hasilBerita);
-        $pathDokumenPengesahan = public_path('hasil_pengesahan/' . $post->hasilPengesahan);
+        $pathDokumenReviu = ('hasil_reviu/' . $post->hasilReviu);
+        $pathDokumenBerita = ('hasil_berita/' . $post->hasilBerita);
+        $pathDokumenPengesahan = ('hasil_pengesahan/' . $post->hasilPengesahan);
 
         // Buat objek PhpWord baru untuk dokumen yang digabung
         $phpWord = new \PhpOffice\PhpWord\PhpWord();

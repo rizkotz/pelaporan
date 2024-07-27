@@ -25,7 +25,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'id_level',
         'menu_config',
-        'bagian_auditee',
         'profile_picture',
         'is_approved',
     ];
@@ -35,9 +34,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Level::class, 'id_level');
     }
     public function comments()
-{
-    return $this->hasMany(Comment::class);
-}
+    {
+        return $this->hasMany(Comment::class);
+    }
+    public function comment_prs()
+    {
+        return $this->hasMany(CommentPr::class);
+    }
     // public function menus(){
     //     return $this->belongsToMany(Menu::class, 'user_menu','user_id','menu_id');
     // }

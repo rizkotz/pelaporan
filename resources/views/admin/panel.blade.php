@@ -38,6 +38,8 @@
                                         <option value="/laporanAkhir">Laporan Akhir</option>
                                         <option value="/reviewKetua">PIC Ketua</option>
                                         <option value="/feedback">Feedback</option>
+                                        <option value="/template">Manualbook</option>
+                                        <option value="/unit-kerja">Unit Kerja</option>
                                         <option value="/admin/panel">Menu</option>
                                         <!-- Ganti dengan route yang sesuai -->
                                         <option value="/profileDataUser/{{ Auth::user()->id }}">Profil</option>
@@ -55,6 +57,8 @@
                                         <option value="fa-regular fa-file">&#xf15b; </option>
                                         <option value="fa-brands fa-facebook">&#xf09a; </option>
                                         <option value="fa-solid fa-gear">&#xf013; </option>
+                                        <option value="fa-solid fa-file-arrow-down">&#xf56d; </option>
+                                        <option value="fa-regular fa-bookmark">&#xf02e; </option>
                                         <option value="fa-solid fa-thumbs-up">&#xf164; </option>
 
 
@@ -212,7 +216,7 @@
                                                                     <option value="/posts"
                                                                         {{ $menu->link == '/posts' ? 'selected' : '' }}>
                                                                         PIC</option>
-                                                                    <option value="/posts"
+                                                                    <option value="/petas"
                                                                         {{ $menu->link == '/petas' ? 'selected' : '' }}>
                                                                         Peta Risiko</option>
                                                                     <option value="/dokumens"
@@ -239,6 +243,12 @@
                                                                     <option value="/admin/panel"
                                                                         {{ $menu->link == '/admin/panel' ? 'selected' : '' }}>
                                                                         Menu</option>
+                                                                    <option value="/template"
+                                                                        {{ $menu->link == '/template' ? 'selected' : '' }}>
+                                                                        Manualbook</option>
+                                                                    <option value="/unit-kerja"
+                                                                        {{ $menu->link == '/unit-kerja' ? 'selected' : '' }}>
+                                                                        Unit Kerja</option>
                                                                 </select>
                                                             </div>
                                                             <div class="mb-3">
@@ -277,6 +287,14 @@
                                                                         {{ $menu->icon == 'fa-solid fa-thumbs-up' ? 'selected' : '' }}>
 
                                                                         &#xf164; </option>
+                                                                    <option value="fa-solid fa-file-arrow-down"
+                                                                        {{ $menu->icon == 'fa-solid fa-file-arrow-down' ? 'selected' : '' }}>
+
+                                                                        &#xf56d; </option>
+                                                                    <option value="fa-regular fa-bookmark"
+                                                                        {{ $menu->icon == 'fa-regular fa-bookmark' ? 'selected' : '' }}>
+
+                                                                        &#xf02e; </option>
 
                                                                 </select>
                                                             </div>
@@ -299,8 +317,6 @@
                                 @endforelse
                             </tbody>
                         </table>
-                        <!-- PAGINATION (Hilangi -- nya)-->
-                        {{-- $audites->links() --}}
 
                     </div>
                 </div>

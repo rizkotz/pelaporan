@@ -60,7 +60,6 @@ class UserController extends Controller
             'nip'    => $request->nip,
             'password' => bcrypt($request->password),
             'id_level'     => $request->id_level,
-            'bagian_auditee' => $request->bagian_auditee,
         ]);
 
         event(new Registered($user));
@@ -102,7 +101,6 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->nip = $request->nip;
         $user->id_level = $request->id_level;
-        $user->bagian_auditee = $request->bagian_auditee;
 
         // Jika password diisi, hash password baru
         if ($request->filled('password')) {
@@ -131,7 +129,7 @@ class UserController extends Controller
         if ($request->hasFile('profile_picture')) {
             $image = $request->file('profile_picture');
             $name = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('/profile_pictures');
+            $destinationPath = ('profile_pictures/');
             $image->move($destinationPath, $name);
             $user->profile_picture = $name;
         }

@@ -10,6 +10,7 @@ use App\Http\Controllers\PengumpulanController;
 use App\Http\Controllers\PetaController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,9 @@ Route::controller(LoginController::class)->group(function () {
 
 //Route Admin Menu Setting
 Route::resource('/admin/panel', MenuController::class)->middleware(['auth', 'cekUserLogin']);
+
+//Route Unit Kerja
+Route::resource('/unit-kerja',   UnitKerjaController::class)->middleware(['auth','cekUserLogin']);
 
 //Route CRUD Post Controller
 Route::resource('/posts', PostController::class)->middleware(['auth', 'approved']);
@@ -75,7 +79,7 @@ Route::get('/tambahTindakLanjut/{id}', [PostController::class, 'tambahTindakLanj
     ->middleware('auth');
 Route::post('/tambahTindakLanjut/store/{id}', [PostController::class, 'storeTindakLanjut'])->name('storeTindakLanjut')
     ->middleware('auth');
-    Route::get('/dokumen-tindak-lanjut', [PostController::class, 'dokumenTindakLanjut'])->name('dokumenTindakLanjut')
+Route::get('/dokumen-tindak-lanjut', [PostController::class, 'dokumenTindakLanjut'])->name('dokumenTindakLanjut')
     ->middleware('auth');
 
 //Route CRUD Peta Controller
@@ -86,8 +90,8 @@ Route::post('/petas/{id}/tambahtugas', [PetaController::class, 'tambahtugas'])->
     ->middleware('auth');
 Route::get('/detailPR/{id}', [PetaController::class, 'detailPR'])->name('detailPR')
     ->middleware('auth');
-Route::get('/tampilData/{id}', [PetaController::class, 'tampilData'])->name('tampilData')
-    ->middleware('auth');
+// Route::get('/tampilData/{id}', [PetaController::class, 'tampilData'])->name('tampilData')
+//     ->middleware('auth');
 Route::post('/updateData/{id}', [PetaController::class, 'updateData'])->name('updateData')
     ->middleware('auth');
 Route::delete('/petas/{id}',   [PetaController::class, 'destroy'])->name('destroy')->middleware('auth');
@@ -95,8 +99,10 @@ Route::post('/petas/{id}/approve',   [PetaController::class, 'approve'])->name('
     ->middleware('auth');
 Route::post('/petas/{id}/disapprove', [PetaController::class, 'disapprove'])->name('petas.disapprove')
     ->middleware('auth');
-
-Route::post('/detailTugasKetua/{id}/koreksi_ketua', [PetaController::class, 'koreksi_ketua'])->middleware('auth');
+Route::get('/detailPR/{id}', [PetaController::class, 'detailPR'])->name('detailPR')
+    ->middleware('auth');
+Route::post('/detailPR/{id}/comment', [PetaController::class, 'postComment'])->name('postComment')
+    ->middleware('auth');
 
 
 //Route CRUD User
@@ -129,13 +135,14 @@ Route::delete('/dokumens/{id}',   [DokumenController::class, 'destroy'])->name('
 
 //Route View
 Route::get('/dashboard',               [ProjectController::class, 'dashboard'])->middleware(['auth', 'approved']);
+Route::get('/template',               [ProjectController::class, 'template'])->middleware(['auth', 'approved']);
 Route::get('/',                        [ProjectController::class, 'dashboard'])->middleware(['auth', 'approved']);
 
 //Route Search
 Route::get('/reviewLaporan/search',     [ProjectController::class, 'search'])->middleware('auth');
 Route::get('/reviewLaporanKetua/searchKetua', [ProjectController::class, 'searchKetua'])->middleware('auth');
 Route::get('/laporanAkhir/searchAkhir',     [ProjectController::class, 'searchAkhir'])->middleware('auth');
-Route::get('/petaRisiko/search',     [ProjectController::class, 'searchPetaRisiko'])->middleware('auth');
+Route::get('/petaRisiko/search',     [PetaController::class, 'searchPetaRisiko'])->middleware('auth');
 Route::get('/tindakLanjut/search',     [ProjectController::class, 'searchTindakLanjut'])->middleware('auth');
 Route::get('/userView/search',     [UserController::class, 'search'])->middleware('auth');
 Route::get('/dokumen/search',           [DokumenController::class, 'search'])->middleware('auth');

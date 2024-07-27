@@ -89,7 +89,6 @@ class LoginController extends Controller
             'username' => 'required',
             'email' => 'required|min:4|email|unique:users',
             'nip'     => 'required|min:1',
-            'nidn'     => 'required|min:1',
             'password' => 'required',
             'confirmation' => 'required|same:password',
             'id_level'     => 'required',
@@ -101,10 +100,8 @@ class LoginController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'nip'    => $request->nip,
-            'nidn'     => $request->nidn,
             'password' => bcrypt($request->password),
             'id_level'     => $request->id_level,
-            'bagian_auditee' => $request->bagian_auditee,
         ]);
 
         event(new Registered($user));

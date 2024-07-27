@@ -42,10 +42,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                @php $no = ($posts->currentPage() - 1) * $posts->perPage() + 1; @endphp
                                     @forelse ($posts as $post)
                                         <tr>
                                             <td class="text-center">
-                                                {{ $loop->iteration }}
+                                                {{ $no++ }}
                                             </td>
                                             <td class="text-center">
                                                 {{ $post->jenis }}

@@ -8,6 +8,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class ProjectController extends Controller
 {
@@ -67,6 +68,26 @@ class ProjectController extends Controller
         ]);
     }
 
+    public function template()
+    {
+        // Path folder dokumen di dalam public
+        $folderPath = ('all_template/');
+
+        // Ambil semua file dari folder dokumen
+        $files = File::files($folderPath);
+
+        // Format data file
+        $filesData = collect($files)->map(function ($file) {
+            return [
+                'name' => basename($file),
+                'path' => 'all_template/' . basename($file),
+            ];
+        });
+
+        return view('template', ['files' => $filesData]);
+    }
+
+
     public function search(Request $request)
     {
         $search = $request->input('search');
@@ -111,16 +132,7 @@ class ProjectController extends Controller
             ->paginate(10);
         return view('posts.dokumen_tindakLanjut', compact('posts'));
     }
-    public function searchPetaRisiko(Request $request)
-    {
-        $search = $request->input('search');
-        $petas = Peta::where('judul', 'like', '%' . $search . '%')
-        ->orWhere('waktu', 'like', '%' . $search . '%')
-        ->orWhere('nama', 'LIKE', '%' . $search . '%')
-        ->orWhere('dokumen', 'LIKE', '%' . $search . '%')
-        ->paginate(10);
-        return view('pr.petaRisiko', compact('petas'));
-    }
+
     public function feedback()
     {
         return view('feedback');

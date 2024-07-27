@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Charts\TugasLaporChart;
 use App\Models\Peta;
 use App\Models\User;
+use App\Models\DocumentHistory;
+use App\Models\CommentPr;
+use App\Models\UnitKerja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -14,18 +17,22 @@ class PetaController extends Controller
 {
     public function index(Request $request, TugasLaporChart $tugasLaporChart)
     {
-        //get user data
+        //get user data yang sedang login
         $users = Auth::user();
 
-        //query to get petas based on tanggungjawab and anggota
+        //query to get data peta berdasarkan anggota
         $query = Peta::query();
 
         if ($users->id_level == 1 || $users->id_level == 2) {
             //Admin: see all peta
+            $showAll = true;
         } else {
+            //filter untuk pengguna yang mengunggah dokumen atau anggota yang ditugaskan
             $query->where(function ($q) use ($users) {
-                $q->where('anggota', $users->name);
+                $q->where('nama', $users->name)
+                    ->orWhere('anggota', 'LIKE', '%' . $users->name . '%');
             });
+            $showAll = false;
         }
 
         //get filtering data from request
@@ -36,18 +43,64 @@ class PetaController extends Controller
         }
 
         //get filtered petas
-        $petas = $query->latest()->paginate(5);
+        $petas = $query->latest()->with('comment_prs.user')->paginate(5);
+
+        //Perhitungan jumlah approve
+        if ($showAll) {
+            // Untuk Admin: hitung semua data
+            $approvedCount = Peta::where('approvalPr', 'approved')->count();
+            $rejectedCount = Peta::where('approvalPr', 'rejected')->count();
+        } else {
+            // Untuk Pengguna Biasa: hitung berdasarkan filter
+            $approvedCount = $query->where('approvalPr', 'approved')->count();
+            $rejectedCount = $query->where('approvalPr', 'rejected')->count();
+        }
+
 
         //render view with petas
-        return view('pr.petaRisiko', compact('petas'))
+        return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount'))
             ->with('tugasLaporChart', $tugasLaporChart->build())
             ->with('users', $users)
             ->with('anggota', $anggota);
     }
+    public function searchPetaRisiko(Request $request)
+    {
+        $search = $request->input('search');
+        $user = Auth::user();
+
+        // Query dasar
+        $query = Peta::where(function ($query) use ($search) {
+            $query->where('judul', 'like', '%' . $search . '%')
+                ->orWhere('waktu', 'like', '%' . $search . '%')
+                ->orWhere('nama', 'LIKE', '%' . $search . '%')
+                ->orWhere('dokumen', 'LIKE', '%' . $search . '%');
+        });
+
+        // Filter berdasarkan hak akses pengguna
+        if ($user->id_level != 1 && $user->id_level != 2) { // Misalnya, hanya super admin dan admin yang bisa melihat semua data
+            $query->where(function ($query) use ($user) {
+                $query->where('nama', $user->name)
+                    ->orWhere('anggota', 'LIKE', '%' . $user->name . '%');
+            });
+        }
+
+        // Ambil data yang sesuai dengan pencarian dan hak akses pengguna
+        $petas = $query->paginate(10);
+
+        // Hitung jumlah dokumen yang disetujui dan ditolak
+        $approvedCount = $query->clone()->where('approvalPr', 'approved')->count();
+        $rejectedCount = $query->clone()->where('approvalPr', 'rejected')->count();
+
+        return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount'));
+    }
 
     public function create()
     {
-        return view('pr.tambahDokPR')->with([
+        $user = Auth::user();
+        $unitKerjas = UnitKerja::all();
+
+        return view('pr.tambahDokPR', compact('unitKerjas'))->with([
+            'user' => $user,
             'user' => Auth::user(),
         ]);
     }
@@ -63,8 +116,8 @@ class PetaController extends Controller
         //validate form
         $this->validate($request, [
             'judul'     => 'required|min:1',
-            'jenis'     => 'required|min:1',
-            'dokumen'   => 'mimes:xls,xlsx',
+            'dokumen'   => 'required|mimes:xls,xlsx',
+            'jenis'     => 'required',
         ]);
 
         //create peta
@@ -87,36 +140,41 @@ class PetaController extends Controller
         return redirect()->route('petas.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
     //tampil data
-    public function tampilData($id)
-    {
-        $petas = Peta::find($id);
-        return view('pr.tampilEdit', compact('petas'))->with([
-            'user' => Auth::user(),
-        ]);
-    }
+    // public function tampilData($id)
+    // {
+    //     $petas = Peta::find($id);
+    //     return view('pr.tampilEdit', compact('petas'))->with([
+    //         'user' => Auth::user(),
+    //     ]);
+    // }
     //Edit Data
     public function updateData(Request $request, $id)
     {
         $petas = Peta::find($id);
         //validate form
         $this->validate($request, [
-            'judul'     => 'required|min:1',
-            'jenis'     => 'required|min:1',
-            'dokumen'   => 'mimes:xls,xlsx',
+            'dokumen'   => 'required|mimes:xls,xlsx',
         ]);
+        // Simpan riwayat dokumen lama
+        if ($petas->dokumen) {
+            DocumentHistory::create([
+                'peta_id' => $petas->id,
+                'dokumen' => $petas->dokumen,
+                'uploaded_at' => now(),
+                'status' => $petas->approvalPr,
+            ]);
+        }
         //update peta
-        $petas->judul = $request->judul;
-        $petas->jenis = $request->jenis;
-
         if ($request->hasFile('dokumen')) {
             $file = $request->file('dokumen');
             $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(('dokumenPR/'), $filename);
             $petas->dokumen = $filename;
         }
+        $petas->approvalPr = 'Pending';
         $petas->save();
 
-        return redirect()->route('petas.index')->with('success', 'Data Berhasil Diupdate!');
+        return redirect()->back()->with('success', 'Dokumen berhasil diupdate');
     }
     //Hapus Data
     public function destroy($id)
@@ -161,7 +219,8 @@ class PetaController extends Controller
     public function detailPR($id)
     {
         $petas = Peta::findOrFail($id);
-        return view('pr.detailPR', compact('petas'));
+        $comment_prs = $petas->comment_prs()->with('user')->latest()->get();
+        return view('pr.detailPR', compact('petas', 'comment_prs'));
     }
 
     //approval
@@ -181,12 +240,34 @@ class PetaController extends Controller
     public function disapprove($id)
     {
         $peta = Peta::find($id);
-        if (Auth::user()->id_level == 1 || Auth::user()->id_level == 3) {
+        if (Auth::user()->id_level == 1 || Auth::user()->id_level == 2 || Auth::user()->id_level == 3 || Auth::user()->id_level == 4 || Auth::user()->id_level == 6) {
+            $currentTimestamp = now();
             $peta->approvalPr = 'rejected';
+            $peta->approvalPr_at = $currentTimestamp;
             $peta->save();
 
             return redirect()->route('detailPR', $id)->with('success', 'Dokumen berhasil ditolak');
         }
         return redirect()->route('detailPR', $id)->with('error', 'Anda tidak memiliki hak akses untuk menolak dokumen ini');
+    }
+
+    //Komentar Penelaah
+    public function postComment(Request $request, $id)
+    {
+        // $peta = Peta::findOrFail($id);
+
+        // Validasi input komentar
+        $request->validate([
+            'comment' => 'required|string',
+        ]);
+
+        // Simpan komentar ke dalam database
+        CommentPr::create([
+            'user_id' => auth()->id(),
+            'peta_id' => $id,
+            'comment' => $request->input('comment'),
+        ]);
+
+        return redirect()->back()->with('success', 'Komentar berhasil disimpan.');
     }
 }

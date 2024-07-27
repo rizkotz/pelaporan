@@ -46,7 +46,7 @@
                                     <th scope="col">No</th>
                                     <th scope="col">Judul</th>
                                     <th scope="col">Jenis</th>
-                                    <th colspan="3" scope="col">Dokumen</th>
+                                    <th colspan="2" scope="col">Dokumen</th>
                                     <th scope="col">Waktu Pengumpulan</th>
                                     @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 5)
                                         <th colspan="2" scope="col">Aksi</th>
@@ -55,7 +55,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php $no = 1; @endphp
+                                @php $no = ($dokumens->currentPage() - 1) * $dokumens->perPage() + 1; @endphp
                                 @forelse ($dokumens as $dokumen)
                                     <tr>
                                         <td class="text-center">
@@ -77,13 +77,13 @@
                                                 <i class="fa-solid fa-eye"></i>
                                             </a>
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             <!-- Menambahkan tombol download -->
                                             <a href="{{ route('download.dokumen', $dokumen->id) }}"
                                                 class="btn btn-success btn-sm" title="Unduh Dokumen">
                                                 <i class="fa-solid fa-download"></i>
                                             </a>
-                                        </td>
+                                        </td> --}}
                                         <td class="text-center">
                                             {{ $dokumen->created_at->format('d F Y') }}
                                         </td>

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Peta extends Model
 {
     use HasFactory;
-     /**
+    /**
      * fillable
      *
      * @var array
@@ -24,23 +24,31 @@ class Peta extends Model
         'koreksiPr',
     ];
 
-public function getApprovalStatusAttribute()
-{
-    $approvedCount = 0;
+    public function getApprovalStatusAttribute()
+    {
+        $approvedCount = 0;
 
-    if ($this->approvalPr == 'approved') $approvedCount++;
+        if ($this->approvalPr == 'approved') $approvedCount++;
 
-    return $approvedCount;
-}
-
-public function getStatusAttribute()
-{
-    $approvedCount = $this->approval_status;
-
-    if ($approvedCount == 0) {
-        return 'Belum';
-    }  else {
-        return 'Selesai';
+        return $approvedCount;
     }
-}
+
+    public function getStatusAttribute()
+    {
+        $approvedCount = $this->approval_status;
+
+        if ($approvedCount == 0) {
+            return 'Belum';
+        } else {
+            return 'Selesai';
+        }
+    }
+    public function comment_prs()
+    {
+        return $this->hasMany(CommentPr::class);
+    }
+    public function documentHistories()
+    {
+        return $this->hasMany(DocumentHistory::class);
+    }
 }

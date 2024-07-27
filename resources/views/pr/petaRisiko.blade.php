@@ -9,12 +9,24 @@
             <span class="span0">List</span>
             <span class="span1">Dokumen</span>
         </h4>
+        <!-- Rekapitulasi -->
+        <div class="row mb-1">
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <strong>Rekapitulasi:</strong>
+                    <ul>
+                        <li>Jumlah Dokumen <span class="badge badge-success">Disetujui</span> : {{ $approvedCount }}</li>
+                        <li>Jumlah Dokumen <span class="badge badge-danger">Ditolak</span> : {{ $rejectedCount }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-6 mb-2">
                 <form action="/petaRisiko/search" method="GET">
                     <div class="input-group">
                         <input type="search" name="search" class="form-control float-right"
-                            placeholder="Search: Masukkan Judul/ Waktu/ PIC/ Anggota">
+                            placeholder="Search: Masukkan Judul/ Waktu/ PIC/">
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-default">
                                 <i class="fas fa-search"></i>
@@ -31,7 +43,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-1">
                                 @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 5)
-                                    <a href="{{ route('petas.create') }}" class="btn btn-md btn-success mb-3">TAMBAH
+                                    <a href="{{ route('petas.create') }}" class="btn btn-md btn-success mb-1">TAMBAH
                                         DOKUMEN</a>
                                 @endif
                             </div>
@@ -40,19 +52,20 @@
                             <thead>
                                 <tr class="text-center">
                                     <th scope="col">No</th>
-                                    <th scope="col">Nama</th>
+                                    <th scope="col">PIC</th>
                                     <th scope="col">Judul</th>
-                                    <th scope="col">Jenis</th>
+                                    <th scope="col">Unit Kerja</th>
                                     <th scope="col">Dokumen</th>
                                     <th scope="col">Status</th>
                                     <th colspan="4" scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php $no = ($petas->currentPage() - 1) * $petas->perPage() + 1; @endphp
                                 @forelse ($petas as $peta)
                                     <tr>
                                         <td class="text-center">
-                                            {{ $loop->iteration }}
+                                            {{ $no++ }}
                                         </td>
                                         <td class="text-center">
                                             {{ $peta->nama }}
@@ -73,7 +86,7 @@
                                                 </small>
                                             </div>
                                         </td>
-                                        <td class="text">
+                                        <td class="text-center">
                                             @if ($peta->approvalPr == 'approved')
                                                 <span class="badge badge-success">Disetujui</span>
                                                 <div>
@@ -85,20 +98,14 @@
                                                 <span class="badge badge-warning">Pending</span>
                                             @endif
                                         </td>
-                                        @if (auth()->user()->id_level == 1 ||
-                                                auth()->user()->id_level == 2 ||
-                                                auth()->user()->id_level == 3 ||
-                                                auth()->user()->id_level == 4 ||
-                                                auth()->user()->id_level == 6)
                                             <td><a href="{{ route('detailPR', ['id' => $peta->id]) }}"
                                                     class="btn fa-solid fa-list bg-success p-2 text-white"
                                                     data-toggle="tooltip" title="Detail Dokumen"></a> </td>
-                                        @endif
-                                        @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 5)
+                                        {{-- @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 5)
                                             <td><a href="/tampilData/{{ $peta->id }}"
                                                     class="btn fa-regular fa-pen-to-square bg-warning p-2 text-white"
                                                     data-toggle="tooltip" title="Edit Dokumen"></a> </td>
-                                        @endif
+                                        @endif --}}
                                         @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
                                             <td class="text-center">
                                                 <form onsubmit="return confirm('Apakah Anda Yakin ?');"
