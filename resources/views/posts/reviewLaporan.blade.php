@@ -2,9 +2,73 @@
 @section('title', 'PIC Kegiatan')
 @section('isi')
 
-    <div class="col-md-16 p-5 pt-2">
+    <div class="col-md-16 p-4 pt-2">
         <h3><i class="fa-solid fa-list-check mr-2"></i>PIC Kegiatan</h3>
         <hr>
+        @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 3)
+            <h4 class="tittle-1">
+                <span class="span0">List</span>
+                <span class="span1">Tugas Untuk Disetujui</span>
+            </h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card border-0 shadow rounded">
+                        <div class="card-body">
+                            <table class="table table-bordered mt-2">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th scope="col">Waktu</th>
+                                        <th scope="col">Tempat</th>
+                                        <th scope="col">Jenis</th>
+                                        <th scope="col">Judul</th>
+                                        <th scope="col">Deskripsi</th>
+                                        <th scope="col">PIC</th>
+                                        <th scope="col">Anggota</th>
+                                        <th colspan="3" scope="col">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($pendingPosts as $post)
+                                            <tr>
+                                                <td class="text-center">{{ $post->waktu }}</td>
+                                                <td class="text-center">{{ $post->tempat }}</td>
+                                                <td class="text-center">{{ $post->jenis }}</td>
+                                                <td class="text">{{ $post->judul }}</td>
+                                                <td class="text">{{ $post->deskripsi }}</td>
+                                                <td class="text-center"><span
+                                                        class="badge badge-primary">{{ $post->tanggungjawab }}</span></td>
+                                                <td class="text-center"><span
+                                                        class="badge badge-secondary">{{ $post->anggota }}</span></td>
+                                                <td><a href="/detailTugas/{{ $post->id }}"
+                                                        class="btn fa-solid fa-list bg-success p-2 text-white"
+                                                        data-toggle="tooltip" title="Detail Tugas"></a></td>
+                                                <td>
+                                                    <form action="{{ route('posts.approve_task', $post->id) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="btn fa-solid fa-check bg-primary p-2 text-white"
+                                                            data-toggle="tooltip" title="Approve Tugas"></button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <form action="{{ route('posts.disapprove_task', $post->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="btn fa-solid fa-times bg-danger p-2 text-white"
+                                                            data-toggle="tooltip" title="Disapprove Tugas"></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            {{ $pendingPosts->links('pagination::bootstrap-4') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         <h4 class="tittle-1">
             <span class="span0">List</span>
             <span class="span1">Tugas</span>
@@ -50,7 +114,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($posts as $post)
+                                @forelse ($approvedPosts as $post)
                                     <tr>
                                         <td class="text-center">
                                             {{ $post->waktu }}
@@ -116,7 +180,7 @@
                             </tbody>
                         </table>
                         <!-- PAGINATION -->
-                        {{ $posts->links('pagination::bootstrap-4') }}
+                        {{ $approvedPosts->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>

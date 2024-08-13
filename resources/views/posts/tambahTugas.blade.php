@@ -3,7 +3,7 @@
 
 @section('isi')
 
-    <div class="col-md-16 p-5 pt-2">
+    <div class="col-md-16 p-4 pt-2">
         <h3><i class="fa fa-angle-double-right"></i>Tambah Tugas</h3>
         <hr>
         <h4 class="tittle-1">
@@ -78,8 +78,12 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold">JENIS</label>
-                                <input type="text" class="form-control @error('jenis') is-invalid @enderror"
-                                    name="jenis" value="{{ old('jenis') }}" placeholder="Masukkan Jenis Tugas...">
+                                <select id="jenis" name="jenis" class="form-control @error('jenis') is-invalid @enderror">
+                                    <option value="">- Pilih Jenis Tugas -</option>
+                                    <option value="Reviu" {{ old('jenis') == 'Reviu' ? 'selected' : '' }}>Reviu</option>
+                                    <option value="Monev" {{ old('jenis') == 'Monev' ? 'selected' : '' }}>Monev</option>
+                                    <option value="Keuangan" {{ old('jenis') == 'Keuangan' ? 'selected' : '' }}>Keuangan</option>
+                                </select>
 
                                 <!-- error message untuk jenis -->
                                 @error('jenis')
@@ -115,8 +119,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="font-weight-bold">BIDANG</label>
-                                <input type="text" class="form-control @error('bidang') is-invalid @enderror"
-                                    name="bidang" value="{{ old('bidang') }}" placeholder="Masukkan Bidang Tugas...">
+                                <input type="text" id="bidang" class="form-control @error('bidang') is-invalid @enderror"
+                                    name="bidang" value="{{ old('bidang') }}" placeholder="Masukkan Bidang Tugas..." readonly>
 
                                 <!-- error message untuk merek -->
                                 @error('bidang')
@@ -188,6 +192,20 @@
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const jenisSelect = document.getElementById('jenis');
+                const bidangInput = document.getElementById('bidang');
+
+                jenisSelect.addEventListener('change', function() {
+                    // Ambil nilai yang dipilih dari dropdown jenis
+                    const selectedJenis = jenisSelect.value;
+
+                    // Set nilai bidang sesuai dengan jenis yang dipilih
+                    bidangInput.value = selectedJenis;
+                });
+            });
+        </script>
         <script>
             $(function() {
                 $.datepicker.setDefaults($.datepicker.regional['id']);

@@ -2,7 +2,7 @@
 @section('title', 'Unit Kerja')
 @section('isi')
 
-    <div class="col-md-16 p-5 pt-2">
+    <div class="col-md-16 p-4 pt-2">
         <h3><i class="fa-regular fa-bookmark mr-2"></i>UNIT KERJA</h3>
         <hr>
         <h4 class="tittle-1">

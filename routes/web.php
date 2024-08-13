@@ -35,6 +35,7 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('logout', 'logout');
     Route::get('register', 'create')->name('register');
     Route::post('register', 'store')->name('register.store');
+    Route::get('manualbook','manualbook')->name('manualbook');
 });
 
 
@@ -50,6 +51,11 @@ Route::get('/laporanAkhir',    [PostController::class, 'laporanAkhir'])->name('l
     ->middleware('auth');
 Route::get('/reviewKetua',    [PostController::class, 'reviewKetua'])->name('reviewKetua')
     ->middleware('auth');
+// Route untuk approve dan disapprove tugas
+Route::post('/posts/{id}/approve_task', [PostController::class, 'approve_task'])->name('posts.approve_task')
+    ->middleware('auth', 'cekUserLogin');
+Route::post('/posts/{id}/disapprove_task', [PostController::class, 'disapprove_task'])->name('posts.disapprove_task')
+    ->middleware('auth', 'cekUserLogin');
 Route::get('/tampilData/{id}', [PostController::class, 'tampilData'])->name('tampilData')
     ->middleware('auth');
 Route::post('/updateData/{id}', [PostController::class, 'updateData'])->name('updateData')
@@ -135,7 +141,7 @@ Route::delete('/dokumens/{id}',   [DokumenController::class, 'destroy'])->name('
 
 //Route View
 Route::get('/dashboard',               [ProjectController::class, 'dashboard'])->middleware(['auth', 'approved']);
-Route::get('/template',               [ProjectController::class, 'template'])->middleware(['auth', 'approved']);
+Route::get('/template',               [ProjectController::class, 'template']);
 Route::get('/',                        [ProjectController::class, 'dashboard'])->middleware(['auth', 'approved']);
 
 //Route Search
@@ -172,6 +178,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 //Feedback
 Route::get('/feedback', [ProjectController::class, 'feedback'])->middleware('auth');
+Route::get('/feedback_web', [ProjectController::class, 'feedback_web']);
 
 //template
 Route::get('/welcome', function () {

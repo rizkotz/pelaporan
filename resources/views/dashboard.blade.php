@@ -2,7 +2,7 @@
 @section('title', 'Dashboard')
 
 @section('isi')
-    <div class="col-md-16 p-5 pt-2">
+    <div class="col-md-16 p-4 pt-2">
         <h3><i class="fa-solid fa-gauge mr-2"></i>DASHBOARD</h3>
         <hr>
 

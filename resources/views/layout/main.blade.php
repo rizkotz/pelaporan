@@ -52,7 +52,7 @@
       <div class="icon ml-auto">
         <h5>
 
-            <a class="navbar-brand text-white" href="#">
+            <a class="navbar-brand text-white" href="{{ url('/profileDataUser/' . Auth::user()->id) }}">
                 @if(auth()->user()->profile_picture)
                 <img src="/profile_pictures/{{ auth()->user()->profile_picture }}" class="img-circle elevation-2" alt="User Image" width="30" height="30">
               @else

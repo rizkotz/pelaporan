@@ -2,7 +2,7 @@
 @section('title', 'Dokumen')
 @section('isi')
 
-    <div class="col-md-16 p-5 pt-2">
+    <div class="col-md-16 p-4 pt-2">
         <h3><i class="fa-solid fa-file mr-2"></i>DOKUMEN</h3>
         <hr>
         <h4 class="tittle-1">

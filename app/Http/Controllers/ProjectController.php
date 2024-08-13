@@ -137,4 +137,8 @@ class ProjectController extends Controller
     {
         return view('feedback');
     }
+    public function feedback_web()
+    {
+        return view('feedback');
+    }
 }

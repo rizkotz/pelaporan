@@ -27,7 +27,7 @@ class TugasLaporChart
 
         return $this->chart->barChart()
             ->setTitle('Data Penugasan')
-            ->setSubtitle('Data Penugasan Tahun 2023/2024')
+            ->setSubtitle('Data Penugasan SPI')
             ->addData('Jumlah Penugasan', $data)
             ->setHeight(300)
             ->setLabels($labels);

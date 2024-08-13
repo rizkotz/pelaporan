@@ -4,8 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Feedback</title>
-
+    <title>Manual Book</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -15,7 +14,6 @@
     <link rel="stylesheet" href="{{ asset('/') }}plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('/') }}dist/css/adminlte.min.css">
-
     <style>
         body {
             background-image: url('{{ asset('img/LoginBackground.jpg') }}');
@@ -25,14 +23,13 @@
         }
     </style>
 </head>
-
 <body>
     <div class="col-md-16 p-5 pt-2">
-        <h3><i class="fa-regular fa-user mr-2"></i>FEEDBACK</h3>
+        <h3><i class="fa-regular fa-user mr-2"></i>MANUAL BOOK</h3>
         <hr>
         <h4 class="tittle-1">
-            <span class="span0">Feedback</span>
-            <span class="span1">User</span>
+            <span class="span0">Manual</span>
+            <span class="span1">Book</span>
         </h4>
         <div class="row">
             <div class="col-md-8">
@@ -40,16 +37,20 @@
                     <div class="card-body">
                         <table class="table table-white table-sm">
                             <tr>
-                                Untuk mengisi kuesioner feedback aplikasi, silahkan
-                                klik link di bawah ini
+                                Untuk membuka manualbook website, silahkan klik
+                                link di bawah ini.
                             </tr>
                             <p>
                                 <tr>
                                     <th class="text-left">Link : </th>
                                     <td>
-                                        <a href="https://forms.gle/mahK8WtUnzsizVgw8" target="_blank">
-                                            https://forms.gle/mahK8WtUnzsizVgw8
-                                        </a>
+                                        <ul>
+                                            @foreach ($files as $file)
+                                                <li>
+                                                    <a href="{{ url('all_template/' . basename($file)) }}" target="_blank">{{ basename($file) }}</a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     </td>
                                 </tr>
                         </table>

@@ -26,6 +26,7 @@ class Post extends Model
         'templateA',
         'templateB',
         'rubrik',
+        'status_task',
         'hasilReviu',
         'hasilBerita',
         'hasilPengesahan',

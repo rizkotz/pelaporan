@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Level;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\File;
 
 
 class LoginController extends Controller
@@ -22,6 +23,13 @@ class LoginController extends Controller
             return redirect()->intended('dashboard');
         }
         return view('login.view_login');
+    }
+
+    public function manualbook(){
+        $templatePath = ('all_template/');
+        $files = File::files($templatePath);
+
+        return view('login.manual-book', compact('files'));
     }
 
     public function proses(Request $request)

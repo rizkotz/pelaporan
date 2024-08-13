@@ -30,16 +30,25 @@ class PostController extends Controller
         //get user data
         $users = Auth::user();
 
+        // Initialize pendingPosts as null
+        $pendingPosts = null;
+
         //query to get posts based on tanggungjawab and anggota
         $query = Post::query();
 
+        // For Ketua (id_level = 3) and Superadmin (id_level = 1)
+        if ($users->id_level == 1 || $users->id_level == 3) {
+            $pendingPosts = $query->where('status_task', 'pending')->latest()->paginate(5);
+        }
+
         if ($users->id_level == 1 || $users->id_level == 2) {
             //Admin: see all post
+            $approvedPosts = Post::where('status_task', 'approved')->latest()->paginate(5);
         } else {
-            $query->where(function ($q) use ($users) {
+            $approvedPosts= Post::where(function ($q) use ($users) {
                 $q->where('tanggungjawab', $users->name)
                     ->orWhere('anggota', 'LIKE', '%' . $users->name . '%');
-            });
+            })->where('status_task', 'approved'); //Hanya tampilkan tugas yg telah diapprove
         }
 
         //get filtering data from request
@@ -47,17 +56,19 @@ class PostController extends Controller
         $anggota = $request->input('anggota');
 
         if ($tanggungjawab) {
-            $query->where('tanggungjawab', 'LIKE', '%' . $tanggungjawab . '%');
+            $query->where('tanggungjawab', 'LIKE', '%' . $tanggungjawab . '%')
+                ->orWhere('status_task', 'approved'); //Hanya tampilkan tugas yg telah diapprove
         }
         if ($anggota) {
-            $query->where('anggota', 'LIKE', '%' . $anggota . '%');
+            $query->where('anggota', 'LIKE', '%' . $anggota . '%')
+                ->orWhere('status_task', 'approved'); //Hanya tampilkan tugas yg telah diapprove
         }
 
         //get filtered posts
         $posts = $query->latest()->paginate(5);
 
         //render view with posts
-        return view('posts.reviewLaporan', compact('posts'))
+        return view('posts.reviewLaporan', compact('posts','approvedPosts','pendingPosts'))
             ->with('tugasLaporChart', $tugasLaporChart->build())
             ->with('users', $users)
             ->with('tanggungjawab', $tanggungjawab)
@@ -212,6 +223,7 @@ class PostController extends Controller
             'templateA' => 'mimes:doc,docx',
             'templateB' => 'mimes:doc,docx',
             'rubrik' => 'mimes:xls,xlsx',
+            'status_task'   => 'pending',
         ], [
             'anggota.required' => 'Anggota field is required.',
             'tanggungjawab.required' => 'Tanggungjawab field is required.'
@@ -257,6 +269,23 @@ class PostController extends Controller
 
         //redirect to index
         return redirect()->route('posts.index')->with(['success' => 'Data Berhasil Disimpan!']);
+    }
+
+    //approval tugas
+    public function approve_task($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->status_task = 'approved';
+        $post->save();
+        return redirect()->route('posts.index')->with(['success' => 'Tugas berhasil disetujui!']);
+    }
+
+    public function disapprove_task($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->status_task = 'rejected';
+        $post->save();
+        return redirect()->route('posts.index')->with(['success' => 'Tugas berhasil ditolak!']);
     }
 
     //submit tugas
@@ -731,8 +760,8 @@ class PostController extends Controller
     public function dokumenTindakLanjut()
     {
         $posts = Post::whereNotNull('dokumen_tindak_lanjut')
-                 ->latest()
-                 ->paginate(10);
+            ->latest()
+            ->paginate(10);
         return view('posts.dokumen_tindakLanjut', compact('posts'));
     }
     public function tambahTindakLanjut($id)

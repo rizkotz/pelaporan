@@ -2,7 +2,7 @@
 @section('title', 'Dokumen Tindak Lanjut')
 @section('isi')
 
-    <div class="col-md-16 p-5 pt-2">
+    <div class="col-md-16 p-4 pt-2">
         <h3><i class="fa-regular fa-file mr-2"></i>DOKUMEN TINDAK LANJUT</h3>
         <hr>
         <h4 class="tittle-1">

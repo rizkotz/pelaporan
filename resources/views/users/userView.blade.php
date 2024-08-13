@@ -3,7 +3,7 @@
 
 @section('isi')
 
-    <div class="col-md-16 p-5 pt-2">
+    <div class="col-md-16 p-4 pt-2">
         <h3><i class="fa-solid fa-user mr-2"></i>DATA USER</h3>
         <hr>
         <h4 class="tittle-1">
@@ -63,11 +63,11 @@
                                         <td class="text">
                                             {{ $user->Level->name }}
                                         </td>
-                                        @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
+                                        {{-- @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
                                             <td><a href="/tampilDataUser/{{ $user->id }}"
                                                     class="btn fa-regular fa-pen-to-square bg-warning p-2 text-white"
                                                     data-toggle="tooltip" title="Edit User"></a> </td>
-                                        @endif
+                                        @endif --}}
                                         @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
                                             <td class="text-center">
                                                 <form onsubmit="return confirm('Apakah Anda Yakin ?');"

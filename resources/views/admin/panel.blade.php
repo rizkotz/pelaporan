@@ -64,8 +64,6 @@
 
 
                                     </select>
-                                </div>
-                                <div>
 
                                     <label for="menu" style="font-weight: 100;">Visibility</label>
                                 </div>
