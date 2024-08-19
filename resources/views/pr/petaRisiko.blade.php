@@ -3,7 +3,7 @@
 @section('isi')
 
     <div class="col-md-16 p-4 pt-2">
-        <h3><i class="fa-solid fa-list-check mr-2"></i>Peta Risiko</h3>
+        <h3><i class="fa-regular fa-newspaper mr-2"></i>Peta Risiko</h3>
         <hr>
         <h4 class="tittle-1">
             <span class="span0">List</span>
@@ -36,6 +36,31 @@
                 </form>
             </div>
         </div>
+        <!-- Filter Jenis -->
+        @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2 || auth()->user()->id_level == 3 || auth()->user()->id_level == 4 || auth()->user()->id_level == 6)
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <form action="{{ route('petas.index') }}" method="GET">
+                    <div class="input-group">
+                        <select name="jenis" class="form-control">
+                            <option value="">-- Pilih Jenis --</option>
+                            @foreach ($unitKerjas as $unitKerja)
+                                <option value="{{ $unitKerja->nama_unit_kerja }}"
+                                    {{ request('jenis') == $unitKerja->nama_unit_kerja ? 'selected' : '' }}>
+                                    {{ $unitKerja->nama_unit_kerja }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endif
         <div class="row">
             <div class="col-md-12">
                 <div class="card border-0 shadow rounded">
@@ -46,6 +71,8 @@
                                     <a href="{{ route('petas.create') }}" class="btn btn-md btn-success mb-1">TAMBAH
                                         DOKUMEN</a>
                                 @endif
+                                <a href="{{ route('petas.tabel') }}" class="btn btn-md btn-primary mb-1">Tabel
+                                    Matrik</a>
                             </div>
                         </div>
                         <table class="table table-bordered mt-2">
@@ -98,9 +125,9 @@
                                                 <span class="badge badge-warning">Pending</span>
                                             @endif
                                         </td>
-                                            <td><a href="{{ route('detailPR', ['id' => $peta->id]) }}"
-                                                    class="btn fa-solid fa-list bg-success p-2 text-white"
-                                                    data-toggle="tooltip" title="Detail Dokumen"></a> </td>
+                                        <td><a href="{{ route('detailPR', ['id' => $peta->id]) }}"
+                                                class="btn fa-solid fa-list bg-success p-2 text-white" data-toggle="tooltip"
+                                                title="Detail Dokumen"></a> </td>
                                         {{-- @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 5)
                                             <td><a href="/tampilData/{{ $peta->id }}"
                                                     class="btn fa-regular fa-pen-to-square bg-warning p-2 text-white"

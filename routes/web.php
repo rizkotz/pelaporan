@@ -92,6 +92,8 @@ Route::get('/dokumen-tindak-lanjut', [PostController::class, 'dokumenTindakLanju
 Route::resource('/petas', PetaController::class)->middleware(['auth', 'approved']);
 Route::get('/petas/{id}/tugas', [PetaController::class, 'tugas'])->name('petas.tugas')
     ->middleware('auth');
+Route::get('/petas-tabel', [PetaController::class, 'tabelMatrik'])->name('petas.tabel')
+    ->middleware('auth');
 Route::post('/petas/{id}/tambahtugas', [PetaController::class, 'tambahtugas'])->name('petas.tambahtugas')
     ->middleware('auth');
 Route::get('/detailPR/{id}', [PetaController::class, 'detailPR'])->name('detailPR')

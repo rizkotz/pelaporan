@@ -22,36 +22,10 @@
             background-size: cover;
             background-repeat: no-repeat;
         }
-        .manualbook {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #007bff;
-        }
-        .feedback_web {
-            position: absolute;
-            top: 65px;
-            right: 10px;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #007bff;
-        }
     </style>
 </head>
 
 <body class="hold-transition login-page">
-    <a href="{{ url('/manualbook') }}" class="manualbook" target="_blank">
-        Download Manual Book
-    </a>
-    <a href="{{ url('/feedback_web') }}" class="feedback_web" target="_blank">
-        Feedback Website
-    </a>
     <div class="login-box">
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">

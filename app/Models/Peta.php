@@ -22,6 +22,19 @@ class Peta extends Model
         'dokumen',
         'approvalPr',
         'koreksiPr',
+        'kode_regist',
+        'iku',
+        'sasaran',
+        'proker',
+        'indikator',
+        'anggaran',
+        'pernyataan',
+        'kategori',
+        'uraian',
+        'metode',
+        'skor_kemungkinan',
+        'skor_dampak',
+        'tingkat_risiko',
     ];
 
     public function getApprovalStatusAttribute()

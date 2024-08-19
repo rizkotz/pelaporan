@@ -42,6 +42,11 @@ class PetaController extends Controller
             $query->where('anggota', 'LIKE', '%' . $anggota . '%');
         }
 
+        //filter berdasarkan jenis jika ada
+        if ($request->has('jenis')&& $request->jenis != ''){
+            $query->where('jenis', $request->jenis);
+        }
+
         //get filtered petas
         $petas = $query->latest()->with('comment_prs.user')->paginate(5);
 
@@ -56,9 +61,9 @@ class PetaController extends Controller
             $rejectedCount = $query->where('approvalPr', 'rejected')->count();
         }
 
-
+        $unitKerjas = UnitKerja::all();
         //render view with petas
-        return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount'))
+        return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount','unitKerjas'))
             ->with('tugasLaporChart', $tugasLaporChart->build())
             ->with('users', $users)
             ->with('anggota', $anggota);
@@ -94,6 +99,23 @@ class PetaController extends Controller
         return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount'));
     }
 
+    public function tabelMatrik()
+    {
+        $petas = Peta::all();
+
+        // Mengelompokkan berdasarkan skor
+        $matrix = [];
+        foreach ($petas as $peta){
+            $key = 'R-' . $peta->skor_dampak . '-' . $peta->skor_kemungkinan;
+            if (!isset($matrix[$key])){
+                $matrix[$key] = [];
+            }
+            $matrix[$key][] = $peta->kode_regist; //menggunakan kode regist
+        }
+
+        return view('pr.tabelPeta', compact('matrix'));
+    }
+
     public function create()
     {
         $user = Auth::user();
@@ -118,6 +140,18 @@ class PetaController extends Controller
             'judul'     => 'required|min:1',
             'dokumen'   => 'required|mimes:xls,xlsx',
             'jenis'     => 'required',
+            'kode_regist'     => 'required',
+            'iku'     => 'required',
+            'sasaran'     => 'required',
+            'proker'     => 'required',
+            'indikator'     => 'required',
+            'anggaran'     => 'required',
+            'pernyataan'     => 'required',
+            'kategori'     => 'required',
+            'uraian'     => 'required',
+            'metode'     => 'required',
+            'skor_kemungkinan'     => 'required',
+            'skor_dampak'     => 'required',
         ]);
 
         //create peta
@@ -127,6 +161,18 @@ class PetaController extends Controller
             'jenis'     => $request->jenis,
             'dokumen'   => $request->dokumen,
             'nama'      => $user->name,
+            'kode_regist'     => $request->kode_regist,
+            'iku'     => $request->iku,
+            'sasaran'     => $request->sasaran,
+            'proker'     => $request->proker,
+            'indikator'     => $request->indikator,
+            'anggaran'     => $request->anggaran,
+            'pernyataan'     => $request->pernyataan,
+            'kategori'     => $request->kategori,
+            'uraian'     => $request->uraian,
+            'metode'     => $request->metode,
+            'skor_kemungkinan'     => $request->skor_kemungkinan,
+            'skor_dampak'     => $request->skor_dampak,
         ]);
 
         $petas = Peta::latest()->first();

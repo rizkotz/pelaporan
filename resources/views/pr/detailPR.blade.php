@@ -37,6 +37,59 @@
                                 <th class="col-2">Penelaah : </th>
                                 <td>{{ $petas->anggota }}</td>
                             </tr>
+                            <tr>
+                                <th class="col-2">Identifikasi Risiko : </th>
+                                <td>Kode Registrasi: {{ $petas->kode_regist }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>IKU: {{ $petas->iku }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Sasaran Strategis: {{ $petas->sasaran }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Program Kerja: {{ $petas->proker }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Indikator: {{ $petas->indikator }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Anggaran: {{ $petas->anggaran }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Pernyataan Risiko: {{ $petas->pernyataan }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Kategori Risiko: {{ $petas->kategori }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Uraian Dampak: {{ $petas->uraian }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Metode Pencapaian: {{ $petas->metode }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Skor Probabilitas: {{ $petas->skor_kemungkinan }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Skor Dampak: {{ $petas->skor_dampak }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2"> </th>
+                                <td>Tingkat Risiko: extreme</td>
+                            </tr>
+
                             @if (Auth::user()->id_level == 1 ||
                                     Auth::user()->id_level == 2 ||
                                     Auth::user()->id_level == 3 ||

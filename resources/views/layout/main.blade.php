@@ -48,11 +48,11 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <!-- Navbar Search -->
-      <div class="icon ml-auto">
-        <h5>
+        <li class="nav-item dropdown">
+            <a class="nav-link text-white dropdown-toggle" href="#" id="userDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-            <a class="navbar-brand text-white" href="{{ url('/profileDataUser/' . Auth::user()->id) }}">
+            {{-- <a class="navbar-brand text-white" href="{{ url('/profileDataUser/' . Auth::user()->id) }}"> --}}
                 @if(auth()->user()->profile_picture)
                 <img src="/profile_pictures/{{ auth()->user()->profile_picture }}" class="img-circle elevation-2" alt="User Image" width="30" height="30">
               @else
@@ -83,8 +83,17 @@
               @endswitch
               </span>
             </a>
-        </h5>
-    </div>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="{{ route('profileDataUser', Auth::user()->id) }}">Profile</a>
+                <a class="dropdown-item" href="{{ route('manualbook') }}">Manualbook</a>
+                <a class="dropdown-item" href="/feedback">Feedback</a>
+
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="logout">
+                    Logout
+                </a>
+            </div>
+        </li>
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -209,6 +218,12 @@
     </script>
 
 <!-- jQuery -->
+{{-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> --}}
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<!-- jQuery -->
 <script src="{{ asset('/') }}plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('/') }}plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -216,6 +231,8 @@
 <script src="{{ asset('/') }}dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 {{-- <script src="{{ asset('/') }}dist/js/demo.js"></script> --}}
+
+
 
 @stack('scripts')
 </body>
