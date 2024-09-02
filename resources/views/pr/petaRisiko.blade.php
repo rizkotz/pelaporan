@@ -21,6 +21,7 @@
                 </div>
             </div>
         </div>
+        {{-- search bar --}}
         <div class="row">
             <div class="col-md-6 mb-2">
                 <form action="/petaRisiko/search" method="GET">
@@ -35,11 +36,11 @@
                     </div>
                 </form>
             </div>
-        </div>
+
         <!-- Filter Jenis -->
         @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2 || auth()->user()->id_level == 3 || auth()->user()->id_level == 4 || auth()->user()->id_level == 6)
         <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <form action="{{ route('petas.index') }}" method="GET">
                     <div class="input-group">
                         <select name="jenis" class="form-control">
@@ -61,6 +62,7 @@
             </div>
         </div>
         @endif
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card border-0 shadow rounded">
@@ -133,6 +135,11 @@
                                                     class="btn fa-regular fa-pen-to-square bg-warning p-2 text-white"
                                                     data-toggle="tooltip" title="Edit Dokumen"></a> </td>
                                         @endif --}}
+                                        <td>
+                                            <a href="{{ route('petas.tabelUnitKerja', ['unitKerja' => $peta->jenis]) }}"
+                                               class="btn fa-solid fa-table bg-info p-2 text-white"
+                                               data-toggle="tooltip" title="Lihat Tabel Matrik Unit Kerja"></a>
+                                        </td>
                                         @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 2)
                                             <td class="text-center">
                                                 <form onsubmit="return confirm('Apakah Anda Yakin ?');"

@@ -10,7 +10,8 @@
             <span class="span0">Tambahkan Detail Dokumen</span>
         </h4>
         <div class="row">
-            <div class="col-md-12">
+            {{-- bagian kiri --}}
+            <div class="col-md-6">
                 <div class="card border-0 shadow rounded">
                     <div class="card-body">
                         <form action="{{ route('petas.store') }}" method="POST" enctype="multipart/form-data">
@@ -45,8 +46,22 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold">KODE REGISTER</label>
+                                @php
+                                    $selectedUnit = old('jenis') ?? $unitKerjas->first()->nama_unit_kerja; // mengambil unit kerja yang dipilih atau default ke yang pertama
+                                    $latestEntry = \App\Models\Peta::where('jenis', $selectedUnit)->latest()->first(); // Sesuaikan dengan model dan field yang digunakan
+
+                                    if ($latestEntry) {
+                                        $kodeParts = explode('_', $latestEntry->kode_regist);
+                                        $lastNumber = isset($kodeParts[1]) ? intval($kodeParts[1]) : 0;
+                                    } else {
+                                        $lastNumber = 0;
+                                    }
+
+                                    $newKodeRegist = $selectedUnit . '_' . ($lastNumber + 1);
+                                @endphp
                                 <input type="text" class="form-control @error('kode_regist') is-invalid @enderror"
-                                    name="kode_regist" value="{{ old('kode_regist') }}" placeholder="Masukkan Kode...">
+                                    name="kode_regist" value="{{ old('kode_regist', $newKodeRegist) }}"
+                                    placeholder="Masukkan Kode..." readonly>
 
                                 <!-- error message untuk judul -->
                                 @error('kode_regist')
@@ -58,8 +73,8 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold">IKU</label>
-                                <input type="text" class="form-control @error('iku') is-invalid @enderror"
-                                    name="iku" value="{{ old('iku') }}" placeholder="Masukkan IKU...">
+                                <input type="text" class="form-control @error('iku') is-invalid @enderror" name="iku"
+                                    value="{{ old('iku') }}" placeholder="Masukkan IKU...">
 
                                 <!-- error message untuk judul -->
                                 @error('iku')
@@ -71,9 +86,14 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold">SASARAN STRATEGIS</label>
-                                <input type="text" class="form-control @error('sasaran') is-invalid @enderror"
-                                    name="sasaran" value="{{ old('sasaran') }}" placeholder="Masukkan Sasaran Strategis...">
-
+                                <select class="form-control @error('sasaran') is-invalid @enderror"
+                                    name="sasaran">
+                                    <option value="" disabled selected>Pilih Sasaran</option>
+                                    <option value="1. Meningkatnya kualitas lulusan pendidikan tinggi" {{ old('kategori') == 1 ? 'selected' : '' }}>1. Meningkatnya kualitas lulusan pendidikan tinggi</option>
+                                    <option value="2. Meningkatnya kualitas dosen pendidikan tinggi" {{ old('kategori') == 2 ? 'selected' : '' }}>2. Meningkatnya kualitas dosen pendidikan tinggi</option>
+                                    <option value="3. Meningkatnya kualitas kurikulum dan pembelajaran" {{ old('kategori') == 3 ? 'selected' : '' }}>3. Meningkatnya kualitas kurikulum dan pembelajaran</option>
+                                    <option value="4. Meningkatnya tata kelola satuan kerja di lingkungan Ditjen Pendidikan Vokasi" {{ old('kategori') == 4 ? 'selected' : '' }}>4. Meningkatnya tata kelola satuan kerja di lingkungan Ditjen Pendidikan Vokasi</option>
+                                </select>
                                 <!-- error message untuk judul -->
                                 @error('sasaran')
                                     <div class="alert alert-danger mt-2">
@@ -121,8 +141,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="font-weight-bold">PERNYATAAN RISIKO</label>
-                                <input type="text" class="form-control @error('pernyataan') is-invalid @enderror"
-                                    name="pernyataan" value="{{ old('pernyataan') }}" placeholder="Masukkan Pernyataan Risiko...">
+                                <textarea class="form-control @error('pernyataan') is-invalid @enderror" name="pernyataan"
+                                    placeholder="Masukkan Pernyataan Risiko..." rows="3">{{ old('pernyataan') }}</textarea>
 
                                 <!-- error message untuk judul -->
                                 @error('pernyataan')
@@ -134,8 +154,15 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold">KATEGORI RISIKO</label>
-                                <input type="text" class="form-control @error('kategori') is-invalid @enderror"
-                                    name="kategori" value="{{ old('kategori') }}" placeholder="Masukkan Kategori...">
+                                <select class="form-control @error('kategori') is-invalid @enderror"
+                                    name="kategori">
+                                    <option value="" disabled selected>Pilih Kategori</option>
+                                    <option value="1. Risiko Strategis" {{ old('kategori') == 1 ? 'selected' : '' }}>1. Risiko Strategis</option>
+                                    <option value="2. Risiko Operasional" {{ old('kategori') == 2 ? 'selected' : '' }}>2. Risiko Operasional</option>
+                                    <option value="3. Risiko Keuangan" {{ old('kategori') == 3 ? 'selected' : '' }}>3. Risiko Keuangan</option>
+                                    <option value="4. Risiko Kepatuhan" {{ old('kategori') == 4 ? 'selected' : '' }}>4. Risiko Kepatuhan</option>
+                                    <option value="5. Risiko Kecurangan" {{ old('kategori') == 5 ? 'selected' : '' }}>5. Risiko Kecurangan</option>
+                                </select>
 
                                 <!-- error message untuk judul -->
                                 @error('kategori')
@@ -160,8 +187,14 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold">METODE PENCAPAIAN</label>
-                                <input type="text" class="form-control @error('metode') is-invalid @enderror"
-                                    name="metode" value="{{ old('metode') }}" placeholder="Masukkan Metode Pencapaian Tujuan SPIP...">
+                                <select class="form-control @error('metode') is-invalid @enderror"
+                                    name="metode">
+                                    <option value="" disabled selected>Pilih Metode</option>
+                                    <option value="1" {{ old('metode') == 1 ? 'selected' : '' }}>1. Memberikan keyakinan yang memadai bagi tercapainya efektivitas dan efisiensi pencapaian tujuan penyelenggaraan pemerintahan negara</option>
+                                    <option value="2" {{ old('metode') == 2 ? 'selected' : '' }}>2. Keandalan pelaporan keuangan</option>
+                                    <option value="3" {{ old('metode') == 3 ? 'selected' : '' }}>3. Pengamanan aset negara</option>
+                                    <option value="4" {{ old('metode') == 4 ? 'selected' : '' }}>4. Ketaatan terhadap peraturan perundang-undangan</option>
+                                </select>
 
                                 <!-- error message untuk judul -->
                                 @error('metode')
@@ -174,13 +207,13 @@
                             <div class="form-group">
                                 <label class="font-weight-bold">SKOR PROBABILITAS</label>
                                 <select class="form-control @error('skor_kemungkinan') is-invalid @enderror"
-                                name="skor_kemungkinan">
+                                    name="skor_kemungkinan">
                                     <option value="" disabled selected>Pilih Skor</option>
-                                    <option value="1" {{ old('skor_kemungkinan') == 1 ? 'selected' : '' }}>1</option>
-                                    <option value="2" {{ old('skor_kemungkinan') == 2 ? 'selected' : '' }}>2</option>
-                                    <option value="3" {{ old('skor_kemungkinan') == 3 ? 'selected' : '' }}>3</option>
-                                    <option value="4" {{ old('skor_kemungkinan') == 4 ? 'selected' : '' }}>4</option>
-                                    <option value="5" {{ old('skor_kemungkinan') == 5 ? 'selected' : '' }}>5</option>
+                                    <option value="1" {{ old('skor_kemungkinan') == 1 ? 'selected' : '' }}>1. Sangat Jarang</option>
+                                    <option value="2" {{ old('skor_kemungkinan') == 2 ? 'selected' : '' }}>2. Jarang</option>
+                                    <option value="3" {{ old('skor_kemungkinan') == 3 ? 'selected' : '' }}>3. Kadang-kadang</option>
+                                    <option value="4" {{ old('skor_kemungkinan') == 4 ? 'selected' : '' }}>4. Sering</option>
+                                    <option value="5" {{ old('skor_kemungkinan') == 5 ? 'selected' : '' }}>5. Sangat Sering</option>
                                 </select>
 
                                 <!-- error message untuk judul -->
@@ -194,13 +227,13 @@
                             <div class="form-group">
                                 <label class="font-weight-bold">SKOR DAMPAK</label>
                                 <select class="form-control @error('skor_dampak') is-invalid @enderror"
-                                name="skor_dampak">
+                                    name="skor_dampak">
                                     <option value="" disabled selected>Pilih Skor</option>
-                                    <option value="1" {{ old('skor_dampak') == 1 ? 'selected' : '' }}>1</option>
-                                    <option value="2" {{ old('skor_dampak') == 2 ? 'selected' : '' }}>2</option>
-                                    <option value="3" {{ old('skor_dampak') == 3 ? 'selected' : '' }}>3</option>
-                                    <option value="4" {{ old('skor_dampak') == 4 ? 'selected' : '' }}>4</option>
-                                    <option value="5" {{ old('skor_dampak') == 5 ? 'selected' : '' }}>5</option>
+                                    <option value="1" {{ old('skor_dampak') == 1 ? 'selected' : '' }}>1. Sangat Sedikit Berpengaruh</option>
+                                    <option value="2" {{ old('skor_dampak') == 2 ? 'selected' : '' }}>2. Sedikit Berpengaruh</option>
+                                    <option value="3" {{ old('skor_dampak') == 3 ? 'selected' : '' }}>3. Cukup Berpengaruh</option>
+                                    <option value="4" {{ old('skor_dampak') == 4 ? 'selected' : '' }}>4. Berpengaruh</option>
+                                    <option value="5" {{ old('skor_dampak') == 5 ? 'selected' : '' }}>5. Sangat Berpengaruh</option>
                                 </select>
 
                                 <!-- error message untuk judul -->
@@ -229,6 +262,44 @@
                     </div>
                 </div>
             </div>
+
+            {{-- bagian kanan --}}
+            <div class="col-md-6">
+                <div class="card border-0 shadow rounded">
+                    <div class="card-body">
+                        <h5>Data yang Telah Dimasukkan</h5>
+                        <hr>
+                        <ul class="list-group">
+                            <li class="list-group-item"><strong>Judul:</strong> <span id="judulDisplay"></span></li>
+                            <li class="list-group-item"><strong>Unit Kerja:</strong> <span id="unitKerjaDisplay"></span>
+                            </li>
+                            <li class="list-group-item"><strong>Kode Register:</strong> <span
+                                    id="kodeRegistDisplay"></span></li>
+                            <li class="list-group-item"><strong>IKU:</strong> <span id="ikuDisplay"></span></li>
+                            <li class="list-group-item"><strong>Sasaran Strategis:</strong> <span
+                                    id="sasaranDisplay"></span></li>
+                            <li class="list-group-item"><strong>Program Kerja:</strong> <span id="prokerDisplay"></span>
+                            </li>
+                            <li class="list-group-item"><strong>Indikator:</strong> <span id="indikatorDisplay"></span>
+                            </li>
+                            <li class="list-group-item"><strong>Anggaran:</strong> <span id="anggaranDisplay"></span></li>
+                            <li class="list-group-item"><strong>Pernyataan Risiko:</strong> <span
+                                    id="pernyataanDisplay"></span></li>
+                            <li class="list-group-item"><strong>Kategori Risiko:</strong> <span
+                                    id="kategoriDisplay"></span></li>
+                            <li class="list-group-item"><strong>Uraian Dampak:</strong> <span id="uraianDisplay"></span>
+                            </li>
+                            <li class="list-group-item"><strong>Metode Pencapaian:</strong> <span
+                                    id="metodeDisplay"></span></li>
+                            <li class="list-group-item"><strong>Skor Probabilitas:</strong> <span
+                                    id="skor_kemungkinanDisplay"></span></li>
+                            <li class="list-group-item"><strong>Skor Dampak:</strong> <span
+                                    id="skor_dampakDisplay"></span></li>
+                            <li class="list-group-item"><strong>Dokumen:</strong> <span id="dokumenDisplay"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -237,29 +308,78 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
         <style>
             .select2-container .select2-selection--single {
-                height: 38px; /* Adjust height to match other form controls */
+                height: 38px;
+                /* Adjust height to match other form controls */
             }
+
             .select2-container .select2-selection--single .select2-selection__rendered {
-                line-height: 30px; /* Align text vertically */
+                line-height: 30px;
+                /* Align text vertically */
             }
+
             .select2-container .select2-selection--single .select2-selection__arrow {
-                height: 36px; /* Adjust height of the dropdown arrow */
+                height: 36px;
+                /* Adjust height of the dropdown arrow */
             }
         </style>
     @endpush
 
     @push('scripts')
+        <!-- Jquery harus dimuat terlebih dahulu -->
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <!-- Kemudian, Bootstrap -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
         <script>
+            //UNIT KERJA
             $(document).ready(function() {
                 $('.select2').select2({
                     placeholder: 'Pilih Unit Kerja',
                     allowClear: true
                 });
+
+                //Update tampilan data pada form change
+                $('input, select, textarea').on('input change', function() {
+                    let inputName = $(this).attr('name');
+                    let displayId = `#${inputName}Display`;
+                    $(displayId).text($(this).val());
+                });
             });
         </script>
+        {{-- <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const unitKerjaSelect = document.querySelector('select[name="jenis"]');
+                const kodeRegistInput = document.querySelector('input[name="kode_regist"]');
+
+                unitKerjaSelect.addEventListener('change', function() {
+                    const unitKerja = this.value;
+
+                    if (!unitKerja) {
+                        kodeRegistInput.value = ''; // Kosongkan jika tidak ada unit kerja yang dipilih
+                        return;
+                    }
+
+                    // Fetch the incremented number from the server
+                    fetch(`/get-kode-register/${encodeURIComponent(unitKerja)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Combine unit kerja (X) and incremented number (Y)
+                                const newCode = `${data.unitKerjaCode}_${data.nextNumber}`;
+                                kodeRegistInput.value = newCode;
+                            } else {
+                                kodeRegistInput.value = ''; // Kosongkan jika ada error
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            kodeRegistInput.value = ''; // Kosongkan jika ada error
+                        });
+                });
+            });
+        </script> --}}
     @endpush
 
 @endsection

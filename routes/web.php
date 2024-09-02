@@ -41,6 +41,11 @@ Route::controller(LoginController::class)->group(function () {
 
 //Route Admin Menu Setting
 Route::resource('/admin/panel', MenuController::class)->middleware(['auth', 'cekUserLogin']);
+Route::post('/admin/panel/head-menu', [MenuController::class, 'storeHead'])->middleware(['auth', 'cekUserLogin']);
+Route::put('/admin/panel/{id}/head-menu', [MenuController::class, 'editHead'])->middleware(['auth', 'cekUserLogin']);
+Route::delete('/admin/panel/{id}/head-menu', [MenuController::class, 'removeHead'])->middleware(['auth', 'cekUserLogin']);
+Route::post('/admin/panel/{id}/menu', [MenuController::class, 'addMenu'])->middleware(['auth', 'cekUserLogin']);
+Route::delete('/admin/panel/{id}/menu', [MenuController::class, 'removeMenu'])->middleware(['auth', 'cekUserLogin']);
 
 //Route Unit Kerja
 Route::resource('/unit-kerja',   UnitKerjaController::class)->middleware(['auth','cekUserLogin']);
@@ -94,6 +99,8 @@ Route::get('/petas/{id}/tugas', [PetaController::class, 'tugas'])->name('petas.t
     ->middleware('auth');
 Route::get('/petas-tabel', [PetaController::class, 'tabelMatrik'])->name('petas.tabel')
     ->middleware('auth');
+Route::get('/petas/tabel-unit-kerja/{unitKerja}', [PetaController::class, 'tabelUnitKerja'])->name('petas.tabelUnitKerja')
+    ->middleware('auth');
 Route::post('/petas/{id}/tambahtugas', [PetaController::class, 'tambahtugas'])->name('petas.tambahtugas')
     ->middleware('auth');
 Route::get('/detailPR/{id}', [PetaController::class, 'detailPR'])->name('detailPR')
@@ -111,6 +118,7 @@ Route::get('/detailPR/{id}', [PetaController::class, 'detailPR'])->name('detailP
     ->middleware('auth');
 Route::post('/detailPR/{id}/comment', [PetaController::class, 'postComment'])->name('postComment')
     ->middleware('auth');
+Route::get('/get-kode-register/{unitKerja}', [PetaController::class, 'getKodeRegister']);
 
 
 //Route CRUD User

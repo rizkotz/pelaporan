@@ -11,6 +11,7 @@ use App\Models\UnitKerja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 
 class PetaController extends Controller
@@ -43,7 +44,7 @@ class PetaController extends Controller
         }
 
         //filter berdasarkan jenis jika ada
-        if ($request->has('jenis')&& $request->jenis != ''){
+        if ($request->has('jenis') && $request->jenis != '') {
             $query->where('jenis', $request->jenis);
         }
 
@@ -63,10 +64,27 @@ class PetaController extends Controller
 
         $unitKerjas = UnitKerja::all();
         //render view with petas
-        return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount','unitKerjas'))
+        return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount', 'unitKerjas'))
             ->with('tugasLaporChart', $tugasLaporChart->build())
             ->with('users', $users)
             ->with('anggota', $anggota);
+    }
+    public function tabelUnitKerja($unitKerja)
+    {
+        // Ambil data peta risiko yang sesuai dengan unit kerja yang dipilih
+        $petas = Peta::where('jenis', $unitKerja)->get();
+
+        // Lakukan pengolahan data untuk matriks
+        $matrix = [];
+        foreach ($petas as $peta) {
+            $key = 'R-' . $peta->skor_dampak . '-' . $peta->skor_kemungkinan;
+            if (!isset($matrix[$key])) {
+                $matrix[$key] = [];
+            }
+            $matrix[$key][] = $peta->kode_regist; // atau field lain yang ingin Anda tampilkan
+        }
+
+        return view('pr.tabelUnitKerja', compact('matrix', 'unitKerja'));
     }
     public function searchPetaRisiko(Request $request)
     {
@@ -105,15 +123,37 @@ class PetaController extends Controller
 
         // Mengelompokkan berdasarkan skor
         $matrix = [];
-        foreach ($petas as $peta){
+        foreach ($petas as $peta) {
             $key = 'R-' . $peta->skor_dampak . '-' . $peta->skor_kemungkinan;
-            if (!isset($matrix[$key])){
+            if (!isset($matrix[$key])) {
                 $matrix[$key] = [];
             }
             $matrix[$key][] = $peta->kode_regist; //menggunakan kode regist
         }
 
         return view('pr.tabelPeta', compact('matrix'));
+    }
+
+    public function getKodeRegister($unitKerja)
+    {
+        // Ambil unit kerja dari parameter
+        $unitKerjaData = UnitKerja::where('nama_unit_kerja', $unitKerja)->first();
+
+        if (!$unitKerjaData) {
+            return response()->json(['success' => false], 404);
+        }
+
+        // Hitung jumlah dokumen dengan unit kerja yang sama
+        $count = Peta::where('jenis', $unitKerja)->count();
+
+        // Kode register berikutnya
+        $nextNumber = $count + 1;
+
+        // Format kode register
+        $unitKerjaCode = $unitKerjaData->nama_unit_kerja;
+        $formattedCode = $unitKerjaCode . '_' . $nextNumber;
+
+        return response()->json(['success' => true, 'unitKerjaCode' => $unitKerjaCode, 'nextNumber' => $nextNumber]);
     }
 
     public function create()

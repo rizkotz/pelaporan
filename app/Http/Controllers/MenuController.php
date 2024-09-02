@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Menu;
+use App\Models\Head_menu;
 use App\Models\Level;
 use App\Models\Level_menu;
+use Illuminate\Validation\ValidationException;
 
 class MenuController extends Controller
 {
@@ -17,10 +19,16 @@ class MenuController extends Controller
     public function index()
     {
         $menus = Menu::all();
+        $menus_heads = Menu::where('id_head_menu', null)->get();
+        $menus_head = $menus_heads->shift();
+        $menus_head = $menus_heads->all();
+        $head_menus = Head_menu::all();
         $levels = Level::all()->except(1);
         $List_menus = Level_menu::all();
         return view('admin.panel', [
             'menus' => $menus,
+            'menus_head' => $menus_head,
+            'head_menus' => $head_menus,
             'levels' => $levels,
             'List_menus' => $List_menus,
         ]);
@@ -31,10 +39,7 @@ class MenuController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -74,21 +79,20 @@ class MenuController extends Controller
         // dd($level);
 
         for ($x = 1; $x <= $level; $x++) {
-            if($x == 1){
+            if ($x == 1) {
                 $levelmenu = new Level_menu();
                 $levelmenu->id_level = 1;
                 $levelmenu->id_menu = $lastMenu->id;
                 $levelmenu->save();
-            }elseif($x > 1){
+            } elseif ($x > 1) {
 
-                if($request->get('level'.$x) !== null){
+                if ($request->get('level' . $x) !== null) {
                     $levelmenu = new Level_menu();
-                    $levelmenu->id_level = $request->get('level'.$x);
+                    $levelmenu->id_level = $request->get('level' . $x);
                     $levelmenu->id_menu = $lastMenu->id;
                     $levelmenu->save();
                 }
             }
-
         };
         return redirect('/admin/panel/')->with('success', 'Panel berhasil ditambah');
     }
@@ -154,7 +158,6 @@ class MenuController extends Controller
                 $level_menu_del = $List_menus->where('id_level', $id_level)->where('id_menu', $id)->first();
                 $level_menu_del->delete();
             }
-
         }
         // if ($request->get('admin')) {
         //     if($request->get('admin') == "false"){
@@ -190,7 +193,6 @@ class MenuController extends Controller
         // }
 
         return redirect('/admin/panel/')->with('success', 'Panel berhasil diedit');
-
     }
 
     /**
@@ -207,5 +209,78 @@ class MenuController extends Controller
         $menu->delete();
 
         return redirect('/admin/panel')->with('success', 'Panel berhasil dihapus');
+    }
+
+    public function storeHead(Request $request)
+    {
+        // dd($request);
+        $request->validate([
+            'name' => 'required|unique:head_menus,name',
+            'icon' => 'required',
+        ]);
+        $headMenu = new Head_Menu;
+        $headMenu->name = $request->get('name');
+        $headMenu->icon = $request->get('icon');
+        $headMenu->save();
+
+        $recent_head = Head_Menu::latest('created_at')->first();
+
+        for ($x = 0; $x < count($request->get('id_menu')); $x++) {
+            $menu = Menu::where('id', $request->get('id_menu')[$x])->first();
+            if($menu->id_head_menu == null) {
+                $menu->id_head_menu = $recent_head->id;
+                $menu->save();
+
+            } else {
+                $errors[] = 'Menu ' . $menu->name . ' Tidak dapat ditambahkan pada head menu 2 kali';
+            }
+        }
+
+        if (!empty($errors)) {
+            return redirect('/admin/panel/')->withErrors($errors);
+        }
+
+        return redirect('/admin/panel/')->with('success', 'Head Menu berhasil ditambah');
+
+    }
+
+    public function editHead(Request $request, $id){
+        // dd($request);
+        $request->validate([
+            'name' => 'required',
+            'icon' => 'required',
+        ]);
+        $head_menu = Head_Menu::where('id', $id)->first();
+        $head_menu->name = $request->get('name');
+        $head_menu->icon = $request->get('icon');
+        $head_menu->save();
+        return redirect('/admin/panel/')->with('success', 'Head Menu berhasil diubah');
+    }
+    public function removeHead($id){
+
+        $head_menu = Head_Menu::where('id', $id)->first();
+        foreach($head_menu->Menu as $menu){
+            $menu->id_head_menu = null;
+            $menu->save();
+        }
+        $head_menu->delete();
+        return redirect('/admin/panel/')->with('success', 'Head Menu berhasil dihapus   ');
+    }
+
+    public function addMenu(Request $request, $id){
+        $request->validate([
+            'id_menu' => 'required',
+        ]);
+        $menu = Menu::where('id', $request->get('id_menu'))->first();
+        $menu->id_head_menu = $id;
+        $menu->save();
+        return redirect('/admin/panel/')->with('success', 'Menu berhasil ditambah');
+    }
+
+    public function removeMenu($id){
+        $menu = Menu::where('id', $id)->first();
+        $menu->id_head_menu = null;
+        $menu->save();
+        return redirect('/admin/panel/')->with('success', 'Menu berhasil ditambah');
     }
 }

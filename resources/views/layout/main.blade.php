@@ -220,8 +220,7 @@
 <!-- jQuery -->
 {{-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> --}}
 
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 
 <!-- jQuery -->
 <script src="{{ asset('/') }}plugins/jquery/jquery.min.js"></script>
@@ -229,6 +228,8 @@
 <script src="{{ asset('/') }}plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('/') }}dist/js/adminlte.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 {{-- <script src="{{ asset('/') }}dist/js/demo.js"></script> --}}
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Menu;
+use App\Models\Head_menu;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,10 +35,23 @@ class AppServiceProvider extends ServiceProvider
 
             if(auth()->check()){
                 $level_menus = Level_menu::where('id_level', auth()->user()->id_level)->get();
-
+                $first = Menu::first();
                 $menus = Menu::get();
+                // $panel_menus[] = null;
+                foreach($menus as $menu){
+                    foreach ($level_menus->skip(1) as $level_menu) {
+                        if ($menu->id == $level_menu->id_menu) {
+                            if($menu->id_head_menu == null){
+                                $panel_menus[] = $menu;
+                            }
+                        }
+                    }
+                };
+                $head_menus = Head_menu::get();
                 View::share([
-                    'menus' =>$menus,
+                    'first_menu' =>$first,
+                    'panel_menus' =>$panel_menus,
+                    'head_menus' =>$head_menus,
                     'level_menus' => $level_menus
 
                 ]);
