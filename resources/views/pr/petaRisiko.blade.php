@@ -71,7 +71,7 @@
                             <div class="col-md-6 mb-1">
                                 @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 5)
                                     <a href="{{ route('petas.create') }}" class="btn btn-md btn-success mb-1">TAMBAH
-                                        DOKUMEN</a>
+                                        PETA</a>
                                 @endif
                                 <a href="{{ route('petas.tabel') }}" class="btn btn-md btn-primary mb-1">Tabel
                                     Matrik</a>
@@ -84,7 +84,8 @@
                                     <th scope="col">PIC</th>
                                     <th scope="col">Judul</th>
                                     <th scope="col">Unit Kerja</th>
-                                    <th scope="col">Dokumen</th>
+                                    <th scope="col">IKU</th>
+                                    <th scope="col">Kode</th>
                                     <th scope="col">Status</th>
                                     <th colspan="4" scope="col">Aksi</th>
                                 </tr>
@@ -105,26 +106,28 @@
                                         <td class="text-center">
                                             {{ $peta->jenis }}
                                         </td>
-                                        <td class="text">
-                                            {{ $peta->dokumen }}
-                                            <div>
-                                                <small>
-                                                    <span class="badge badge-secondary">
-                                                        {{ \Carbon\Carbon::parse($peta->dokumen_at)->format('d F Y') }}
-                                                    </span>
-                                                </small>
-                                            </div>
+                                        <td class="text-center">
+                                            {{ $peta->iku }}
                                         </td>
                                         <td class="text-center">
-                                            @if ($peta->approvalPr == 'approved')
-                                                <span class="badge badge-success">Disetujui</span>
-                                                <div>
-                                                    <small>{{ \Carbon\Carbon::parse($peta->approvalPr_at)->format('d F Y') }}</small>
-                                                </div>
-                                            @elseif($peta->approvalPr == 'rejected')
-                                                <span class="badge badge-danger">Ditolak</span>
+                                            <span class="badge bg-black">
+                                            {{ $peta->kode_regist }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($peta->dokumen)
+                                                @if ($peta->approvalPr == 'approved')
+                                                    <span class="badge badge-success">Disetujui</span>
+                                                    <div>
+                                                        <small>{{ \Carbon\Carbon::parse($peta->approvalPr_at)->format('d F Y') }}</small>
+                                                    </div>
+                                                @elseif($peta->approvalPr == 'rejected')
+                                                    <span class="badge badge-danger">Ditolak</span>
+                                                @else
+                                                    <span class="badge badge-warning">Pending</span>
+                                                @endif
                                             @else
-                                                <span class="badge badge-warning">Pending</span>
+                                                <span class="badge badge-secondary">Kosong</span>
                                             @endif
                                         </td>
                                         <td><a href="{{ route('detailPR', ['id' => $peta->id]) }}"

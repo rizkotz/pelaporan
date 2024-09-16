@@ -134,28 +134,6 @@ class PetaController extends Controller
         return view('pr.tabelPeta', compact('matrix'));
     }
 
-    public function getKodeRegister($unitKerja)
-    {
-        // Ambil unit kerja dari parameter
-        $unitKerjaData = UnitKerja::where('nama_unit_kerja', $unitKerja)->first();
-
-        if (!$unitKerjaData) {
-            return response()->json(['success' => false], 404);
-        }
-
-        // Hitung jumlah dokumen dengan unit kerja yang sama
-        $count = Peta::where('jenis', $unitKerja)->count();
-
-        // Kode register berikutnya
-        $nextNumber = $count + 1;
-
-        // Format kode register
-        $unitKerjaCode = $unitKerjaData->nama_unit_kerja;
-        $formattedCode = $unitKerjaCode . '_' . $nextNumber;
-
-        return response()->json(['success' => true, 'unitKerjaCode' => $unitKerjaCode, 'nextNumber' => $nextNumber]);
-    }
-
     public function create()
     {
         $user = Auth::user();
@@ -178,9 +156,9 @@ class PetaController extends Controller
         //validate form
         $this->validate($request, [
             'judul'     => 'required|min:1',
-            'dokumen'   => 'required|mimes:xls,xlsx',
+            // 'dokumen'   => 'mimes:xls,xlsx',
             'jenis'     => 'required',
-            'kode_regist'     => 'required',
+            // 'kode_regist'     => 'required',
             'iku'     => 'required',
             'sasaran'     => 'required',
             'proker'     => 'required',
@@ -194,6 +172,24 @@ class PetaController extends Controller
             'skor_dampak'     => 'required',
         ]);
 
+        // Generate kode_regist based on unit kerja (jenis)
+        $latestPeta = Peta::where('jenis', $request->jenis)->latest()->first();
+
+        if ($latestPeta) {
+            // Cek apakah kode_regist memiliki format yang valid
+            $kodeParts = explode('_', $latestPeta->kode_regist);
+            if (count($kodeParts) > 1) {
+                $count = intval($kodeParts[1]) + 1;
+            } else {
+                $count = 1; // Default jika format tidak sesuai
+            }
+        } else {
+            $count = 1; // Jika tidak ada Peta sebelumnya
+        }
+
+        $kode_regist = $request->jenis . '_' . $count;
+
+
         //create peta
         $user = Auth::user();
         Peta::create([
@@ -201,7 +197,7 @@ class PetaController extends Controller
             'jenis'     => $request->jenis,
             'dokumen'   => $request->dokumen,
             'nama'      => $user->name,
-            'kode_regist'     => $request->kode_regist,
+            'kode_regist'     => $kode_regist,
             'iku'     => $request->iku,
             'sasaran'     => $request->sasaran,
             'proker'     => $request->proker,
@@ -216,23 +212,39 @@ class PetaController extends Controller
         ]);
 
         $petas = Peta::latest()->first();
-        if ($request->hasFile('dokumen')) {
-            $request->file('dokumen')->move('dokumenPR/', $request->file('dokumen')->getClientOriginalName());
-            $petas->dokumen = $request->file('dokumen')->getClientOriginalName();
-            $petas->save();
-        }
+        // if ($request->hasFile('dokumen')) {
+        //     $request->file('dokumen')->move('dokumenPR/', $request->file('dokumen')->getClientOriginalName());
+        //     $petas->dokumen = $request->file('dokumen')->getClientOriginalName();
+        //     $petas->save();
+        // }
 
         //redirect to index
-        return redirect()->route('petas.index')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->back()->with('success', 'Dokumen berhasil ditambahkan');
     }
-    //tampil data
-    // public function tampilData($id)
-    // {
-    //     $petas = Peta::find($id);
-    //     return view('pr.tampilEdit', compact('petas'))->with([
-    //         'user' => Auth::user(),
-    //     ]);
-    // }
+
+    //Upload DOkumen
+    public function uploadDokumen(Request $request, $id)
+    {
+        $request->validate([
+            'dokumen' => 'required|mimes:xlsx,xls',
+        ]);
+
+        $peta = Peta::find($id);
+
+        if ($request->hasFile('dokumen')) {
+            $file = $request->file('dokumen');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(('dokumenPR/'), $filename);
+
+            // Simpan nama file ke database
+            $peta->dokumen = $filename;
+            $peta->save();
+        }
+
+        return redirect()->back()->with('success', 'Dokumen berhasil diunggah.');
+    }
+
+
     //Edit Data
     public function updateData(Request $request, $id)
     {

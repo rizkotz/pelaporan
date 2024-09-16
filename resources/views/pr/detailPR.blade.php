@@ -5,11 +5,19 @@
     <div class="col-md-16 p-4 pt-2">
         <h3><i class="fa fa-angle-double-right"></i>Detail Dokumen</h3>
         <hr>
-        <h4 class="tittle-1">
-            <span class="span0">Detail Telaah</span>
-        </h4>
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="tittle-1">
+                <span class="span0">Detail Telaah</span>
+            </h4>
+            <!-- Tombol untuk membuka modal popup -->
+            @if (auth()->user()->id_level == 1 || auth()->user()->id_level == 5)
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal">
+                Tambah Dokumen
+            </button>
+            @endif
+        </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 mt-2">
                 <div class="card border-0 shadow rounded">
                     <div class="card-body">
 
@@ -20,6 +28,10 @@
                                     <i class="fa-regular fa-calendar-days mr-1" style="color: #0050db;"></i>
                                     {{ $petas->waktu }}
                                 </td>
+                            </tr>
+                            <tr>
+                                <th class="col-2">Penelaah : </th>
+                                <td>{{ $petas->anggota }}</td>
                             </tr>
                             <tr>
                                 <th class="col-2">Judul Kegiatan : </th>
@@ -34,152 +46,159 @@
                                 <td>{{ $petas->nama }}</td>
                             </tr>
                             <tr>
-                                <th class="col-2">Penelaah : </th>
-                                <td>{{ $petas->anggota }}</td>
+                                <th class="col-2">IKU : </th>
+                                <td>{{ $petas->iku }}</td>
+                            </tr>
+                            <tr>
+                                <th class="col-2">Kode Regist : </th>
+                                <td>{{ $petas->kode_regist }}</td>
                             </tr>
                             <tr>
                                 <th class="col-2">Identifikasi Risiko : </th>
-                                <td>Kode Registrasi: {{ $petas->kode_regist }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>IKU: {{ $petas->iku }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Sasaran Strategis: {{ $petas->sasaran }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Program Kerja: {{ $petas->proker }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Indikator: {{ $petas->indikator }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Anggaran: {{ $petas->anggaran }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Pernyataan Risiko: {{ $petas->pernyataan }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Kategori Risiko: {{ $petas->kategori }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Uraian Dampak: {{ $petas->uraian }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Metode Pencapaian: {{ $petas->metode }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Skor Probabilitas: {{ $petas->skor_kemungkinan }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Skor Dampak: {{ $petas->skor_dampak }}</td>
-                            </tr>
-                            <tr>
-                                <th class="col-2"> </th>
-                                <td>Tingkat Risiko: extreme</td>
+                                <td>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th class="col-3">Sasaran Strategis:</th>
+                                                <td>{{ $petas->sasaran }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="col-3">Program Kerja:</th>
+                                                <td>{{ $petas->proker }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="col-3">Indikator:</th>
+                                                <td>{{ $petas->indikator }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="col-3">Anggaran:</th>
+                                                <td>{{ $petas->anggaran }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="col-3">Pernyataan Risiko:</th>
+                                                <td>{{ $petas->pernyataan }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="col-3">Kategori Risiko:</th>
+                                                <td>{{ $petas->kategori }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="col-3">Uraian Dampak:</th>
+                                                <td>{{ $petas->uraian }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="col-3">Metode Pencapaian:</th>
+                                                <td>{{ $petas->metode }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="col-3">Skor Probabilitas:</th>
+                                                <td>{{ $petas->skor_kemungkinan }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="col-3">Skor Dampak:</th>
+                                                <td>{{ $petas->skor_dampak }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="col-3">Tingkat Risiko:</th>
+                                                <td>Extreme</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
                             </tr>
 
-                            @if (Auth::user()->id_level == 1 ||
-                                    Auth::user()->id_level == 2 ||
-                                    Auth::user()->id_level == 3 ||
-                                    Auth::user()->id_level == 4 ||
-                                    Auth::user()->id_level == 6)
-                                @php
-                                    $documents = [
-                                        [
-                                            'name' => $petas->dokumen,
-                                            'path' => 'dokumenPR/',
-                                            'label' => 'Dokumen Peta Risiko',
-                                            'approval' => $petas->approvalPr,
-                                            'uploaded_at' => $petas->dokumen_at,
-                                            'approval_at' => $petas->approvalPr_at,
-                                        ],
-                                    ];
+                            @if ($petas->dokumen)
 
-                                    $filteredDocuments = array_filter($documents, function ($document) {
-                                        return !is_null($document['name']);
-                                    });
-                                @endphp
+                                @if (Auth::user()->id_level == 1 ||
+                                        Auth::user()->id_level == 2 ||
+                                        Auth::user()->id_level == 3 ||
+                                        Auth::user()->id_level == 4 ||
+                                        Auth::user()->id_level == 6)
+                                    @php
+                                        $documents = [
+                                            [
+                                                'name' => $petas->dokumen,
+                                                'path' => 'dokumenPR/',
+                                                'label' => 'Dokumen Peta Risiko',
+                                                'approval' => $petas->approvalPr,
+                                                'uploaded_at' => $petas->dokumen_at,
+                                                'approval_at' => $petas->approvalPr_at,
+                                            ],
+                                        ];
 
-                                @if (count($filteredDocuments) > 0)
-                                    <tr>
-                                        <th class="col-2">Dokumen : </th>
-                                        <td>
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr class="text-center">
-                                                        <th scope="col">No</th>
-                                                        <th colspan="2">Nama Berkas</th>
-                                                        <th scope="col">Keterangan</th>
-                                                        <th scope="col">Waktu Pengumpulan</th>
-                                                        <th colspan="3" scope="col">Approving</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @php $no = 1; @endphp
-                                                    @foreach ($filteredDocuments as $document)
-                                                        <tr>
-                                                            <td class="text-center">{{ $no++ }}</td>
-                                                            <td>{{ $document['name'] }}</td>
-                                                            <td>
-                                                                <a href="{{ asset($document['path'] . '/' . $document['name']) }}"
-                                                                    target="_blank" class="btn btn-info btn-sm"
-                                                                    title="Buka Dokumen">
-                                                                    <i class="fa-solid fa-eye"></i>
-                                                                </a>
-                                                            </td>
-                                                            <td>{{ $document['label'] }}</td>
-                                                            <td class="text-center">
-                                                                {{ \Carbon\Carbon::parse($document['uploaded_at'])->format('d F Y') }}
-                                                            </td>
-                                                            <td>
+                                        $filteredDocuments = array_filter($documents, function ($document) {
+                                            return !is_null($document['name']);
+                                        });
+                                    @endphp
 
-                                                                @if (Auth::user()->id_level == 1 ||
-                                                                        Auth::user()->id_level == 2 ||
-                                                                        Auth::user()->id_level == 3 ||
-                                                                        Auth::user()->id_level == 4 ||
-                                                                        Auth::user()->id_level == 6)
+                                    @if (count($filteredDocuments) > 0)
+                                        <tr>
+                                            <th class="col-2">Dokumen : </th>
+                                            <td>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr class="text-center">
+                                                            <th scope="col">No</th>
+                                                            <th colspan="2">Nama Berkas</th>
+                                                            <th scope="col">Keterangan</th>
+                                                            <th scope="col">Waktu Pengumpulan</th>
+                                                            <th colspan="3" scope="col">Approving</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @php $no = 1; @endphp
+                                                        @foreach ($filteredDocuments as $document)
+                                                            <tr>
+                                                                <td class="text-center">{{ $no++ }}</td>
+                                                                <td>{{ $document['name'] }}</td>
+                                                                <td>
+                                                                    <a href="{{ asset($document['path'] . '/' . $document['name']) }}"
+                                                                        target="_blank" class="btn btn-info btn-sm"
+                                                                        title="Buka Dokumen">
+                                                                        <i class="fa-solid fa-eye"></i>
+                                                                    </a>
+                                                                </td>
+                                                                <td>{{ $document['label'] }}</td>
+                                                                <td class="text-center">
+                                                                    {{ \Carbon\Carbon::parse($document['uploaded_at'])->format('d F Y') }}
+                                                                </td>
+                                                                <td>
+
+                                                                    @if (Auth::user()->id_level == 1 ||
+                                                                            Auth::user()->id_level == 2 ||
+                                                                            Auth::user()->id_level == 3 ||
+                                                                            Auth::user()->id_level == 4 ||
+                                                                            Auth::user()->id_level == 6)
+                                                                        <form
+                                                                            action="{{ route('petas.approve', ['id' => $petas->id]) }}"
+                                                                            method="POST">
+                                                                            @csrf
+                                                                            <button type="submit"
+                                                                                class="btn btn-success">Approve</button>
+                                                                        </form>
+                                                                        @if ($document['approval'] == 'approved')
+                                                                            <p> {{ \Carbon\Carbon::parse($document['approval_at'])->format('d F Y') }}
+                                                                            </p>
+                                                                        @endif
+
+                                                                </td>
+                                                                <td>
                                                                     <form
-                                                                        action="{{ route('petas.approve', ['id' => $petas->id]) }}"
-                                                                        method="POST">
+                                                                        action="{{ route('petas.disapprove', ['id' => $petas->id]) }}"
+                                                                        method="POST" style="display:inline;">
                                                                         @csrf
                                                                         <button type="submit"
-                                                                            class="btn btn-success">Approve</button>
+                                                                            class="btn btn-danger">Reject</button>
                                                                     </form>
-                                                                    @if ($document['approval'] == 'approved')
+                                                                    @if ($document['approval'] == 'rejected')
                                                                         <p> {{ \Carbon\Carbon::parse($document['approval_at'])->format('d F Y') }}
                                                                         </p>
                                                                     @endif
-
-                                                            </td>
-                                                            <td>
-                                                                <form
-                                                                    action="{{ route('petas.disapprove', ['id' => $petas->id]) }}"
-                                                                    method="POST" style="display:inline;">
-                                                                    @csrf
-                                                                    <button type="submit"
-                                                                        class="btn btn-danger">Reject</button>
-                                                                </form>
-                                                                @if ($document['approval'] == 'rejected')
-                                                                    <p> {{ \Carbon\Carbon::parse($document['approval_at'])->format('d F Y') }}
-                                                                    </p>
-                                                                @endif
-                                                            </td>
-                                                    @endif
-                                    </tr>
-                                @endforeach
-                                </tbody>
+                                                                </td>
+                                                        @endif
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
                         </table>
                         </td>
                         </tr>
@@ -375,11 +394,46 @@
                                 </td>
                             </tr>
                         @endif
+                    @else
+                        <div class="alert alert-info">
+                            Belum ada dokumen yang diunggah. Harap unggah dokumen terlebih dahulu.
+                        </div>
+                        @endif
                         </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Popup -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Tambah Dokumen</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('uploadDokumen', $petas->id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label for="dokumen">Pilih Dokumen:</label>
+                                <input type="file" name="dokumen" class="form-control" id="dokumen" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Load jQuery and Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 @endsection

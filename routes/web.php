@@ -95,6 +95,8 @@ Route::get('/dokumen-tindak-lanjut', [PostController::class, 'dokumenTindakLanju
 
 //Route CRUD Peta Controller
 Route::resource('/petas', PetaController::class)->middleware(['auth', 'approved']);
+Route::post('/uploadDokumen/{id}', [PetaController::class, 'uploadDokumen'])->name('uploadDokumen')
+    ->middleware('auth');
 Route::get('/petas/{id}/tugas', [PetaController::class, 'tugas'])->name('petas.tugas')
     ->middleware('auth');
 Route::get('/petas-tabel', [PetaController::class, 'tabelMatrik'])->name('petas.tabel')
@@ -118,7 +120,7 @@ Route::get('/detailPR/{id}', [PetaController::class, 'detailPR'])->name('detailP
     ->middleware('auth');
 Route::post('/detailPR/{id}/comment', [PetaController::class, 'postComment'])->name('postComment')
     ->middleware('auth');
-Route::get('/get-kode-register/{unitKerja}', [PetaController::class, 'getKodeRegister']);
+
 
 
 //Route CRUD User

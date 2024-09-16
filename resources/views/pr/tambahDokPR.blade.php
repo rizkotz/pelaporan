@@ -11,7 +11,7 @@
         </h4>
         <div class="row">
             {{-- bagian kiri --}}
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="card border-0 shadow rounded">
                     <div class="card-body">
                         <form action="{{ route('petas.store') }}" method="POST" enctype="multipart/form-data">
@@ -38,33 +38,6 @@
                                 </select>
                                 <!-- error message untuk jenis -->
                                 @error('jenis')
-                                    <div class="alert alert-danger mt-2">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label class="font-weight-bold">KODE REGISTER</label>
-                                @php
-                                    $selectedUnit = old('jenis') ?? $unitKerjas->first()->nama_unit_kerja; // mengambil unit kerja yang dipilih atau default ke yang pertama
-                                    $latestEntry = \App\Models\Peta::where('jenis', $selectedUnit)->latest()->first(); // Sesuaikan dengan model dan field yang digunakan
-
-                                    if ($latestEntry) {
-                                        $kodeParts = explode('_', $latestEntry->kode_regist);
-                                        $lastNumber = isset($kodeParts[1]) ? intval($kodeParts[1]) : 0;
-                                    } else {
-                                        $lastNumber = 0;
-                                    }
-
-                                    $newKodeRegist = $selectedUnit . '_' . ($lastNumber + 1);
-                                @endphp
-                                <input type="text" class="form-control @error('kode_regist') is-invalid @enderror"
-                                    name="kode_regist" value="{{ old('kode_regist', $newKodeRegist) }}"
-                                    placeholder="Masukkan Kode..." readonly>
-
-                                <!-- error message untuk judul -->
-                                @error('kode_regist')
                                     <div class="alert alert-danger mt-2">
                                         {{ $message }}
                                     </div>
@@ -174,8 +147,8 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold">URAIAN DAMPAK</label>
-                                <input type="text" class="form-control @error('uraian') is-invalid @enderror"
-                                    name="uraian" value="{{ old('uraian') }}" placeholder="Masukkan Uraian...">
+                                <textarea class="form-control @error('uraian') is-invalid @enderror" name="uraian"
+                                    placeholder="Masukan Uraian..." rows="3"{{ old('uraian') }}></textarea>
 
                                 <!-- error message untuk judul -->
                                 @error('uraian')
@@ -190,10 +163,10 @@
                                 <select class="form-control @error('metode') is-invalid @enderror"
                                     name="metode">
                                     <option value="" disabled selected>Pilih Metode</option>
-                                    <option value="1" {{ old('metode') == 1 ? 'selected' : '' }}>1. Memberikan keyakinan yang memadai bagi tercapainya efektivitas dan efisiensi pencapaian tujuan penyelenggaraan pemerintahan negara</option>
-                                    <option value="2" {{ old('metode') == 2 ? 'selected' : '' }}>2. Keandalan pelaporan keuangan</option>
-                                    <option value="3" {{ old('metode') == 3 ? 'selected' : '' }}>3. Pengamanan aset negara</option>
-                                    <option value="4" {{ old('metode') == 4 ? 'selected' : '' }}>4. Ketaatan terhadap peraturan perundang-undangan</option>
+                                    <option value="1. Memberikan keyakinan yang memadai bagi tercapainya efektivitas dan efisiensi pencapaian tujuan penyelenggaraan pemerintahan negara" {{ old('metode') == 1 ? 'selected' : '' }}>1. Memberikan keyakinan yang memadai bagi tercapainya efektivitas dan efisiensi pencapaian tujuan penyelenggaraan pemerintahan negara</option>
+                                    <option value="2. Keandalan pelaporan keuangan" {{ old('metode') == 2 ? 'selected' : '' }}>2. Keandalan pelaporan keuangan</option>
+                                    <option value="3. Pengamanan aset negara" {{ old('metode') == 3 ? 'selected' : '' }}>3. Pengamanan aset negara</option>
+                                    <option value="4. Ketaatan terhadap peraturan perundang-undangan" {{ old('metode') == 4 ? 'selected' : '' }}>4. Ketaatan terhadap peraturan perundang-undangan</option>
                                 </select>
 
                                 <!-- error message untuk judul -->
@@ -244,7 +217,7 @@
                                 @enderror
                             </div>
 
-                            <div class="card border mb-3">
+                            {{-- <div class="card border mb-3">
                                 <label for="dokumen" class="form-label m-2"><b>DOKUMEN PETA RISIKO</b></label>
                                 <div class="input-group mb-3">
                                     <input type="file" name="dokumen" class="form-control m-2" id="inputGroupFile">
@@ -253,50 +226,12 @@
                                 <small class="form-text text-danger ml-4" style="font-style: italic;">
                                     *dokumen harus berformat excel
                                 </small>
-                            </div>
+                            </div> --}}
 
                             <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
                             <button type="reset" class="btn btn-md btn-warning">RESET</button>
 
                         </form>
-                    </div>
-                </div>
-            </div>
-
-            {{-- bagian kanan --}}
-            <div class="col-md-6">
-                <div class="card border-0 shadow rounded">
-                    <div class="card-body">
-                        <h5>Data yang Telah Dimasukkan</h5>
-                        <hr>
-                        <ul class="list-group">
-                            <li class="list-group-item"><strong>Judul:</strong> <span id="judulDisplay"></span></li>
-                            <li class="list-group-item"><strong>Unit Kerja:</strong> <span id="unitKerjaDisplay"></span>
-                            </li>
-                            <li class="list-group-item"><strong>Kode Register:</strong> <span
-                                    id="kodeRegistDisplay"></span></li>
-                            <li class="list-group-item"><strong>IKU:</strong> <span id="ikuDisplay"></span></li>
-                            <li class="list-group-item"><strong>Sasaran Strategis:</strong> <span
-                                    id="sasaranDisplay"></span></li>
-                            <li class="list-group-item"><strong>Program Kerja:</strong> <span id="prokerDisplay"></span>
-                            </li>
-                            <li class="list-group-item"><strong>Indikator:</strong> <span id="indikatorDisplay"></span>
-                            </li>
-                            <li class="list-group-item"><strong>Anggaran:</strong> <span id="anggaranDisplay"></span></li>
-                            <li class="list-group-item"><strong>Pernyataan Risiko:</strong> <span
-                                    id="pernyataanDisplay"></span></li>
-                            <li class="list-group-item"><strong>Kategori Risiko:</strong> <span
-                                    id="kategoriDisplay"></span></li>
-                            <li class="list-group-item"><strong>Uraian Dampak:</strong> <span id="uraianDisplay"></span>
-                            </li>
-                            <li class="list-group-item"><strong>Metode Pencapaian:</strong> <span
-                                    id="metodeDisplay"></span></li>
-                            <li class="list-group-item"><strong>Skor Probabilitas:</strong> <span
-                                    id="skor_kemungkinanDisplay"></span></li>
-                            <li class="list-group-item"><strong>Skor Dampak:</strong> <span
-                                    id="skor_dampakDisplay"></span></li>
-                            <li class="list-group-item"><strong>Dokumen:</strong> <span id="dokumenDisplay"></span></li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -339,47 +274,7 @@
                     placeholder: 'Pilih Unit Kerja',
                     allowClear: true
                 });
-
-                //Update tampilan data pada form change
-                $('input, select, textarea').on('input change', function() {
-                    let inputName = $(this).attr('name');
-                    let displayId = `#${inputName}Display`;
-                    $(displayId).text($(this).val());
-                });
             });
         </script>
-        {{-- <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const unitKerjaSelect = document.querySelector('select[name="jenis"]');
-                const kodeRegistInput = document.querySelector('input[name="kode_regist"]');
-
-                unitKerjaSelect.addEventListener('change', function() {
-                    const unitKerja = this.value;
-
-                    if (!unitKerja) {
-                        kodeRegistInput.value = ''; // Kosongkan jika tidak ada unit kerja yang dipilih
-                        return;
-                    }
-
-                    // Fetch the incremented number from the server
-                    fetch(`/get-kode-register/${encodeURIComponent(unitKerja)}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Combine unit kerja (X) and incremented number (Y)
-                                const newCode = `${data.unitKerjaCode}_${data.nextNumber}`;
-                                kodeRegistInput.value = newCode;
-                            } else {
-                                kodeRegistInput.value = ''; // Kosongkan jika ada error
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            kodeRegistInput.value = ''; // Kosongkan jika ada error
-                        });
-                });
-            });
-        </script> --}}
     @endpush
-
 @endsection
