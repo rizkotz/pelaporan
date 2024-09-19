@@ -23,23 +23,31 @@ class PetaController extends Controller
         //get user data yang sedang login
         $users = Auth::user();
 
-        // Query pengelompokan data berdasarkan jenis
-        $jenisCount = Peta::select('jenis', DB::raw('count(*) as total'))
-        ->groupBy('jenis')
-        ->get();
-
         //query to get data peta berdasarkan anggota
         $query = Peta::query();
 
         if ($users->id_level == 1 || $users->id_level == 2) {
-            //Admin: see all peta
+            // Admin: dapat melihat semua data
             $showAll = true;
+
+            // Mengambil data jenis yang dikelompokkan berdasarkan jenis untuk admin
+            $jenisCount = Peta::select('jenis', DB::raw('count(*) as total'))
+                ->groupBy('jenis')
+                ->get();
         } else {
-            //filter untuk pengguna yang mengunggah dokumen atau anggota yang ditugaskan
+            // Filter untuk pengguna yang mengunggah dokumen atau anggota yang ditugaskan
             $query->where(function ($q) use ($users) {
-                $q->where('nama', $users->name)
-                    ->orWhere('anggota', 'LIKE', '%' . $users->name . '%');
+                $q->where('nama', $users->name) // Mengambil data yang diunggah oleh pengguna
+                    ->orWhere('anggota','LIKE','%'.$users->name.'%'); //Menambahkan kondisi utk anggota yg ditugaskan
             });
+
+            // Mengambil data jenis yang dikelompokkan berdasarkan jenis untuk auditee
+            $jenisCount = Peta::select('jenis', DB::raw('count(*) as total'))
+                ->where('nama', $users->name) // Hanya jenis yang ditambahkan oleh auditee
+                ->orWhere('anggota','LIKE','%'.$users->name.'%') //Menambahkan kondisi utk anggota yg ditugaskan
+                ->groupBy('jenis')
+                ->get();
+
             $showAll = false;
         }
 
@@ -76,6 +84,7 @@ class PetaController extends Controller
             ->with('users', $users)
             ->with('anggota', $anggota);
     }
+
     public function tabelUnitKerja($unitKerja)
     {
         // Ambil data peta risiko yang sesuai dengan unit kerja yang dipilih
@@ -98,13 +107,8 @@ class PetaController extends Controller
         $search = $request->input('search');
         $user = Auth::user();
 
-        // Query dasar
-        $query = Peta::where(function ($query) use ($search) {
-            $query->where('judul', 'like', '%' . $search . '%')
-                ->orWhere('waktu', 'like', '%' . $search . '%')
-                ->orWhere('nama', 'LIKE', '%' . $search . '%')
-                ->orWhere('dokumen', 'LIKE', '%' . $search . '%');
-        });
+        // Query berdasarkan jenis
+        $query = Peta::where('jenis', 'LIKE', '%' .$search. '%');
 
         // Filter berdasarkan hak akses pengguna
         if ($user->id_level != 1 && $user->id_level != 2) { // Misalnya, hanya super admin dan admin yang bisa melihat semua data
@@ -121,7 +125,12 @@ class PetaController extends Controller
         $approvedCount = $query->clone()->where('approvalPr', 'approved')->count();
         $rejectedCount = $query->clone()->where('approvalPr', 'rejected')->count();
 
-        return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount'));
+        // Hitung jumlah data berdasarkan jenis
+        $jenisCount = Peta::select('jenis', DB::raw('count(*) as total'))
+            ->where('jenis', 'LIKE', '%' . $search . '%')
+            ->groupBy('jenis')
+            ->get();
+        return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount','jenisCount'));
     }
 
     public function tabelMatrik()
@@ -229,28 +238,6 @@ class PetaController extends Controller
         return redirect()->back()->with('success', 'Dokumen berhasil ditambahkan');
     }
 
-    //Upload DOkumen
-    public function uploadDokumen(Request $request, $id)
-    {
-        $request->validate([
-            'dokumen' => 'required|mimes:xlsx,xls',
-        ]);
-
-        $peta = Peta::find($id);
-
-        if ($request->hasFile('dokumen')) {
-            $file = $request->file('dokumen');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(('dokumenPR/'), $filename);
-
-            // Simpan nama file ke database
-            $peta->dokumen = $filename;
-            $peta->save();
-        }
-
-        return redirect()->back()->with('success', 'Dokumen berhasil diunggah.');
-    }
-
     //Upload sesuai unit kerja
     public function uploadDokumenByJenis(Request $request, $jenis)
     {
@@ -329,15 +316,19 @@ class PetaController extends Controller
         return redirect()->back()->with('success', 'Data berhasil dihapus.');
     }
 
-    public function tugas($id)
+    public function tugas($jenis)
     {
-        $petas = Peta::findOrFail($id);
+        // Cari data berdasarkan jenis (unit kerja)
+        $peta = Peta::where('jenis', $jenis)->firstOrFail();
+
+        // Ambil semua user untuk ditampilkan sebagai opsi penelaah
         $users = User::all();
-        return view('pr.tambahPR', compact('petas', 'users'))->with([
+
+        return view('pr.tambahPR', compact('peta', 'users', 'jenis'))->with([
             'user' => Auth::user(),
         ]);
     }
-    public function tambahtugas(Request $request, $id)
+    public function tambahtugas(Request $request, $jenis)
     {
         $request->validate([
             'waktu'     => 'required|min:1',
@@ -346,12 +337,15 @@ class PetaController extends Controller
             'anggota.required' => 'Anggota field is required.',
         ]);
 
-        $petas = Peta::findOrFail($id);
-        $petas->waktu = $request->waktu;
-        $petas->anggota = $request->anggota;
-        $petas->save();
+        // Cari peta risiko berdasarkan jenis (unit kerja)
+        $peta = Peta::where('jenis', $jenis)->firstOrFail();
 
-        return redirect()->route('detailPR', ['id' => $id])->with('success', 'Tugas berhasil ditambahkan.');
+        // Simpan tugas baru
+        $peta->waktu = $request->waktu;
+        $peta->anggota = $request->anggota;
+        $peta->save();
+
+        return redirect()->route('petaRisikoDetail',['jenis'=>$jenis])->with('success', 'Tugas berhasil ditambahkan.');
     }
 
     public function detailPR($id)
@@ -369,10 +363,16 @@ class PetaController extends Controller
                     ->where('jenis', $jenis)
                     ->paginate(10);
 
+
         // Ambil data unit kerja untuk referensi jika diperlukan
         $unitKerja = UnitKerja::all();
 
-        return view('pr.petaRisikoDetail', compact('data', 'jenis','unitKerja'));
+        // Ambil semua komentar yang terkait dengan peta risiko berdasarkan jenis
+        $comment_prs = CommentPr::whereHas('peta', function($query) use ($jenis) {
+            $query->where('jenis', $jenis);
+        })->get();
+
+        return view('pr.petaRisikoDetail', compact('data', 'jenis','unitKerja','comment_prs'));
     }
 
     //approval
@@ -384,16 +384,12 @@ class PetaController extends Controller
             $peta->approvalPr = 'approved';
             $peta->approvalPr_at = $currentTimestamp;
             $peta->save();
-            return redirect()->route('detailPR', $id)->with('success', 'Dokumen berhasil di-approve');
-            // return redirect()->back()->with('success', 'Dokumen berhasil di-approve');
 
+            return redirect()->route('petaRisikoDetail', $peta->jenis)->with('success','Dokumen berhaisl di-approve.');
         }
-        return redirect()->route('detailPR', $id)->with('error', 'Anda tidak memiliki hak akses untuk approve dokumen ini');
-        // return redirect()->back()->with('error', 'Anda tidak memiliki hak akses untuk approve dokumen ini');
-
-
-
+        return redirect()->route('petaRisikoDetail', $peta->jenis)->with('error','Anda tidak memiliki hak akses untuk approve dokumen ini.');
     }
+
     // Disapproval
     public function disapprove($id)
     {
@@ -404,9 +400,9 @@ class PetaController extends Controller
             $peta->approvalPr_at = $currentTimestamp;
             $peta->save();
 
-            return redirect()->route('detailPR', $id)->with('success', 'Dokumen berhasil ditolak');
+            return redirect()->route('petaRisikoDetail', $peta->jenis)->with('success','Dokumen berhaisl ditolak.');
         }
-        return redirect()->route('detailPR', $id)->with('error', 'Anda tidak memiliki hak akses untuk menolak dokumen ini');
+        return redirect()->route('petaRisikoDetail', $peta->jenis)->with('error','Anda tidak memiliki hak akses untuk menolak dokumen ini.');
     }
 
     //Komentar Penelaah

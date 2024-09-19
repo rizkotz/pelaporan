@@ -103,15 +103,19 @@ Route::post('/upload-dokumen/{jenis}', [PetaController::class, 'uploadDokumenByJ
     ->middleware('auth');
 Route::post('/updateDataByJenis/{jenis}', [PetaController::class, 'updateData'])->name('updateDataByJenis')
     ->middleware('auth');
-
-Route::get('/petas/{id}/tugas', [PetaController::class, 'tugas'])->name('petas.tugas')
+Route::get('/peta-risiko/tugas/{jenis}', [PetaController::class, 'tugas'])->name('petas.tugas')
     ->middleware('auth');
+Route::post('/peta-risiko/tambahtugas/{jenis}', [PetaController::class, 'tambahtugas'])->name('petas.tambahtugas')
+    ->middleware('auth');
+
+// Route::get('/petas/{id}/tugas', [PetaController::class, 'tugas'])->name('petas.tugas')
+//     ->middleware('auth');
 Route::get('/petas-tabel', [PetaController::class, 'tabelMatrik'])->name('petas.tabel')
     ->middleware('auth');
 Route::get('/petas/tabel-unit-kerja/{unitKerja}', [PetaController::class, 'tabelUnitKerja'])->name('petas.tabelUnitKerja')
     ->middleware('auth');
-Route::post('/petas/{id}/tambahtugas', [PetaController::class, 'tambahtugas'])->name('petas.tambahtugas')
-    ->middleware('auth');
+// Route::post('/petas/{id}/tambahtugas', [PetaController::class, 'tambahtugas'])->name('petas.tambahtugas')
+//     ->middleware('auth');
 Route::get('/detailPR/{id}', [PetaController::class, 'detailPR'])->name('detailPR')
     ->middleware('auth');
 // Route::get('/tampilData/{id}', [PetaController::class, 'tampilData'])->name('tampilData')

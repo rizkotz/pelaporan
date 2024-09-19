@@ -13,7 +13,7 @@
             <div class="col-md-12">
                 <div class="card border-0 shadow rounded">
                     <div class="card-body">
-                        <form action="{{ route('petas.tambahtugas', ['id' => $petas->id]) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('petas.tambahtugas', ['jenis' => $peta->jenis]) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label class="font-weight-bold">HARI TANGGAL</label>

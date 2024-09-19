@@ -82,7 +82,7 @@
                                     <option value="">- Pilih Jenis Tugas -</option>
                                     <option value="Reviu" {{ old('jenis') == 'Reviu' ? 'selected' : '' }}>Reviu</option>
                                     <option value="Monev" {{ old('jenis') == 'Monev' ? 'selected' : '' }}>Monev</option>
-                                    <option value="Keuangan" {{ old('jenis') == 'Keuangan' ? 'selected' : '' }}>Keuangan</option>
+                                    <option value="Audit" {{ old('jenis') == 'Audit' ? 'selected' : '' }}>Audit</option>
                                 </select>
 
                                 <!-- error message untuk jenis -->
