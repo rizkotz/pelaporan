@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 
 class PetaController extends Controller
@@ -20,6 +22,11 @@ class PetaController extends Controller
     {
         //get user data yang sedang login
         $users = Auth::user();
+
+        // Query pengelompokan data berdasarkan jenis
+        $jenisCount = Peta::select('jenis', DB::raw('count(*) as total'))
+        ->groupBy('jenis')
+        ->get();
 
         //query to get data peta berdasarkan anggota
         $query = Peta::query();
@@ -64,7 +71,7 @@ class PetaController extends Controller
 
         $unitKerjas = UnitKerja::all();
         //render view with petas
-        return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount', 'unitKerjas'))
+        return view('pr.petaRisiko', compact('petas', 'approvedCount', 'rejectedCount', 'unitKerjas','jenisCount'))
             ->with('tugasLaporChart', $tugasLaporChart->build())
             ->with('users', $users)
             ->with('anggota', $anggota);
@@ -244,36 +251,70 @@ class PetaController extends Controller
         return redirect()->back()->with('success', 'Dokumen berhasil diunggah.');
     }
 
+    //Upload sesuai unit kerja
+    public function uploadDokumenByJenis(Request $request, $jenis)
+    {
+        $request->validate([
+            'dokumen' => 'required|mimes:xls,xlsx',
+        ]);
+
+        $file = $request->file('dokumen');
+        $fileName = time().'_'.$file->getClientOriginalName();
+        $file->move(('dokumenPR/'), $fileName);
+
+        // Simpan informasi dokumen ke database
+        // Misalnya, update dokumen untuk jenis tertentu
+        Peta::where('jenis', $jenis)->update(['dokumen' => $fileName]);
+
+        return redirect()->route('petaRisikoDetail', $jenis)->with('success', 'Dokumen berhasil diunggah.');
+    }
 
     //Edit Data
-    public function updateData(Request $request, $id)
+    public function updateData(Request $request, $jenis)
     {
-        $petas = Peta::find($id);
-        //validate form
-        $this->validate($request, [
-            'dokumen'   => 'required|mimes:xls,xlsx',
-        ]);
+        // Validasi form
+    $this->validate($request, [
+        'dokumen' => 'required|mimes:xls,xlsx',
+    ]);
+
+    // Cari data Peta berdasarkan jenis
+    $petas = Peta::where('jenis', $jenis)->get();
+
+    // Simpan riwayat dokumen lama dan update dokumen baru untuk setiap entri
+    foreach ($petas as $peta) {
         // Simpan riwayat dokumen lama
-        if ($petas->dokumen) {
+        if ($peta->dokumen) {
             DocumentHistory::create([
-                'peta_id' => $petas->id,
-                'dokumen' => $petas->dokumen,
+                'peta_id' => $peta->id,
+                'dokumen' => $peta->dokumen,
                 'uploaded_at' => now(),
-                'status' => $petas->approvalPr,
+                'status' => $peta->approvalPr,
             ]);
         }
-        //update peta
+
+        // Update dokumen baru
         if ($request->hasFile('dokumen')) {
             $file = $request->file('dokumen');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(('dokumenPR/'), $filename);
-            $petas->dokumen = $filename;
+            // Debugging
+            if ($file->isValid()) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('dokumenPR/'), $filename);
+                $peta->dokumen = $filename;
+            } else {
+                $error = $file->getErrorMessage();
+                Log::error("File upload error: $error");
+                return redirect()->back()->with('error', 'File upload error: ' . $error);
+            }
         }
-        $petas->approvalPr = 'Pending';
-        $petas->save();
 
-        return redirect()->back()->with('success', 'Dokumen berhasil diupdate');
+        // Update status dokumen
+        $peta->approvalPr = 'Pending';
+        $peta->save();
     }
+
+    return redirect()->back()->with('success', 'Dokumen berhasil diupdate');
+    }
+
     //Hapus Data
     public function destroy($id)
     {
@@ -285,8 +326,7 @@ class PetaController extends Controller
         // Hapus record dari database
         $petas->delete();
 
-        return redirect()->route('petas.index')
-            ->with('success', 'Data berhasil dihapus.');
+        return redirect()->back()->with('success', 'Data berhasil dihapus.');
     }
 
     public function tugas($id)
@@ -321,6 +361,20 @@ class PetaController extends Controller
         return view('pr.detailPR', compact('petas', 'comment_prs'));
     }
 
+    //detail per jenis
+    public function detailByJenis($jenis)
+    {
+        // Ambil data peta risiko berdasarkan jenis
+        $data = Peta::with('comment_prs') // Memuat komentar secara eager loading
+                    ->where('jenis', $jenis)
+                    ->paginate(10);
+
+        // Ambil data unit kerja untuk referensi jika diperlukan
+        $unitKerja = UnitKerja::all();
+
+        return view('pr.petaRisikoDetail', compact('data', 'jenis','unitKerja'));
+    }
+
     //approval
     public function approve($id)
     {
@@ -331,8 +385,14 @@ class PetaController extends Controller
             $peta->approvalPr_at = $currentTimestamp;
             $peta->save();
             return redirect()->route('detailPR', $id)->with('success', 'Dokumen berhasil di-approve');
+            // return redirect()->back()->with('success', 'Dokumen berhasil di-approve');
+
         }
         return redirect()->route('detailPR', $id)->with('error', 'Anda tidak memiliki hak akses untuk approve dokumen ini');
+        // return redirect()->back()->with('error', 'Anda tidak memiliki hak akses untuk approve dokumen ini');
+
+
+
     }
     // Disapproval
     public function disapprove($id)

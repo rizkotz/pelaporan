@@ -217,17 +217,6 @@
                                 @enderror
                             </div>
 
-                            {{-- <div class="card border mb-3">
-                                <label for="dokumen" class="form-label m-2"><b>DOKUMEN PETA RISIKO</b></label>
-                                <div class="input-group mb-3">
-                                    <input type="file" name="dokumen" class="form-control m-2" id="inputGroupFile">
-                                    <label for="inputGroupFile" class="input-group-text m-2">Upload</label>
-                                </div>
-                                <small class="form-text text-danger ml-4" style="font-style: italic;">
-                                    *dokumen harus berformat excel
-                                </small>
-                            </div> --}}
-
                             <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
                             <button type="reset" class="btn btn-md btn-warning">RESET</button>
 

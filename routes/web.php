@@ -97,6 +97,13 @@ Route::get('/dokumen-tindak-lanjut', [PostController::class, 'dokumenTindakLanju
 Route::resource('/petas', PetaController::class)->middleware(['auth', 'approved']);
 Route::post('/uploadDokumen/{id}', [PetaController::class, 'uploadDokumen'])->name('uploadDokumen')
     ->middleware('auth');
+Route::get('/peta-risiko/detail/{jenis}', [PetaController::class, 'detailByJenis'])->name('petaRisikoDetail')
+    ->middleware('auth');
+Route::post('/upload-dokumen/{jenis}', [PetaController::class, 'uploadDokumenByJenis'])->name('uploadDokumenByJenis')
+    ->middleware('auth');
+Route::post('/updateDataByJenis/{jenis}', [PetaController::class, 'updateData'])->name('updateDataByJenis')
+    ->middleware('auth');
+
 Route::get('/petas/{id}/tugas', [PetaController::class, 'tugas'])->name('petas.tugas')
     ->middleware('auth');
 Route::get('/petas-tabel', [PetaController::class, 'tabelMatrik'])->name('petas.tabel')
@@ -109,8 +116,8 @@ Route::get('/detailPR/{id}', [PetaController::class, 'detailPR'])->name('detailP
     ->middleware('auth');
 // Route::get('/tampilData/{id}', [PetaController::class, 'tampilData'])->name('tampilData')
 //     ->middleware('auth');
-Route::post('/updateData/{id}', [PetaController::class, 'updateData'])->name('updateData')
-    ->middleware('auth');
+// Route::post('/updateData/{id}', [PetaController::class, 'updateData'])->name('updateData')
+//     ->middleware('auth');
 Route::delete('/petas/{id}',   [PetaController::class, 'destroy'])->name('destroy')->middleware('auth');
 Route::post('/petas/{id}/approve',   [PetaController::class, 'approve'])->name('petas.approve')
     ->middleware('auth');

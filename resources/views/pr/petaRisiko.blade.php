@@ -75,6 +75,9 @@
                                 @endif
                                 <a href="{{ route('petas.tabel') }}" class="btn btn-md btn-primary mb-1">Tabel
                                     Matrik</a>
+
+                                    <a href="#" class="btn btn-md btn-primary mb-1" >Tambah
+                                        Dokumen</a>
                             </div>
                         </div>
                         <table class="table table-bordered mt-2">
@@ -175,6 +178,57 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-0 shadow rounded">
+                    <div class="card-body">
+                        <table class="table table-bordered mt-2">
+                            <thead>
+                                <tr class="text-center">
+                                    <th scope="col">No</th>
+                                    <th scope="col">Unit Kerja</th>
+                                    <th scope="col">Kegiatan</th>
+                                    <th colspan='2' scope="col">Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $no = ($petas->currentPage() - 1) * $petas->perPage() + 1; @endphp
+                                @forelse ($jenisCount as $item)
+                                    <tr>
+                                        <td class="text-center">
+                                            {{ $no++ }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $item->jenis }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $item->total }}
+                                        </td>
+
+                                        <td class="text-center">
+                                            <a href="{{ route('petaRisikoDetail', $item->jenis) }}" class="btn btn-success">Lihat Detail</a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{ route('petas.tabelUnitKerja', ['unitKerja' => $item->jenis]) }}"
+                                               class="btn fa-solid fa-table bg-info p-2 text-white"
+                                               data-toggle="tooltip" title="Lihat Tabel Matrik Unit Kerja"></a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <div class="alert alert-danger">
+                                        Data Peta Risiko belum Tersedia.
+                                    </div>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        {{-- <!-- PAGINATION -->
+                        {{ $petas->links('pagination::bootstrap-4') }} --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->string('nama');
             $table->string('judul');
-            $table->string('jenis');
+            $table->string('jenis'); //unit kerja
             $table->string('dokumen');
             $table->timestamp('dokumen_at');
             $table->string('waktu')->nullable();
